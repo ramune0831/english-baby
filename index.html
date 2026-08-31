@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>英会話は赤ちゃん以下 - 洋画リスニングへの道</title>
+
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -16,6 +17,7 @@
       min-height: 100vh;
       box-sizing: border-box;
     }
+
     .card {
       background: white;
       border-radius: 24px;
@@ -25,39 +27,263 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.06);
       text-align: center;
       position: relative;
+      box-sizing: border-box;
     }
-    h1 { font-size: 22px; color: #5A4A42; margin: 6px 0; }
-    .subtitle { color: #8C7A6B; font-size: 13px; margin-bottom: 14px; }
-    .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .btn-icon { background: #F0F4F8; border: none; border-radius: 20px; padding: 6px 12px; font-size: 12px; font-weight: bold; color: #4A5568; cursor: pointer; }
-    .char-area { background: #EBF7FF; border-radius: 16px; padding: 12px; margin: 12px 0; display: flex; align-items: center; gap: 12px; }
-    .char-icon { font-size: 32px; }
-    .char-msg { font-size: 13px; font-weight: bold; color: #2B6CB0; text-align: left; }
-    .en-text { font-size: 26px; font-weight: bold; color: #2D3748; margin: 16px 0 4px; }
-    .jp-text { font-size: 15px; color: #718096; margin-bottom: 20px; }
-    .btn { width: 100%; padding: 13px; margin: 5px 0; border: none; border-radius: 30px; font-size: 15px; font-weight: bold; cursor: pointer; }
-    .btn-listen { background: #EBF7FF; color: #2B6CB0; }
-    .btn-speak { background: #FFF0E5; color: #C05621; }
-    .btn-next { background: #FF6B6B; color: white; margin-top: 10px; }
-    .btn-start { background: #FF6B6B; color: white; }
-    .spoken-box { font-size: 13px; color: #4A5568; background: #EDF2F7; border-radius: 12px; padding: 8px 10px; margin-top: 8px; min-height: 18px; }
-    .result { margin-top: 6px; font-weight: bold; font-size: 15px; min-height: 22px; }
-    .name-input { width: 90%; padding: 12px; border: 2px solid #E2E8F0; border-radius: 14px; font-size: 16px; text-align: center; margin: 8px 0 16px; outline: none; box-sizing: border-box; }
-    .course-option { background: #F7FAFC; border: 2px solid #E2E8F0; border-radius: 16px; padding: 12px; margin: 8px 0; text-align: left; cursor: pointer; transition: all 0.2s; }
-    .course-option.selected { border-color: #FF6B6B; background: #FFF5F5; }
-    .course-title { font-weight: bold; color: #2D3748; font-size: 14px; }
-    .course-desc { font-size: 11px; color: #718096; margin-top: 2px; }
-    .recommended-badge { background: #FF6B6B; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 8px; margin-left: 6px; }
-    .modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); border-radius: 24px; justify-content: center; align-items: center; z-index: 10; }
-    .modal-content { background: white; padding: 20px; border-radius: 20px; width: 85%; max-height: 90%; overflow-y: auto; text-align: center; box-sizing: border-box; }
-    .status-box { background: #FFF0E5; padding: 10px; border-radius: 16px; margin: 10px 0; font-weight: bold; color: #5A4A42; font-size: 13px; }
-    .setting-group { margin: 14px 0; text-align: left; }
-    .setting-label { font-size: 12px; font-weight: bold; color: #718096; margin-bottom: 6px; display: block; }
-    .speed-selector { display: flex; justify-content: space-between; gap: 6px; background: #F7FAFC; padding: 4px; border-radius: 16px; }
-    .speed-btn { flex: 1; border: none; background: transparent; padding: 8px 0; border-radius: 12px; font-size: 11px; font-weight: bold; color: #718096; cursor: pointer; }
-    .speed-btn.active { background: #FF9F43; color: white; }
+
+    h1 {
+      font-size: 22px;
+      color: #5A4A42;
+      margin: 6px 0;
+    }
+
+    .subtitle {
+      color: #8C7A6B;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .btn-icon {
+      background: #F0F4F8;
+      border: none;
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #4A5568;
+      cursor: pointer;
+    }
+
+    .char-area {
+      background: #EBF7FF;
+      border-radius: 16px;
+      padding: 12px;
+      margin: 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .char-icon {
+      font-size: 32px;
+      min-width: 45px;
+    }
+
+    .char-msg {
+      font-size: 13px;
+      font-weight: bold;
+      color: #2B6CB0;
+      text-align: left;
+    }
+
+    .en-text {
+      font-size: 25px;
+      font-weight: bold;
+      color: #2D3748;
+      margin: 16px 0 4px;
+      word-break: break-word;
+    }
+
+    .jp-text {
+      font-size: 15px;
+      color: #718096;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 13px;
+      margin: 5px 0;
+      border: none;
+      border-radius: 30px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .btn-listen {
+      background: #EBF7FF;
+      color: #2B6CB0;
+    }
+
+    .btn-speak {
+      background: #FFF0E5;
+      color: #C05621;
+    }
+
+    .btn-next {
+      background: #FF6B6B;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .btn-start {
+      background: #FF6B6B;
+      color: white;
+    }
+
+    .spoken-box {
+      font-size: 13px;
+      color: #4A5568;
+      background: #EDF2F7;
+      border-radius: 12px;
+      padding: 10px;
+      margin-top: 8px;
+      min-height: 20px;
+      word-break: break-word;
+    }
+
+    .result {
+      margin-top: 6px;
+      font-weight: bold;
+      font-size: 14px;
+      min-height: 22px;
+    }
+
+    .name-input {
+      width: 90%;
+      padding: 12px;
+      border: 2px solid #E2E8F0;
+      border-radius: 14px;
+      font-size: 16px;
+      text-align: center;
+      margin: 8px 0 16px;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .level-option {
+      background: #F7FAFC;
+      border: 2px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 12px;
+      margin: 8px 0;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .level-option.selected {
+      border-color: #FF6B6B;
+      background: #FFF5F5;
+    }
+
+    .level-title {
+      font-weight: bold;
+      color: #2D3748;
+      font-size: 14px;
+    }
+
+    .level-desc {
+      font-size: 11px;
+      color: #718096;
+      margin-top: 2px;
+    }
+
+    .recommended-badge {
+      background: #FF6B6B;
+      color: white;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 8px;
+      margin-left: 6px;
+    }
+
+    .modal {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      border-radius: 24px;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      width: 85%;
+      max-height: 90%;
+      overflow-y: auto;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .status-box {
+      background: #FFF0E5;
+      padding: 10px;
+      border-radius: 16px;
+      margin: 10px 0;
+      font-weight: bold;
+      color: #5A4A42;
+      font-size: 13px;
+    }
+
+    .setting-group {
+      margin: 14px 0;
+      text-align: left;
+    }
+
+    .setting-label {
+      font-size: 12px;
+      font-weight: bold;
+      color: #718096;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .speed-selector {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      background: #F7FAFC;
+      padding: 4px;
+      border-radius: 16px;
+    }
+
+    .speed-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 8px 0;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: bold;
+      color: #718096;
+      cursor: pointer;
+    }
+
+    .speed-btn.active {
+      background: #FF9F43;
+      color: white;
+    }
+
+    .mic-status {
+      font-size: 11px;
+      color: #718096;
+      margin-top: 8px;
+    }
   </style>
 </head>
+
 <body>
 
 <div class="card" id="app">
@@ -67,79 +293,89 @@
     <div class="modal-content">
       <div style="font-size:36px;">⚙️🐱</div>
       <h3 style="color:#5A4A42; margin:4px 0;">設定・記録</h3>
+      
       <div class="status-box">
         <p style="margin:4px 0;">🔥 連続記録: <span id="modalStreak">0</span>日</p>
         <p style="margin:4px 0;">🏆 累計学習: <span id="modalTotal">0</span>日</p>
       </div>
-      
+
       <div class="setting-group">
-        <span class="setting-label">📚 学習コースの変更</span>
-        <div class="course-option" id="mCourse_slow" onclick="selectModalCourse('slow')">
-          <div class="course-title">🍼 ゆっくり英会話</div>
+        <span class="setting-label">🎯 スタートレベルの変更</span>
+        <div class="level-option" id="mLevel_1" onclick="selectModalLevel(1)">
+          <div class="level-title">🍼 レベル1：超初心者</div>
         </div>
-        <div class="course-option" id="mCourse_daily" onclick="selectModalCourse('daily')">
-          <div class="course-title">🐣 日常英会話</div>
+        <div class="level-option" id="mLevel_2" onclick="selectModalLevel(2)">
+          <div class="level-title">🐣 レベル2：初級・日常英会話</div>
         </div>
-        <div class="course-option" id="mCourse_movie" onclick="selectModalCourse('movie')">
-          <div class="course-title">🎬 洋画英語</div>
+        <div class="level-option" id="mLevel_3" onclick="selectModalLevel(3)">
+          <div class="level-title">🎬 レベル3：洋画チャレンジ</div>
         </div>
       </div>
 
       <div class="setting-group">
         <span class="setting-label">🔊 音声スピード</span>
         <div class="speed-selector">
-          <button class="speed-btn active" id="speedSlow" onclick="setSpeed(0.5)">🐢 ゆっくり</button>
+          <button class="speed-btn" id="speedSlow" onclick="setSpeed(0.5)">🐢 ゆっくり</button>
           <button class="speed-btn" id="speedNormal" onclick="setSpeed(0.8)">🙂 ふつう</button>
           <button class="speed-btn" id="speedFast" onclick="setSpeed(1.0)">🐇 洋画スピード</button>
         </div>
       </div>
+
+      <div class="mic-status">
+        🎤 音声認識：<span id="micSupportText">確認中...</span>
+      </div>
+
       <button class="btn btn-next" onclick="closeRecordModal()">保存してとじる</button>
     </div>
   </div>
 
-  <!-- 1. 名前＆コース設定画面 -->
+  <!-- 初期設定画面 -->
   <div id="nameArea">
     <div style="font-size:40px;">🎬👶🐶</div>
     <h1>英会話は赤ちゃん以下</h1>
     <div class="subtitle">目指せ！洋画を字幕なしで聴き取る力</div>
-    
+
     <p style="font-weight:bold; color:#5A4A42; margin-bottom:4px; font-size:14px;">お名前</p>
     <input id="nameInput" class="name-input" type="text" placeholder="例: Taro" maxlength="30">
 
-    <p style="font-weight:bold; color:#5A4A42; margin-bottom:6px; font-size:14px;">学習コースを選択</p>
-    
-    <div class="course-option selected" id="initCourse_slow" onclick="chooseInitCourse('slow')">
-      <div class="course-title">🍼 ゆっくり英会話<span class="recommended-badge">おすすめ</span></div>
-      <div class="course-desc">超短文・基本文 / 英語の口慣らし</div>
-    </div>
-    
-    <div class="course-option" id="initCourse_daily" onclick="chooseInitCourse('daily')">
-      <div class="course-title">🐣 日常英会話</div>
-      <div class="course-desc">日常でよく使う短文 / 会話力向上</div>
+    <p style="font-weight:bold; color:#5A4A42; margin-bottom:6px; font-size:14px;">あなたの英語レベルを選んでね</p>
+
+    <div class="level-option selected" id="initLevel_1" onclick="chooseInitLevel(1)">
+      <div class="level-title">🍼 ① レベル1：超初心者 <span class="recommended-badge">おすすめ</span></div>
+      <div class="level-desc">あいさつ・気持ち・基本動作からスタート</div>
     </div>
 
-    <div class="course-option" id="initCourse_movie" onclick="chooseInitCourse('movie')">
-      <div class="course-title">🎬 洋画英語</div>
-      <div class="course-desc">映画のリアルなフレーズ / リスニング特化</div>
+    <div class="level-option" id="initLevel_2" onclick="chooseInitLevel(2)">
+      <div class="level-title">🐣 ② レベル2：初級・日常英会話</div>
+      <div class="level-desc">日常表現・質問・返し・お願いなど</div>
     </div>
 
-    <button class="btn btn-start" onclick="saveNameAndStart()" style="margin-top:12px;">▶ 学習をはじめる</button>
+    <div class="level-option" id="initLevel_3" onclick="chooseInitLevel(3)">
+      <div class="level-title">🎬 ③ レベル3：洋画チャレンジ</div>
+      <div class="level-desc">洋画頻出・音のつながり・感情表現など</div>
+    </div>
+
+    <button class="btn btn-start" onclick="saveNameAndStart()" style="margin-top:12px;">▶ スタート！</button>
   </div>
 
-  <!-- 2. メイン学習画面 -->
+  <!-- メイン学習画面 -->
   <div id="lessonArea" style="display:none;">
     <div class="header-bar">
-      <span style="color:#A0AEC0; font-size:12px; font-weight:bold;" id="stepProgress">Stage 1 (1 / 3)</span>
+      <span style="color:#A0AEC0; font-size:12px; font-weight:bold;" id="stepProgress">Lv.1 (1-1 あいさつ) 1/5</span>
       <button class="btn-icon" onclick="openRecordModal()">⚙️ 設定</button>
     </div>
+
     <div class="char-area">
       <div class="char-icon" id="charIcon">🐶</div>
       <div class="char-msg" id="charMsg">ぽてワン「音の響きをよく聴いてね！」</div>
     </div>
-    <div class="en-text" id="enText">I'm tired.</div>
-    <div class="jp-text" id="jpText">疲れたよ。</div>
+
+    <div class="en-text" id="enText">Thank you.</div>
+    <div class="jp-text" id="jpText">ありがとう。</div>
+
     <button class="btn btn-listen" onclick="speakCurrent()">🔊 きく</button>
-    <button class="btn btn-speak" onclick="startListen()">🎤 マネして言う</button>
+    <button class="btn btn-speak" id="btnSpeak" onclick="startListen()">🎤 マネして言う</button>
+
     <div class="spoken-box" id="spokenBox">👂 声を聞かせてね</div>
     <div class="result" id="resultMsg"></div>
     <button class="btn btn-next" onclick="nextLesson()">つぎへ ✨</button>
@@ -148,65 +384,150 @@
 </div>
 
 <script>
+  /* =========================================
+     基本データ
+  ========================================= */
   let userName = "";
-  let selectedCourseKey = "slow";
-  let currentStageIndex = 0;
+  let currentLevel = 1;
+  let currentSubIndex = 0;
   let currentIndex = 0;
   let streak = 0;
   let total = 0;
-  let lastDate = ""; 
+  let lastDate = "";
   let currentSpeed = 0.5;
+  let isListening = false;
+  let recognitionInstance = null;
+  let listenTimeoutTimer = null;
 
-  const coursesData = {
-    slow: {
-      name: "🍼 ゆっくり英会話",
-      stages: [
-        [
-          { en: "Thank you.", jp: "ありがとう。" },
-          { en: "I'm tired.", jp: "疲れたよ。" },
-          { en: "Let's go!", jp: "行こう！" }
-        ],
-        [
-          { en: "I like coffee.", jp: "コーヒーが好き。" },
-          { en: "See you.", jp: "またね。" },
-          { en: "Good job!", jp: "よくできたね！" }
-        ]
+  /* =========================================
+     カリキュラムデータ
+  ========================================= */
+  const curriculumData = {
+    1: {
+      name: "レベル1",
+      subStages: [
+        {
+          id: "1-1", title: "あいさつ",
+          items: [
+            { en: "Thank you.", jp: "ありがとう。" },
+            { en: "Good morning.", jp: "おはよう。" },
+            { en: "See you.", jp: "またね。" },
+            { en: "Good job!", jp: "よくできたね！" },
+            { en: "Hello.", jp: "こんにちは。" }
+          ]
+        },
+        {
+          id: "1-2", title: "自分のこと",
+          items: [
+            { en: "I'm tired.", jp: "疲れたよ。" },
+            { en: "I'm hungry.", jp: "お腹が空いた。" },
+            { en: "I'm happy.", jp: "うれしいな。" },
+            { en: "I'm ready.", jp: "準備できたよ。" },
+            { en: "I'm home.", jp: "ただいま。" }
+          ]
+        },
+        {
+          id: "1-3", title: "好き・嫌い",
+          items: [
+            { en: "I like coffee.", jp: "コーヒーが好き。" },
+            { en: "I like this.", jp: "これが好き。" },
+            { en: "I don't like it.", jp: "それは好きじゃないな。" },
+            { en: "I love it!", jp: "これ大好き！" },
+            { en: "Me too.", jp: "私も。" }
+          ]
+        },
+        {
+          id: "1-4", title: "気持ち",
+          items: [
+            { en: "I don't know.", jp: "分かりません。" },
+            { en: "I'm sorry.", jp: "ごめんなさい。" },
+            { en: "It's fine.", jp: "大丈夫だよ。" },
+            { en: "I'm fine.", jp: "元気ですよ。" },
+            { en: "It's okay.", jp: "問題ないよ。" }
+          ]
+        },
+        {
+          id: "1-5", title: "日常動作",
+          items: [
+            { en: "Let's go!", jp: "行こう！" },
+            { en: "Come here.", jp: "こっち来て。" },
+            { en: "Look at this.", jp: "これ見て。" },
+            { en: "Wait for me.", jp: "待ってて。" },
+            { en: "Sit down.", jp: "座って。" }
+          ]
+        }
       ]
     },
-    daily: {
-      name: "🐣 日常英会話",
-      stages: [
-        [
-          { en: "I'm on my way.", jp: "今向かってるよ。" },
-          { en: "What do you think?", jp: "どう思う？" },
-          { en: "Give me a minute.", jp: "ちょっと時間を頂戴。" }
-        ],
-        [
-          { en: "I don't know.", jp: "分からないな。" },
-          { en: "Sounds good.", jp: "いいね！" },
-          { en: "Take care.", jp: "気をつけてね。" }
-        ]
+    2: {
+      name: "レベル2",
+      subStages: [
+        {
+          id: "2-1", title: "よく使う日常表現",
+          items: [
+            { en: "I'm on my way.", jp: "今向かってるよ。" },
+            { en: "Sounds good.", jp: "いいね！" },
+            { en: "Take care.", jp: "気をつけてね。" },
+            { en: "No problem.", jp: "問題ないよ。" },
+            { en: "Have fun!", jp: "楽しんできてね！" }
+          ]
+        },
+        {
+          id: "2-2", title: "質問",
+          items: [
+            { en: "What do you think?", jp: "どう思う？" },
+            { en: "How's it going?", jp: "調子はどう？" },
+            { en: "Where are you?", jp: "どこにいるの？" },
+            { en: "What's wrong?", jp: "どうしたの？" },
+            { en: "Are you sure?", jp: "本当に？" }
+          ]
+        },
+        {
+          id: "2-3", title: "返答・つなぎ",
+          items: [
+            { en: "Give me a minute.", jp: "ちょっと時間を頂戴。" },
+            { en: "Just a second.", jp: "ちょっと待って。" },
+            { en: "I see.", jp: "なるほどね。" },
+            { en: "I got it.", jp: "わかったよ。" },
+            { en: "That makes sense.", jp: "納得だよ。" }
+          ]
+        }
       ]
     },
-    movie: {
-      name: "🎬 洋画英語",
-      stages: [
-        [
-          { en: "What are you talking about?", jp: "何言ってるの？" },
-          { en: "Give me a break.", jp: "勘弁してよ。" },
-          { en: "It's up to you.", jp: "君に任せるよ。" }
-        ],
-        [
-          { en: "I'll be right back.", jp: "すぐ戻るよ。" },
-          { en: "You gotta be kidding me.", jp: "冗談でしょ！" },
-          { en: "Never mind.", jp: "気にしないで。" }
-        ]
+    3: {
+      name: "レベル3",
+      subStages: [
+        {
+          id: "3-1", title: "洋画頻出フレーズ",
+          items: [
+            { en: "What are you talking about?", jp: "何言ってるの？" },
+            { en: "Give me a break.", jp: "勘弁してよ。" },
+            { en: "It's up to you.", jp: "君に任せるよ。" },
+            { en: "You gotta be kidding me.", jp: "冗談でしょ！" },
+            { en: "I'll be right back.", jp: "すぐ戻るよ。" }
+          ]
+        },
+        {
+          id: "3-2", title: "感情・ネイティブ表現",
+          items: [
+            { en: "Never mind.", jp: "気にしないで。" },
+            { en: "Don't worry about it.", jp: "心配しないで。" },
+            { en: "Are you out of your mind?", jp: "正気なの？" },
+            { en: "Catch you later.", jp: "また後でね。" },
+            { en: "I have no idea.", jp: "さっぱり分からないや。" }
+          ]
+        }
       ]
     }
   };
 
+  /* =========================================
+     起動初期化
+  ========================================= */
   window.onload = function() {
     loadData();
+    setSpeedUI(currentSpeed);
+    checkMicSupport();
+
     if (userName) {
       document.getElementById("nameArea").style.display = "none";
       document.getElementById("lessonArea").style.display = "block";
@@ -214,35 +535,62 @@
     }
   };
 
+  /* =========================================
+     データ管理（localStorage）
+  ========================================= */
   function loadData() {
     userName = localStorage.getItem("eb_userName") || "";
-    selectedCourseKey = localStorage.getItem("eb_course") || "slow";
+    currentLevel = parseInt(localStorage.getItem("eb_level") || "1", 10);
+    currentSubIndex = parseInt(localStorage.getItem("eb_subIndex") || "0", 10);
+    currentIndex = parseInt(localStorage.getItem("eb_currentIndex") || "0", 10);
     streak = parseInt(localStorage.getItem("eb_streak") || "0", 10);
     total = parseInt(localStorage.getItem("eb_total") || "0", 10);
     lastDate = localStorage.getItem("eb_lastDate") || "";
+    currentSpeed = parseFloat(localStorage.getItem("eb_speed") || "0.5");
   }
 
   function saveData() {
     localStorage.setItem("eb_userName", userName);
-    localStorage.setItem("eb_course", selectedCourseKey);
+    localStorage.setItem("eb_level", currentLevel.toString());
+    localStorage.setItem("eb_subIndex", currentSubIndex.toString());
+    localStorage.setItem("eb_currentIndex", currentIndex.toString());
     localStorage.setItem("eb_streak", streak.toString());
     localStorage.setItem("eb_total", total.toString());
     localStorage.setItem("eb_lastDate", lastDate);
+    localStorage.setItem("eb_speed", currentSpeed.toString());
   }
 
-  function chooseInitCourse(key) {
-    selectedCourseKey = key;
-    ['slow', 'daily', 'movie'].forEach(k => {
-      document.getElementById(`initCourse_${k}`).classList.remove('selected');
+  function checkMicSupport() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const target = document.getElementById("micSupportText");
+    if (SpeechRecognition) {
+      target.innerText = "利用可能です";
+      target.style.color = "#2E7D32";
+    } else {
+      target.innerText = "非対応（Chrome等を推奨）";
+      target.style.color = "#E53E3E";
+    }
+  }
+
+  /* =========================================
+     画面表示とコントロール
+  ========================================= */
+  function chooseInitLevel(lvl) {
+    currentLevel = lvl;
+    [1, 2, 3].forEach(l => {
+      document.getElementById(`initLevel_${l}`).classList.remove("selected");
     });
-    document.getElementById(`initCourse_${key}`).classList.add('selected');
+    document.getElementById(`initLevel_${lvl}`).classList.add("selected");
   }
 
   function saveNameAndStart() {
     const input = document.getElementById("nameInput").value.trim();
-    if (!input) { alert("名前を入力してね！"); return; }
+    if (!input) {
+      alert("名前を入力してね！");
+      return;
+    }
     userName = input;
-    currentStageIndex = 0;
+    currentSubIndex = 0;
     currentIndex = 0;
     saveData();
     document.getElementById("nameArea").style.display = "none";
@@ -250,62 +598,101 @@
     updateCard();
   }
 
-  function getCurrentLessons() {
-    const course = coursesData[selectedCourseKey] || coursesData.slow;
-    return course.stages[currentStageIndex % course.stages.length];
+  function getCurrentSubStage() {
+    const levelObj = curriculumData[currentLevel] || curriculumData[1];
+    const subStages = levelObj.subStages;
+    if (currentSubIndex < 0 || currentSubIndex >= subStages.length) {
+      currentSubIndex = 0;
+    }
+    return subStages[currentSubIndex];
   }
 
   function updateCard() {
-    const lessons = getCurrentLessons();
-    const course = coursesData[selectedCourseKey];
-    document.getElementById("stepProgress").innerText = `${course.name} - Stage ${currentStageIndex + 1} (${currentIndex + 1} / ${lessons.length})`;
-    document.getElementById("enText").innerText = lessons[currentIndex].en;
-    document.getElementById("jpText").innerText = lessons[currentIndex].jp;
+    const subStage = getCurrentSubStage();
+    if (currentIndex < 0 || currentIndex >= subStage.items.length) {
+      currentIndex = 0;
+    }
+    const currentItem = subStage.items[currentIndex];
+
+    document.getElementById("stepProgress").innerText =
+      `Lv.${currentLevel} (${subStage.id} ${subStage.title}) ${currentIndex + 1}/${subStage.items.length}`;
+    document.getElementById("enText").innerText = currentItem.en;
+    document.getElementById("jpText").innerText = currentItem.jp;
     document.getElementById("spokenBox").innerText = "👂 声を聞かせてね";
     document.getElementById("resultMsg").innerText = "";
+    document.getElementById("resultMsg").style.color = "";
+    document.getElementById("charIcon").innerText = "🐶";
+    document.getElementById("charMsg").innerText = "ぽてワン「音の響きをよく聴いてね！」";
   }
 
-  function setSpeed(speed) {
-    currentSpeed = speed;
-    document.getElementById("speedSlow").classList.remove("active");
-    document.getElementById("speedNormal").classList.remove("active");
-    document.getElementById("speedFast").classList.remove("active");
-    if (speed === 0.5) document.getElementById("speedSlow").classList.add("active");
-    if (speed === 0.8) document.getElementById("speedNormal").classList.add("active");
-    if (speed === 1.0) document.getElementById("speedFast").classList.add("active");
-  }
-
+  /* =========================================
+     音声再生（SpeechSynthesis）
+  ========================================= */
   function speakCurrent() {
-    const lessons = getCurrentLessons();
+    const subStage = getCurrentSubStage();
+    const currentItem = subStage.items[currentIndex];
     document.getElementById("charIcon").innerText = "🐶🎶";
     document.getElementById("charMsg").innerText = "ぽてワン「音のつながりをよく聴いてね！」";
 
-    const utterance = new SpeechSynthesisUtterance(lessons[currentIndex].en);
+    const utterance = new SpeechSynthesisUtterance(currentItem.en);
     utterance.lang = "en-US";
     utterance.rate = currentSpeed;
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(utterance);
   }
 
+  /* =========================================
+     音声認識（SpeechRecognition）
+  ========================================= */
   function startListen() {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) { alert("お使いのブラウザは音声認識に対応していません。"); return; }
+    if (isListening) return;
 
-    const lessons = getCurrentLessons();
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("お使いのブラウザは音声認識に対応していません。Chrome等の対応ブラウザをお使いください。");
+      return;
+    }
+
+    if (recognitionInstance) {
+      try { recognitionInstance.abort(); } catch(e){}
+    }
+
+    isListening = true;
+    const btnSpeak = document.getElementById("btnSpeak");
+    if (btnSpeak) btnSpeak.disabled = true;
+
     document.getElementById("charIcon").innerText = "👂🐶";
-    document.getElementById("charMsg").innerText = "ぽてワン「きいてるよ！どうぞ！」";
-    document.getElementById("spokenBox").innerText = "🎙️ 聞き取り中...";
+    document.getElementById("charMsg").innerText = "ぽてワン「マイクを準備中…」";
+    document.getElementById("spokenBox").innerText = "🎙️ 準備中...（少し待ってね）";
     document.getElementById("resultMsg").innerText = "";
 
     const recognition = new SpeechRecognition();
+    recognitionInstance = recognition;
     recognition.lang = "en-US";
     recognition.interimResults = false;
 
+    // 安全対策：8秒間応答がなければ強制解除
+    clearTimeout(listenTimeoutTimer);
+    listenTimeoutTimer = setTimeout(() => {
+      if (isListening) {
+        recognition.stop();
+        resetListenState("❌ タイムアウト。もう一度ボタンを押してください。");
+      }
+    }, 8000);
+
+    recognition.onstart = function() {
+      document.getElementById("charMsg").innerText = "ぽてワン「聞いてるよ！英語を話してね！」";
+      document.getElementById("spokenBox").innerText = "🎙️ 聞き取り中... 話してください";
+    };
+
     recognition.onresult = function(event) {
+      clearTimeout(listenTimeoutTimer);
       const rawSpoken = event.results[0][0].transcript;
       document.getElementById("spokenBox").innerText = `🗣️ あなた: "${rawSpoken}"`;
 
-      const matchRate = calculateSimilarity(rawSpoken, lessons[currentIndex].en);
+      const subStage = getCurrentSubStage();
+      const currentItem = subStage.items[currentIndex];
+      const matchRate = calculateSimilarity(rawSpoken, currentItem.en);
 
       if (matchRate >= 0.75) {
         document.getElementById("charIcon").innerText = "🐶🎉🐱";
@@ -313,153 +700,4 @@
         document.getElementById("resultMsg").style.color = "#2E7D32";
         document.getElementById("resultMsg").innerText = "🎉 大成功！";
       } else if (matchRate >= 0.45) {
-        document.getElementById("charIcon").innerText = "🐶✨";
-        document.getElementById("charMsg").innerText = "ぽてワン「かなり近い！フレーズを意識してみて！」";
-        document.getElementById("resultMsg").style.color = "#ED8936";
-        document.getElementById("resultMsg").innerText = "😊 惜しい！";
-      } else {
-        document.getElementById("charIcon").innerText = "🐶❓";
-        document.getElementById("charMsg").innerText = "ぽてワン「もう一回『きく』で音を確認してみよう！」";
-        document.getElementById("resultMsg").style.color = "#E53E3E";
-        document.getElementById("resultMsg").innerText = "🔄 もう一回";
-      }
-    };
-
-    recognition.onerror = function() {
-      document.getElementById("spokenBox").innerText = "👂 声を聞かせてね";
-      document.getElementById("resultMsg").style.color = "#E53E3E";
-      document.getElementById("resultMsg").innerText = "聞き取れなかったよ。もう一度発言してね！";
-    };
-
-    recognition.start();
-  }
-
-  // レベンシュタイン距離を用いた類似度算出（文字レベルのゆらぎに対応）
-  function calculateSimilarity(str1, str2) {
-    const cleanStr = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
-    const s1 = cleanStr(str1);
-    const s2 = cleanStr(str2);
-    if (!s1 || !s2) return 0;
-    if (s1 === s2) return 1.0;
-
-    const track = Array(s2.length + 1).fill(null).map(() => Array(s1.length + 1).fill(null));
-
-    for (let i = 0; i <= s1.length; i += 1) track[0][i] = i;
-    for (let j = 0; j <= s2.length; j += 1) track[j][0] = j;
-
-    for (let j = 1; j <= s2.length; j += 1) {
-      for (let i = 1; i <= s1.length; i += 1) {
-        const indicator = s1[i - 1] === s2[j - 1] ? 0 : 1;
-        track[j][i] = Math.min(
-          track[j][i - 1] + 1,
-          track[j - 1][i] + 1,
-          track[j - 1][i - 1] + indicator
-        );
-      }
-    }
-
-    const distance = track[s2.length][s1.length];
-    const maxLength = Math.max(s1.length, s2.length);
-    return (maxLength - distance) / maxLength;
-  }
-
-  function getTodayString() {
-    const d = new Date();
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  function recordCompletion() {
-    const today = getTodayString();
-    if (lastDate === today) return;
-
-    if (!lastDate) {
-      streak = 1;
-    } else {
-      const last = new Date(lastDate);
-      const current = new Date(today);
-      const diffTime = current - last;
-      const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-      streak = (diffDays === 1) ? streak + 1 : 1;
-    }
-
-    total++;
-    lastDate = today;
-    saveData();
-  }
-
-  function nextLesson() {
-    const lessons = getCurrentLessons();
-    if (currentIndex < lessons.length - 1) {
-      currentIndex++;
-      updateCard();
-    } else {
-      recordCompletion();
-      document.getElementById("lessonArea").innerHTML = `
-        <div style="font-size:40px; margin:12px 0;">🎬🎉🐶</div>
-        <h3 style="color:#5A4A42; margin:4px 0;">Stage クリア！</h3>
-        <p style="color:#8C7A6B; font-size:12px;">ぬくニャン「${userName}さん、いい調子ニャ！」</p>
-        <div class="status-box">
-          <p style="margin:4px 0;">🔥 連続記録: ${streak}日目</p>
-          <p style="margin:4px 0;">🏆 累計記録: ${total}日分</p>
-        </div>
-        <button class="btn btn-start" onclick="continueToNextStage()">▶ つぎのStageに進む✨</button>
-        <button class="btn btn-listen" onclick="reviewSameStage()" style="margin-top:6px;">🔄 このStageをもう一度</button>
-      `;
-    }
-  }
-
-  function continueToNextStage() { currentStageIndex++; currentIndex = 0; restoreLessonView(); updateCard(); }
-  function reviewSameStage() { currentIndex = 0; restoreLessonView(); updateCard(); }
-
-  function restoreLessonView() {
-    document.getElementById("lessonArea").innerHTML = `
-      <div class="header-bar">
-        <span style="color:#A0AEC0; font-size:12px; font-weight:bold;" id="stepProgress"></span>
-        <button class="btn-icon" onclick="openRecordModal()">⚙️ 設定</button>
-      </div>
-      <div class="char-area">
-        <div class="char-icon" id="charIcon">🐶</div>
-        <div class="char-msg" id="charMsg">ぽてワン「音の響きをよく聴いてね！」</div>
-      </div>
-      <div class="en-text" id="enText"></div>
-      <div class="jp-text" id="jpText"></div>
-      <button class="btn btn-listen" onclick="speakCurrent()">🔊 きく</button>
-      <button class="btn btn-speak" onclick="startListen()">🎤 マネして言う</button>
-      <div class="spoken-box" id="spokenBox">👂 声を聞かせてね</div>
-      <div class="result" id="resultMsg"></div>
-      <button class="btn btn-next" onclick="nextLesson()">つぎへ ✨</button>
-    `;
-  }
-
-  function openRecordModal() {
-    document.getElementById("modalStreak").innerText = streak;
-    document.getElementById("modalTotal").innerText = total;
-    ['slow', 'daily', 'movie'].forEach(k => {
-      document.getElementById(`mCourse_${k}`).classList.remove('selected');
-    });
-    document.getElementById(`mCourse_${selectedCourseKey}`).classList.add('selected');
-    document.getElementById("recordModal").style.display = "flex";
-  }
-
-  function selectModalCourse(key) {
-    selectedCourseKey = key;
-    ['slow', 'daily', 'movie'].forEach(k => {
-      document.getElementById(`mCourse_${k}`).classList.remove('selected');
-    });
-    document.getElementById(`mCourse_${key}`).classList.add('selected');
-  }
-
-  function closeRecordModal() {
-    saveData();
-    currentStageIndex = 0;
-    currentIndex = 0;
-    updateCard();
-    document.getElementById("recordModal").style.display = "none";
-  }
-</script>
-
-</body>
-</html>
+        document.getE
