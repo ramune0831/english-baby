@@ -149,7 +149,7 @@
 
 <script>
   let userName = "";
-  let selectedCourseKey = "slow"; // default
+  let selectedCourseKey = "slow";
   let currentStageIndex = 0;
   let currentIndex = 0;
   let streak = 0;
@@ -157,7 +157,6 @@
   let lastDate = ""; 
   let currentSpeed = 0.5;
 
-  // 3コース × ステージ構造のカリキュラムデータ
   const coursesData = {
     slow: {
       name: "🍼 ゆっくり英会話",
@@ -306,14 +305,14 @@
       const rawSpoken = event.results[0][0].transcript;
       document.getElementById("spokenBox").innerText = `🗣️ あなた: "${rawSpoken}"`;
 
-      const matchRate = calculateWordMatch(rawSpoken, lessons[currentIndex].en);
+      const matchRate = calculateSimilarity(rawSpoken, lessons[currentIndex].en);
 
-      if (matchRate >= 0.8) {
+      if (matchRate >= 0.75) {
         document.getElementById("charIcon").innerText = "🐶🎉🐱";
         document.getElementById("charMsg").innerText = "ぽてワン＆ぬくニャン「すごーい！そのまま通じるよ！」";
         document.getElementById("resultMsg").style.color = "#2E7D32";
         document.getElementById("resultMsg").innerText = "🎉 大成功！";
-      } else if (matchRate >= 0.4) {
+      } else if (matchRate >= 0.45) {
         document.getElementById("charIcon").innerText = "🐶✨";
         document.getElementById("charMsg").innerText = "ぽてワン「かなり近い！フレーズを意識してみて！」";
         document.getElementById("resultMsg").style.color = "#ED8936";
@@ -335,17 +334,33 @@
     recognition.start();
   }
 
-  function calculateWordMatch(spoken, target) {
-    const cleanStr = (str) => str.toLowerCase().replace(/[^a-z0-9\s]/g, "").trim();
-    const spokenWords = cleanStr(spoken).split(/\s+/);
-    const targetWords = cleanStr(target).split(/\s+/);
-    if (targetWords.length === 0) return 0;
+  // レベンシュタイン距離を用いた類似度算出（文字レベルのゆらぎに対応）
+  function calculateSimilarity(str1, str2) {
+    const cleanStr = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const s1 = cleanStr(str1);
+    const s2 = cleanStr(str2);
+    if (!s1 || !s2) return 0;
+    if (s1 === s2) return 1.0;
 
-    let matchedCount = 0;
-    targetWords.forEach(tWord => {
-      if (spokenWords.includes(tWord)) matchedCount++;
-    });
-    return matchedCount / targetWords.length;
+    const track = Array(s2.length + 1).fill(null).map(() => Array(s1.length + 1).fill(null));
+
+    for (let i = 0; i <= s1.length; i += 1) track[0][i] = i;
+    for (let j = 0; j <= s2.length; j += 1) track[j][0] = j;
+
+    for (let j = 1; j <= s2.length; j += 1) {
+      for (let i = 1; i <= s1.length; i += 1) {
+        const indicator = s1[i - 1] === s2[j - 1] ? 0 : 1;
+        track[j][i] = Math.min(
+          track[j][i - 1] + 1,
+          track[j - 1][i] + 1,
+          track[j - 1][i - 1] + indicator
+        );
+      }
+    }
+
+    const distance = track[s2.length][s1.length];
+    const maxLength = Math.max(s1.length, s2.length);
+    return (maxLength - distance) / maxLength;
   }
 
   function getTodayString() {
