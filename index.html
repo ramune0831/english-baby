@@ -430,8 +430,8 @@
           id: "1-3", title: "好き・嫌い",
           items: [
             { en: "I like coffee.", jp: "コーヒーが好き。" },
-            { en: "I like this.", jp: "これが好き。" },
-            { en: "I don't like it.", jp: "それは好きじゃないな。" },
+            { en: "I like this.", jp: "色が標準好き。" },
+            { en: "I don't like it.", jp: "色は好きじゃないな。" },
             { en: "I love it!", jp: "これ大好き！" },
             { en: "Me too.", jp: "私も。" }
           ]
@@ -529,6 +529,7 @@
     checkMicSupport();
 
     if (userName) {
+      document.getElementById("nameInput").value = userName;
       document.getElementById("nameArea").style.display = "none";
       document.getElementById("lessonArea").style.display = "block";
       updateCard();
@@ -536,25 +537,33 @@
   };
 
   function loadData() {
-    userName = localStorage.getItem("eb_userName") || "";
-    currentLevel = parseInt(localStorage.getItem("eb_level") || "1", 10);
-    currentSubIndex = parseInt(localStorage.getItem("eb_subIndex") || "0", 10);
-    currentIndex = parseInt(localStorage.getItem("eb_currentIndex") || "0", 10);
-    streak = parseInt(localStorage.getItem("eb_streak") || "0", 10);
-    total = parseInt(localStorage.getItem("eb_total") || "0", 10);
-    lastDate = localStorage.getItem("eb_lastDate") || "";
-    currentSpeed = parseFloat(localStorage.getItem("eb_speed") || "0.5");
+    try {
+      userName = localStorage.getItem("eb_userName") || "";
+      currentLevel = parseInt(localStorage.getItem("eb_level") || "1", 10);
+      currentSubIndex = parseInt(localStorage.getItem("eb_subIndex") || "0", 10);
+      currentIndex = parseInt(localStorage.getItem("eb_currentIndex") || "0", 10);
+      streak = parseInt(localStorage.getItem("eb_streak") || "0", 10);
+      total = parseInt(localStorage.getItem("eb_total") || "0", 10);
+      lastDate = localStorage.getItem("eb_lastDate") || "";
+      currentSpeed = parseFloat(localStorage.getItem("eb_speed") || "0.5");
+    } catch(e) {
+      console.log("Storage load error:", e);
+    }
   }
 
   function saveData() {
-    localStorage.setItem("eb_userName", userName);
-    localStorage.setItem("eb_level", currentLevel.toString());
-    localStorage.setItem("eb_subIndex", currentSubIndex.toString());
-    localStorage.setItem("eb_currentIndex", currentIndex.toString());
-    localStorage.setItem("eb_streak", streak.toString());
-    localStorage.setItem("eb_total", total.toString());
-    localStorage.setItem("eb_lastDate", lastDate);
-    localStorage.setItem("eb_speed", currentSpeed.toString());
+    try {
+      localStorage.setItem("eb_userName", userName);
+      localStorage.setItem("eb_level", currentLevel.toString());
+      localStorage.setItem("eb_subIndex", currentSubIndex.toString());
+      localStorage.setItem("eb_currentIndex", currentIndex.toString());
+      localStorage.setItem("eb_streak", streak.toString());
+      localStorage.setItem("eb_total", total.toString());
+      localStorage.setItem("eb_lastDate", lastDate);
+      localStorage.setItem("eb_speed", currentSpeed.toString());
+    } catch(e) {
+      console.log("Storage save error:", e);
+    }
   }
 
   function checkMicSupport() {
@@ -574,9 +583,11 @@
   function chooseInitLevel(lvl) {
     currentLevel = lvl;
     [1, 2, 3].forEach(l => {
-      document.getElementById(`initLevel_${l}`).classList.remove("selected");
+      const el = document.getElementById(`initLevel_${l}`);
+      if (el) el.classList.remove("selected");
     });
-    document.getElementById(`initLevel_${lvl}`).classList.add("selected");
+    const selectedEl = document.getElementById(`initLevel_${lvl}`);
+    if (selectedEl) selectedEl.classList.add("selected");
   }
 
   function saveNameAndStart() {
@@ -589,6 +600,7 @@
     currentSubIndex = 0;
     currentIndex = 0;
     saveData();
+
     document.getElementById("nameArea").style.display = "none";
     document.getElementById("lessonArea").style.display = "block";
     updateCard();
@@ -691,9 +703,4 @@
       } else if (matchRate >= 0.45) {
         document.getElementById("charIcon").innerText = "🐶✨";
         document.getElementById("charMsg").innerText = "ぽてワン「かなり近い！フレーズを意識してみて！」";
-        document.getElementById("resultMsg").style.color = "#ED8936";
-        document.getElementById("resultMsg").innerText = "😊 惜しい！";
-      } else {
-        document.getElementById("charIcon").innerText = "🐶❓";
-        document.getElementById("charMsg").innerText = "ぽてワン「もう一回『きく』で音を確認してみよう！」";
-        document.getElementById("r
+    
