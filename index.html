@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>英会話は赤ちゃん以下 - 洋画リスニングへの道</title>
 
-  <!-- ★① 紙吹雪（コンフェティ）用ライブラリ -->
+  <!-- 紙吹雪（コンフェティ）用ライブラリ -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
@@ -63,6 +63,19 @@
       cursor: pointer;
     }
 
+    /* コイン＆ステータスバー */
+    .status-header {
+      display: flex;
+      justify-content: space-around;
+      background: #FFF5F5;
+      border-radius: 16px;
+      padding: 8px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #C05621;
+    }
+
     .char-area {
       background: #EBF7FF;
       border-radius: 16px;
@@ -71,11 +84,26 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      position: relative;
     }
 
-    .char-icon {
-      font-size: 32px;
-      min-width: 45px;
+    .char-container {
+      position: relative;
+      font-size: 36px;
+      min-width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .char-hat {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 22px;
+      z-index: 2;
     }
 
     .char-msg {
@@ -116,26 +144,11 @@
       cursor: not-allowed;
     }
 
-    .btn-listen {
-      background: #EBF7FF;
-      color: #2B6CB0;
-    }
-
-    .btn-speak {
-      background: #FFF0E5;
-      color: #C05621;
-    }
-
-    .btn-next {
-      background: #FF6B6B;
-      color: white;
-      margin-top: 10px;
-    }
-
-    .btn-start {
-      background: #FF6B6B;
-      color: white;
-    }
+    .btn-listen { background: #EBF7FF; color: #2B6CB0; }
+    .btn-speak { background: #FFF0E5; color: #C05621; }
+    .btn-next { background: #FF6B6B; color: white; margin-top: 10px; }
+    .btn-start { background: #FF6B6B; color: white; }
+    .btn-shop { background: #FEFCBF; color: #744210; margin-top: 6px; }
 
     .spoken-box {
       font-size: 13px;
@@ -183,27 +196,8 @@
       background: #FFF5F5;
     }
 
-    .level-title {
-      font-weight: bold;
-      color: #2D3748;
-      font-size: 14px;
-    }
-
-    .level-desc {
-      font-size: 11px;
-      color: #718096;
-      margin-top: 2px;
-    }
-
-    .recommended-badge {
-      background: #FF6B6B;
-      color: white;
-      font-size: 10px;
-      font-weight: bold;
-      padding: 2px 6px;
-      border-radius: 8px;
-      margin-left: 6px;
-    }
+    .level-title { font-weight: bold; color: #2D3748; font-size: 14px; }
+    .level-desc { font-size: 11px; color: #718096; margin-top: 2px; }
 
     .modal {
       display: none;
@@ -230,71 +224,41 @@
       box-sizing: border-box;
     }
 
-    .status-box {
-      background: #FFF0E5;
+    /* ショップ＆バッジのスタイル */
+    .shop-item, .badge-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #F7FAFC;
       padding: 10px;
-      border-radius: 16px;
-      margin: 10px 0;
-      font-weight: bold;
-      color: #5A4A42;
+      border-radius: 12px;
+      margin: 8px 0;
       font-size: 13px;
     }
 
-    .setting-group {
-      margin: 14px 0;
-      text-align: left;
-    }
-
-    .setting-label {
+    .shop-btn {
+      background: #48BB78;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 12px;
       font-size: 12px;
       font-weight: bold;
-      color: #718096;
-      margin-bottom: 6px;
-      display: block;
-    }
-
-    .speed-selector {
-      display: flex;
-      justify-content: space-between;
-      gap: 6px;
-      background: #F7FAFC;
-      padding: 4px;
-      border-radius: 16px;
-    }
-
-    .speed-btn {
-      flex: 1;
-      border: none;
-      background: transparent;
-      padding: 8px 0;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: bold;
-      color: #718096;
       cursor: pointer;
     }
 
-    .speed-btn.active {
-      background: #FF9F43;
-      color: white;
+    .shop-btn:disabled {
+      background: #CBD5E0;
+      cursor: not-allowed;
     }
 
-    .mic-status {
-      font-size: 11px;
-      color: #718096;
-      margin-top: 8px;
-    }
-
-    /* ★② ポコッと弾けるアニメーション（CSS） */
     @keyframes popIn {
       0% { transform: scale(0.5); opacity: 0; }
       70% { transform: scale(1.2); }
       100% { transform: scale(1); opacity: 1; }
     }
 
-    .pop-animation {
-      animation: popIn 0.4s ease-out forwards;
-    }
+    .pop-animation { animation: popIn 0.4s ease-out forwards; }
   </style>
 </head>
 
@@ -308,38 +272,31 @@
       <div style="font-size:36px;">⚙️🐱</div>
       <h3 style="color:#5A4A42; margin:4px 0;">設定・記録</h3>
       
-      <div class="status-box">
+      <div style="background:#FFF0E5; padding:10px; border-radius:16px; margin:10px 0; font-weight:bold; color:#5A4A42; font-size:13px;">
         <p style="margin:4px 0;">🔥 連続記録: <span id="modalStreak">0</span>日</p>
         <p style="margin:4px 0;">🏆 累計学習: <span id="modalTotal">0</span>日</p>
+        <p style="margin:4px 0;">🪙 所持コイン: <span id="modalCoins">0</span>枚</p>
       </div>
 
-      <div class="setting-group">
-        <span class="setting-label">🎯 スタートレベルの変更</span>
-        <div class="level-option" id="mLevel_1" onclick="selectModalLevel(1)">
-          <div class="level-title">🍼 レベル1：超初心者</div>
-        </div>
-        <div class="level-option" id="mLevel_2" onclick="selectModalLevel(2)">
-          <div class="level-title">🐣 レベル2：初級・日常英会話</div>
-        </div>
-        <div class="level-option" id="mLevel_3" onclick="selectModalLevel(3)">
-          <div class="level-title">🎬 レベル3：洋画チャレンジ</div>
-        </div>
+      <div style="margin:14px 0; text-align:left;">
+        <span style="font-size:12px; font-weight:bold; color:#718096; margin-bottom:6px; display:block;">🏅 ご褒美バッジ</span>
+        <div id="badgeList"></div>
       </div>
 
-      <div class="setting-group">
-        <span class="setting-label">🔊 音声スピード</span>
-        <div class="speed-selector">
-          <button class="speed-btn" id="speedSlow" onclick="setSpeed(0.5)">🐢 ゆっくり</button>
-          <button class="speed-btn" id="speedNormal" onclick="setSpeed(0.8)">🙂 ふつう</button>
-          <button class="speed-btn" id="speedFast" onclick="setSpeed(1.0)">🐇 洋画スピード</button>
-        </div>
-      </div>
+      <button class="btn btn-next" onclick="closeRecordModal()">とじる</button>
+    </div>
+  </div>
 
-      <div class="mic-status">
-        🎤 音声認識：<span id="micSupportText">確認中...</span>
-      </div>
+  <!-- 着せ替えショップモーダル -->
+  <div class="modal" id="shopModal">
+    <div class="modal-content">
+      <div style="font-size:36px;">👑🐶</div>
+      <h3 style="color:#5A4A42; margin:4px 0;">ぽてワンの服屋さん</h3>
+      <p style="font-size:12px; color:#718096; margin-bottom:12px;">コイン: <span id="shopCoins">0</span> 🪙</p>
 
-      <button class="btn btn-next" onclick="closeRecordModal()">保存してとじる</button>
+      <div id="shopList"></div>
+
+      <button class="btn btn-next" onclick="closeShopModal()">完了</button>
     </div>
   </div>
 
@@ -355,7 +312,7 @@
     <p style="font-weight:bold; color:#5A4A42; margin-bottom:6px; font-size:14px;">あなたの英語レベルを選んでね</p>
 
     <div class="level-option selected" id="initLevel_1" onclick="chooseInitLevel(1)">
-      <div class="level-title">🍼 ① レベル1：超初心者 <span class="recommended-badge">おすすめ</span></div>
+      <div class="level-title">🍼 ① レベル1：超初心者</div>
       <div class="level-desc">あいさつ・気持ち・基本動作からスタート</div>
     </div>
 
@@ -375,12 +332,20 @@
   <!-- メイン学習画面 -->
   <div id="lessonArea" style="display:none;">
     <div class="header-bar">
-      <span style="color:#A0AEC0; font-size:12px; font-weight:bold;" id="stepProgress">Lv.1 (1-1 あいさつ) 1/5</span>
+      <span style="color:#A0AEC0; font-size:12px; font-weight:bold;" id="stepProgress">Lv.1 1/5</span>
       <button class="btn-icon" onclick="openRecordModal()">⚙️ 設定</button>
     </div>
 
+    <div class="status-header">
+      <span>🔥 <span id="displayStreak">0</span>日連続</span>
+      <span>🪙 <span id="displayCoins">0</span> コイン</span>
+    </div>
+
     <div class="char-area">
-      <div class="char-icon" id="charIcon">🐶</div>
+      <div class="char-container">
+        <div class="char-hat" id="charHat"></div>
+        <div id="charIcon">🐶</div>
+      </div>
       <div class="char-msg" id="charMsg">ぽてワン「音の響きをよく聴いてね！」</div>
     </div>
 
@@ -392,7 +357,8 @@
 
     <div class="spoken-box" id="spokenBox">👂 声を聞かせてね</div>
     <div class="result" id="resultMsg"></div>
-    <button class="btn btn-next" onclick="nextLesson()">つぎへ ✨</button>
+    <button class="btn btn-next" onclick="nextLesson()">つぎへ ✨ (+10🪙)</button>
+    <button class="btn btn-shop" onclick="openShopModal()">👒 ぽてワンを着せ替える</button>
   </div>
 
 </div>
@@ -404,138 +370,40 @@
   let currentIndex = 0;
   let streak = 0;
   let total = 0;
+  let coins = 0;
   let lastDate = "";
   let currentSpeed = 0.5;
+  let equippedHat = "";
+  let ownedHats = [];
+  let unlockedBadges = [];
+
   let isListening = false;
   let recognitionInstance = null;
   let listenTimeoutTimer = null;
 
+  const shopItems = [
+    { id: "crown", name: "王冠", icon: "👑", price: 30 },
+    { id: "party", name: "パーティー帽", icon: "🥳", price: 50 },
+    { id: "grad", name: "博士帽", icon: "🎓", price: 80 },
+    { id: "ribbon", name: "赤いリボン", icon: "🎀", price: 100 }
+  ];
+
+  const badgeDefinitions = [
+    { id: "first_step", name: "はじめの一歩", desc: "初めてレッスンを完了", icon: "🌱" },
+    { id: "streak_3", name: "3日連続達成", desc: "3日連続で学習", icon: "🔥" },
+    { id: "coin_100", name: "コインコレクター", desc: "100コイン貯める", icon: "🪙" }
+  ];
+
   const curriculumData = {
-    1: {
-      name: "レベル1",
-      subStages: [
-        {
-          id: "1-1", title: "あいさつ",
-          items: [
-            { en: "Thank you.", jp: "ありがとう。" },
-            { en: "Good morning.", jp: "おはよう。" },
-            { en: "See you.", jp: "またね。" },
-            { en: "Good job!", jp: "よくできたね！" },
-            { en: "Hello.", jp: "こんにちは。" }
-          ]
-        },
-        {
-          id: "1-2", title: "自分のこと",
-          items: [
-            { en: "I'm tired.", jp: "疲れたよ。" },
-            { en: "I'm hungry.", jp: "お腹が空いた。" },
-            { en: "I'm happy.", jp: "うれしいな。" },
-            { en: "I'm ready.", jp: "準備できたよ。" },
-            { en: "I'm home.", jp: "ただいま。" }
-          ]
-        },
-        {
-          id: "1-3", title: "好き・嫌い",
-          items: [
-            { en: "I like coffee.", jp: "コーヒーが好き。" },
-            { en: "I like this.", jp: "色が標準好き。" },
-            { en: "I don't like it.", jp: "それは好きじゃないな。" },
-            { en: "I love it!", jp: "これ大好き！" },
-            { en: "Me too.", jp: "私も。" }
-          ]
-        },
-        {
-          id: "1-4", title: "気持ち",
-          items: [
-            { en: "I don't know.", jp: "分かりません。" },
-            { en: "I'm sorry.", jp: "ごめんなさい。" },
-            { en: "It's fine.", jp: "大丈夫だよ。" },
-            { en: "I'm fine.", jp: "元気ですよ。" },
-            { en: "It's okay.", jp: "問題ないよ。" }
-          ]
-        },
-        {
-          id: "1-5", title: "日常動作",
-          items: [
-            { en: "Let's go!", jp: "行こう！" },
-            { en: "Come here.", jp: "こっち来て。" },
-            { en: "Look at this.", jp: "これ見て。" },
-            { en: "Wait for me.", jp: "待ってて。" },
-            { en: "Sit down.", jp: "座って。" }
-          ]
-        }
-      ]
-    },
-    2: {
-      name: "レベル2",
-      subStages: [
-        {
-          id: "2-1", title: "よく使う日常表現",
-          items: [
-            { en: "I'm on my way.", jp: "今向かってるよ。" },
-            { en: "Sounds good.", jp: "いいね！" },
-            { en: "Take care.", jp: "気をつけてね。" },
-            { en: "No problem.", jp: "問題ないよ。" },
-            { en: "Have fun!", jp: "楽しんできてね！" }
-          ]
-        },
-        {
-          id: "2-2", title: "質問",
-          items: [
-            { en: "What do you think?", jp: "どう思う？" },
-            { en: "How's it going?", jp: "調子はどう？" },
-            { en: "Where are you?", jp: "どこにいるの？" },
-            { en: "What's wrong?", jp: "どうしたの？" },
-            { en: "Are you sure?", jp: "本当に？" }
-          ]
-        },
-        {
-          id: "2-3", title: "返答・つなぎ",
-          items: [
-            { en: "Give me a minute.", jp: "ちょっと時間を頂戴。" },
-            { en: "Just a second.", jp: "ちょっと待って。" },
-            { en: "I see.", jp: "なるほどね。" },
-            { en: "I got it.", jp: "わかったよ。" },
-            { en: "That makes sense.", jp: "納得だよ。" }
-          ]
-        }
-      ]
-    },
-    3: {
-      name: "レベル3",
-      subStages: [
-        {
-          id: "3-1", title: "洋画頻出フレーズ",
-          items: [
-            { en: "What are you talking about?", jp: "何言ってるの？" },
-            { en: "Give me a break.", jp: "勘弁してよ。" },
-            { en: "It's up to you.", jp: "君に任せるよ。" },
-            { en: "You gotta be kidding me.", jp: "冗談でしょ！" },
-            { en: "I'll be right back.", jp: "すぐ戻るよ。" }
-          ]
-        },
-        {
-          id: "3-2", title: "感情・ネイティブ表現",
-          items: [
-            { en: "Never mind.", jp: "気にしないで。" },
-            { en: "Don't worry about it.", jp: "心配しないで。" },
-            { en: "Are you out of your mind?", jp: "正気なの？" },
-            { en: "Catch you later.", jp: "また後でね。" },
-            { en: "I have no idea.", jp: "さっぱり分からないや。" }
-          ]
-        }
-      ]
-    }
+    1: { name: "レベル1", subStages: [{ id: "1-1", title: "あいさつ", items: [{ en: "Thank you.", jp: "ありがとう。" }, { en: "Good morning.", jp: "おはよう。" }, { en: "See you.", jp: "またね。" }] }] },
+    2: { name: "レベル2", subStages: [{ id: "2-1", title: "日常表現", items: [{ en: "I'm on my way.", jp: "今向かってるよ。" }, { en: "Sounds good.", jp: "いいね！" }] }] },
+    3: { name: "レベル3", subStages: [{ id: "3-1", title: "洋画表現", items: [{ en: "Give me a break.", jp: "勘弁してよ。" }, { en: "It's up to you.", jp: "君に任せるよ。" }] }] }
   };
 
   window.onload = function() {
     loadData();
     checkStreak();
-    setSpeedUI(currentSpeed);
-    checkMicSupport();
-
     if (userName) {
-      document.getElementById("nameInput").value = userName;
       document.getElementById("nameArea").style.display = "none";
       document.getElementById("lessonArea").style.display = "block";
       updateCard();
@@ -550,11 +418,12 @@
       currentIndex = parseInt(localStorage.getItem("eb_currentIndex") || "0", 10);
       streak = parseInt(localStorage.getItem("eb_streak") || "0", 10);
       total = parseInt(localStorage.getItem("eb_total") || "0", 10);
+      coins = parseInt(localStorage.getItem("eb_coins") || "0", 10);
       lastDate = localStorage.getItem("eb_lastDate") || "";
-      currentSpeed = parseFloat(localStorage.getItem("eb_speed") || "0.5");
-    } catch(e) {
-      console.log("Storage load error:", e);
-    }
+      equippedHat = localStorage.getItem("eb_equippedHat") || "";
+      ownedHats = JSON.parse(localStorage.getItem("eb_ownedHats") || "[]");
+      unlockedBadges = JSON.parse(localStorage.getItem("eb_unlockedBadges") || "[]");
+    } catch(e) { console.log("Load error", e); }
   }
 
   function saveData() {
@@ -565,56 +434,27 @@
       localStorage.setItem("eb_currentIndex", currentIndex.toString());
       localStorage.setItem("eb_streak", streak.toString());
       localStorage.setItem("eb_total", total.toString());
+      localStorage.setItem("eb_coins", coins.toString());
       localStorage.setItem("eb_lastDate", lastDate);
-      localStorage.setItem("eb_speed", currentSpeed.toString());
-    } catch(e) {
-      console.log("Storage save error:", e);
-    }
+      localStorage.setItem("eb_equippedHat", equippedHat);
+      localStorage.setItem("eb_ownedHats", JSON.stringify(ownedHats));
+      localStorage.setItem("eb_unlockedBadges", JSON.stringify(unlockedBadges));
+    } catch(e) { console.log("Save error", e); }
   }
 
   function checkStreak() {
     const today = new Date().toISOString().split('T')[0];
     if (lastDate) {
-      const last = new Date(lastDate);
-      const current = new Date(today);
-      const diffDays = Math.floor((current - last) / (1000 * 60 * 60 * 24));
-
-      if (diffDays > 1) {
-        streak = 0;
-      }
+      const diff = Math.floor((new Date(today) - new Date(lastDate)) / (1000 * 60 * 60 * 24));
+      if (diff > 1) streak = 0;
     }
   }
 
-  function markAttendance() {
-    const today = new Date().toISOString().split('T')[0];
-    if (lastDate !== today) {
-      const last = lastDate ? new Date(lastDate) : null;
-      const current = new Date(today);
-      const diffDays = last ? Math.floor((current - last) / (1000 * 60 * 60 * 24)) : 0;
-
-      if (diffDays === 1 || !last) {
-        streak += 1;
-      } else {
-        streak = 1;
-      }
-      total += 1;
-      lastDate = today;
-      saveData();
-    }
-  }
-
-  function checkMicSupport() {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const target = document.getElementById("micSupportText");
-    if (target) {
-      if (SpeechRecognition) {
-        target.innerText = "利用可能です";
-        target.style.color = "#2E7D32";
-      } else {
-        target.innerText = "非対応（Chrome推奨）";
-        target.style.color = "#E53E3E";
-      }
-    }
+  function checkBadges() {
+    if (total >= 1 && !unlockedBadges.includes("first_step")) unlockedBadges.push("first_step");
+    if (streak >= 3 && !unlockedBadges.includes("streak_3")) unlockedBadges.push("streak_3");
+    if (coins >= 100 && !unlockedBadges.includes("coin_100")) unlockedBadges.push("coin_100");
+    saveData();
   }
 
   function chooseInitLevel(lvl) {
@@ -623,109 +463,168 @@
       const el = document.getElementById(`initLevel_${l}`);
       if (el) el.classList.remove("selected");
     });
-    const selectedEl = document.getElementById(`initLevel_${lvl}`);
-    if (selectedEl) selectedEl.classList.add("selected");
+    document.getElementById(`initLevel_${lvl}`).classList.add("selected");
   }
 
   function saveNameAndStart() {
     const input = document.getElementById("nameInput").value.trim();
-    if (!input) {
-      alert("お名前を入力してください！");
-      return;
-    }
+    if (!input) return alert("お名前を入力してください！");
     userName = input;
-    currentSubIndex = 0;
-    currentIndex = 0;
-    markAttendance();
     saveData();
-
     document.getElementById("nameArea").style.display = "none";
     document.getElementById("lessonArea").style.display = "block";
     updateCard();
   }
 
-  function getCurrentSubStage() {
-    const levelObj = curriculumData[currentLevel] || curriculumData[1];
-    const subStages = levelObj.subStages;
-    if (currentSubIndex < 0 || currentSubIndex >= subStages.length) {
-      currentSubIndex = 0;
-    }
-    return subStages[currentSubIndex];
-  }
-
   function updateCard() {
-    const subStage = getCurrentSubStage();
-    if (currentIndex < 0 || currentIndex >= subStage.items.length) {
-      currentIndex = 0;
-    }
-    const currentItem = subStage.items[currentIndex];
+    const subStage = curriculumData[currentLevel].subStages[currentSubIndex] || curriculumData[currentLevel].subStages[0];
+    const item = subStage.items[currentIndex] || subStage.items[0];
 
-    document.getElementById("stepProgress").innerText =
-      `Lv.${currentLevel} (${subStage.id} ${subStage.title}) ${currentIndex + 1}/${subStage.items.length}`;
-    document.getElementById("enText").innerText = currentItem.en;
-    document.getElementById("jpText").innerText = currentItem.jp;
+    document.getElementById("stepProgress").innerText = `Lv.${currentLevel} (${subStage.id}) ${currentIndex + 1}/${subStage.items.length}`;
+    document.getElementById("enText").innerText = item.en;
+    document.getElementById("jpText").innerText = item.jp;
+    document.getElementById("displayStreak").innerText = streak;
+    document.getElementById("displayCoins").innerText = coins;
+    document.getElementById("charHat").innerText = equippedHat;
+
     document.getElementById("spokenBox").innerText = "👂 声を聞かせてね";
     document.getElementById("resultMsg").innerText = "";
-    document.getElementById("resultMsg").style.color = "";
     document.getElementById("charIcon").innerText = "🐶";
     document.getElementById("charMsg").innerText = "ぽてワン「音の響きをよく聴いてね！」";
   }
 
   function speakCurrent() {
-    if (!('speechSynthesis' in window)) {
-      alert("お使いのブラウザは音声読み上げに対応していません。");
-      return;
-    }
-
-    const subStage = getCurrentSubStage();
-    const currentItem = subStage.items[currentIndex];
-
-    document.getElementById("charIcon").innerText = "🐶🎶";
-    document.getElementById("charMsg").innerText = "ぽてワン「音のつながりをよく聴いてね！」";
-
+    const subStage = curriculumData[currentLevel].subStages[currentSubIndex];
+    const item = subStage.items[currentIndex];
     window.speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(currentItem.en);
+    const utterance = new SpeechSynthesisUtterance(item.en);
     utterance.lang = "en-US";
     utterance.rate = currentSpeed;
-
-    utterance.onend = function() {
-      document.getElementById("charIcon").innerText = "🐶";
-    };
-
-    utterance.onerror = function() {
-      document.getElementById("charIcon").innerText = "🐶💦";
-    };
-
     window.speechSynthesis.speak(utterance);
   }
 
   function startListen() {
-    if (isListening) return;
-
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      alert("お使いのブラウザは音声認識に対応していません。Android Chromeをお使いください。");
-      return;
-    }
-
-    if (recognitionInstance) {
-      try { recognitionInstance.abort(); } catch(e){}
-    }
+    if (!SpeechRecognition) return alert("お使いのブラウザは音声認識に対応していません。");
 
     isListening = true;
-    const btnSpeak = document.getElementById("btnSpeak");
-    if (btnSpeak) btnSpeak.disabled = true;
-
-    document.getElementById("charIcon").innerText = "👂🐶";
-    document.getElementById("charMsg").innerText = "ぽてワン「マイクを準備中…」";
-    document.getElementById("spokenBox").innerText = "🎙️ 準備中...（少し待ってね）";
-    document.getElementById("resultMsg").innerText = "";
-
+    document.getElementById("spokenBox").innerText = "🎤 聞き取り中...";
     const recognition = new SpeechRecognition();
-    recognitionInstance = recognition;
     recognition.lang = "en-US";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
 
-    clearTimeout(lis
+    recognition.onresult = function(event) {
+      const userText = event.results[0][0].transcript;
+      document.getElementById("spokenBox").innerText = `🗣️ あなた: "${userText}"`;
+      const item = curriculumData[currentLevel].subStages[currentSubIndex].items[currentIndex];
+
+      if (userText.toLowerCase().replace(/[^a-z0-9]/g, "") === item.en.toLowerCase().replace(/[^a-z0-9]/g, "")) {
+        document.getElementById("resultMsg").innerText = "🌟 大成功！バッチリ聞こえたよ！";
+        document.getElementById("resultMsg").style.color = "#2E7D32";
+        if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 60 });
+      } else {
+        document.getElementById("resultMsg").innerText = "💪 おしい！もう一度やってみよう！";
+        document.getElementById("resultMsg").style.color = "#E53E3E";
+      }
+      isListening = false;
+    };
+
+    recognition.onerror = function() {
+      document.getElementById("spokenBox").innerText = "⚠️ 声がうまく聞き取れなかったよ。";
+      isListening = false;
+    };
+
+    recognition.start();
+  }
+
+  function nextLesson() {
+    coins += 10;
+    total += 1;
+    const subStage = curriculumData[currentLevel].subStages[currentSubIndex];
+    currentIndex++;
+
+    if (currentIndex >= subStage.items.length) {
+      currentIndex = 0;
+      currentSubIndex++;
+      if (currentSubIndex >= curriculumData[currentLevel].subStages.length) {
+        currentSubIndex = 0;
+      }
+    }
+
+    checkBadges();
+    saveData();
+    updateCard();
+  }
+
+  /* モーダル関連 */
+  function openRecordModal() {
+    document.getElementById("modalStreak").innerText = streak;
+    document.getElementById("modalTotal").innerText = total;
+    document.getElementById("modalCoins").innerText = coins;
+
+    const list = document.getElementById("badgeList");
+    list.innerHTML = "";
+    badgeDefinitions.forEach(b => {
+      const isUnlocked = unlockedBadges.includes(b.id);
+      list.innerHTML += `
+        <div class="badge-item" style="opacity: ${isUnlocked ? 1 : 0.4}">
+          <span>${b.icon} <strong>${b.name}</strong> (${b.desc})</span>
+          <span>${isUnlocked ? "✅ 獲得済" : "🔒 未解放"}</span>
+        </div>`;
+    });
+
+    document.getElementById("recordModal").style.display = "flex";
+  }
+
+  function closeRecordModal() { document.getElementById("recordModal").style.display = "none"; }
+
+  function openShopModal() {
+    document.getElementById("shopCoins").innerText = coins;
+    const list = document.getElementById("shopList");
+    list.innerHTML = "";
+
+    shopItems.forEach(item => {
+      const isOwned = ownedHats.includes(item.id);
+      const isEquipped = equippedHat === item.icon;
+
+      let btnHtml = "";
+      if (isEquipped) {
+        btnHtml = `<button class="shop-btn" style="background:#718096;" onclick="equipHat('')">はずす</button>`;
+      } else if (isOwned) {
+        btnHtml = `<button class="shop-btn" onclick="equipHat('${item.icon}')">ききる</button>`;
+      } else {
+        btnHtml = `<button class="shop-btn" ${coins < item.price ? 'disabled' : ''} onclick="buyHat('${item.id}', ${item.price})">${item.price}🪙 で買う</button>`;
+      }
+
+      list.innerHTML += `
+        <div class="shop-item">
+          <span>${item.icon} <strong>${item.name}</strong></span>
+          ${btnHtml}
+        </div>`;
+    });
+
+    document.getElementById("shopModal").style.display = "flex";
+  }
+
+  function closeShopModal() {
+    document.getElementById("shopModal").style.display = "none";
+    updateCard();
+  }
+
+  function buyHat(id, price) {
+    if (coins >= price) {
+      coins -= price;
+      ownedHats.push(id);
+      saveData();
+      openShopModal();
+    }
+  }
+
+  function equipHat(icon) {
+    equippedHat = icon;
+    saveData();
+    openShopModal();
+  }
+</script>
+
+</body>
+</html>
