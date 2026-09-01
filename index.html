@@ -373,7 +373,7 @@
     <div class="en-text" id="enText">Thank you.</div>
     <div class="jp-text" id="jpText">ありがとう。</div>
 
-    <button class="btn btn-listen" onclick="speakCurrent()">🔊 きく</button>
+    <button class="btn btn-listen" id="btnListen" onclick="speakCurrent()">🔊 きく</button>
     <button class="btn btn-speak" id="btnSpeak" onclick="startListen()">🎤 マネして言う</button>
 
     <div class="spoken-box" id="spokenBox">👂 声を聞かせてね</div>
@@ -385,7 +385,7 @@
 
 <script>
   /* =========================================
-     基本データ
+     基本データ・状態管理
   ========================================= */
   let userName = "";
   let currentLevel = 1;
@@ -400,7 +400,7 @@
   let listenTimeoutTimer = null;
 
   /* =========================================
-     カリキュラムデータ
+     カリキュラムデータ（翻訳修正済）
   ========================================= */
   const curriculumData = {
     1: {
@@ -430,8 +430,8 @@
           id: "1-3", title: "好き・嫌い",
           items: [
             { en: "I like coffee.", jp: "コーヒーが好き。" },
-            { en: "I like this.", jp: "色が標準好き。" },
-            { en: "I don't like it.", jp: "色は好きじゃないな。" },
+            { en: "I like this.", jp: "これが好き。" },
+            { en: "I don't like it.", jp: "それは好きじゃないな。" },
             { en: "I love it!", jp: "これ大好き！" },
             { en: "Me too.", jp: "私も。" }
           ]
@@ -521,10 +521,11 @@
   };
 
   /* =========================================
-     起動初期化
+     初期化処理・データ管理
   ========================================= */
   window.onload = function() {
     loadData();
+    checkStreak();
     setSpeedUI(currentSpeed);
     checkMicSupport();
 
@@ -566,6 +567,39 @@
     }
   }
 
+  function checkStreak() {
+    const today = new Date().toISOString().split('T')[0];
+    if (lastDate) {
+      const last = new Date(lastDate);
+      const current = new Date(today);
+      const diffDays = Math.floor((current - last) / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 1) {
+        // 連続日数を継続
+      } else if (diffDays > 1) {
+        streak = 0;
+      }
+    }
+  }
+
+  function markAttendance() {
+    const today = new Date().toISOString().split('T')[0];
+    if (lastDate !== today) {
+      const last = lastDate ? new Date(lastDate) : null;
+      const current = new Date(today);
+      const diffDays = last ? Math.floor((current - last) / (1000 * 60 * 60 * 24)) : 0;
+
+      if (diffDays === 1 || !last) {
+        streak += 1;
+      } else {
+        streak = 1;
+      }
+      total += 1;
+      lastDate = today;
+      saveData();
+    }
+  }
+
   function checkMicSupport() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const target = document.getElementById("micSupportText");
@@ -574,7 +608,7 @@
         target.innerText = "利用可能です";
         target.style.color = "#2E7D32";
       } else {
-        target.innerText = "非対応（Chrome等を推奨）";
+        target.innerText = "非対応（Chrome推奨）";
         target.style.color = "#E53E3E";
       }
     }
@@ -599,6 +633,7 @@
     userName = input;
     currentSubIndex = 0;
     currentIndex = 0;
+    markAttendance();
     saveData();
 
     document.getElementById("nameArea").style.display = "none";
@@ -633,28 +668,52 @@
     document.getElementById("charMsg").innerText = "ぽてワン「音の響きをよく聴いてね！」";
   }
 
+  /* =========================================
+     音声再生（SpeechSynthesis）安定化
+  ========================================= */
   function speakCurrent() {
+    if (!('speechSynthesis' in window)) {
+      alert("お使いのブラウザは音声読み上げに対応していません。");
+      return;
+    }
+
     const subStage = getCurrentSubStage();
     const currentItem = subStage.items[currentIndex];
+
     document.getElementById("charIcon").innerText = "🐶🎶";
     document.getElementById("charMsg").innerText = "ぽてワン「音のつながりをよく聴いてね！」";
+
+    window.speechSynthesis.cancel(); // 前の再生をクリア
 
     const utterance = new SpeechSynthesisUtterance(currentItem.en);
     utterance.lang = "en-US";
     utterance.rate = currentSpeed;
-    window.speechSynthesis.cancel();
+
+    utterance.onend = function() {
+      document.getElementById("charIcon").innerText = "🐶";
+    };
+
+    utterance.onerror = function() {
+      document.getElementById("charIcon").innerText = "🐶💦";
+    };
+
     window.speechSynthesis.speak(utterance);
   }
 
+  /* =========================================
+     Android Chrome向け 音声認識処理（完全版）
+  ========================================= */
   function startListen() {
+    // 二重起動防止
     if (isListening) return;
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      alert("お使いのブラウザは音声認識に対応していません。Chrome等の対応ブラウザをお使いください。");
+      alert("お使いのブラウザは音声認識に対応していません。Android Chromeをお使いください。");
       return;
     }
 
+    // 既存インスタンスを破棄
     if (recognitionInstance) {
       try { recognitionInstance.abort(); } catch(e){}
     }
@@ -666,41 +725,3 @@
     document.getElementById("charIcon").innerText = "👂🐶";
     document.getElementById("charMsg").innerText = "ぽてワン「マイクを準備中…」";
     document.getElementById("spokenBox").innerText = "🎙️ 準備中...（少し待ってね）";
-    document.getElementById("resultMsg").innerText = "";
-
-    const recognition = new SpeechRecognition();
-    recognitionInstance = recognition;
-    recognition.lang = "en-US";
-    recognition.interimResults = false;
-
-    clearTimeout(listenTimeoutTimer);
-    listenTimeoutTimer = setTimeout(() => {
-      if (isListening) {
-        recognition.stop();
-        resetListenState("❌ タイムアウト。もう一度ボタンを押してください。");
-      }
-    }, 8000);
-
-    recognition.onstart = function() {
-      document.getElementById("charMsg").innerText = "ぽてワン「聞いてるよ！英語を話してね！」";
-      document.getElementById("spokenBox").innerText = "🎙️ 聞き取り中... 話してください";
-    };
-
-    recognition.onresult = function(event) {
-      clearTimeout(listenTimeoutTimer);
-      const rawSpoken = event.results[0][0].transcript;
-      document.getElementById("spokenBox").innerText = `🗣️ あなた: "${rawSpoken}"`;
-
-      const subStage = getCurrentSubStage();
-      const currentItem = subStage.items[currentIndex];
-      const matchRate = calculateSimilarity(rawSpoken, currentItem.en);
-
-      if (matchRate >= 0.75) {
-        document.getElementById("charIcon").innerText = "🐶🎉🐱";
-        document.getElementById("charMsg").innerText = "ぽてワン＆ぬくニャン「すごーい！そのまま通じるよ！」";
-        document.getElementById("resultMsg").style.color = "#2E7D32";
-        document.getElementById("resultMsg").innerText = "🎉 大成功！";
-      } else if (matchRate >= 0.45) {
-        document.getElementById("charIcon").innerText = "🐶✨";
-        document.getElementById("charMsg").innerText = "ぽてワン「かなり近い！フレーズを意識してみて！」";
-    
