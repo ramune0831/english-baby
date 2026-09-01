@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>英会話は赤ちゃん以下 - 洋画リスニングへの道</title>
 
+  <!-- ★① 紙吹雪（コンフェティ）用ライブラリ -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -281,6 +284,17 @@
       color: #718096;
       margin-top: 8px;
     }
+
+    /* ★② ポコッと弾けるアニメーション（CSS） */
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      70% { transform: scale(1.2); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .pop-animation {
+      animation: popIn 0.4s ease-out forwards;
+    }
   </style>
 </head>
 
@@ -384,9 +398,6 @@
 </div>
 
 <script>
-  /* =========================================
-     基本データ・状態管理
-  ========================================= */
   let userName = "";
   let currentLevel = 1;
   let currentSubIndex = 0;
@@ -399,9 +410,6 @@
   let recognitionInstance = null;
   let listenTimeoutTimer = null;
 
-  /* =========================================
-     カリキュラムデータ（翻訳修正済）
-  ========================================= */
   const curriculumData = {
     1: {
       name: "レベル1",
@@ -430,7 +438,7 @@
           id: "1-3", title: "好き・嫌い",
           items: [
             { en: "I like coffee.", jp: "コーヒーが好き。" },
-            { en: "I like this.", jp: "これが好き。" },
+            { en: "I like this.", jp: "色が標準好き。" },
             { en: "I don't like it.", jp: "それは好きじゃないな。" },
             { en: "I love it!", jp: "これ大好き！" },
             { en: "Me too.", jp: "私も。" }
@@ -520,9 +528,6 @@
     }
   };
 
-  /* =========================================
-     初期化処理・データ管理
-  ========================================= */
   window.onload = function() {
     loadData();
     checkStreak();
@@ -574,9 +579,7 @@
       const current = new Date(today);
       const diffDays = Math.floor((current - last) / (1000 * 60 * 60 * 24));
 
-      if (diffDays === 1) {
-        // 連続日数を継続
-      } else if (diffDays > 1) {
+      if (diffDays > 1) {
         streak = 0;
       }
     }
@@ -668,9 +671,6 @@
     document.getElementById("charMsg").innerText = "ぽてワン「音の響きをよく聴いてね！」";
   }
 
-  /* =========================================
-     音声再生（SpeechSynthesis）安定化
-  ========================================= */
   function speakCurrent() {
     if (!('speechSynthesis' in window)) {
       alert("お使いのブラウザは音声読み上げに対応していません。");
@@ -683,7 +683,7 @@
     document.getElementById("charIcon").innerText = "🐶🎶";
     document.getElementById("charMsg").innerText = "ぽてワン「音のつながりをよく聴いてね！」";
 
-    window.speechSynthesis.cancel(); // 前の再生をクリア
+    window.speechSynthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance(currentItem.en);
     utterance.lang = "en-US";
@@ -700,11 +700,7 @@
     window.speechSynthesis.speak(utterance);
   }
 
-  /* =========================================
-     Android Chrome向け 音声認識処理（完全版）
-  ========================================= */
   function startListen() {
-    // 二重起動防止
     if (isListening) return;
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -713,7 +709,6 @@
       return;
     }
 
-    // 既存インスタンスを破棄
     if (recognitionInstance) {
       try { recognitionInstance.abort(); } catch(e){}
     }
@@ -725,5 +720,12 @@
     document.getElementById("charIcon").innerText = "👂🐶";
     document.getElementById("charMsg").innerText = "ぽてワン「マイクを準備中…」";
     document.getElementById("spokenBox").innerText = "🎙️ 準備中...（少し待ってね）";
-<!-- 紙吹雪用ライブラリ（CDN） -->
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    document.getElementById("resultMsg").innerText = "";
+
+    const recognition = new SpeechRecognition();
+    recognitionInstance = recognition;
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    clearTimeout(lis
