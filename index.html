@@ -232,6 +232,16 @@
       font-weight: bold;
       cursor: pointer;
     }
+
+    .mic-status {
+      background: #EDF2F7;
+      padding: 10px;
+      border-radius: 12px;
+      margin: 10px 0;
+      font-size: 12px;
+      color: #2D3748;
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -245,6 +255,19 @@
       <div style="font-size:36px;">⚙️🐱</div>
       <h3 style="color:#5A4A42; margin:4px 0;">設定・記録</h3>
       
+      <!-- マイクテスト領域 -->
+      <div class="mic-status">
+        🎤 音声認識：
+        <span id="micSupportText">確認中...</span>
+
+        <button
+          class="btn btn-listen"
+          style="margin-top:8px;"
+          onclick="testMicrophone()">
+          🎤 マイクをテスト
+        </button>
+      </div>
+
       <div style="background:#FFF0E5; padding:10px; border-radius:16px; margin:10px 0; font-weight:bold; color:#5A4A42; font-size:13px;">
         <p style="margin:4px 0;">🔥 連続記録: <span id="modalStreak">0</span>日</p>
         <p style="margin:4px 0;">🏆 累計学習: <span id="modalTotal">0</span>日</p>
@@ -277,7 +300,6 @@
     <h1>英会話は赤ちゃん以下</h1>
     <div class="subtitle">目指せ！洋画を字幕なしで聴き取る力</div>
 
-    <!-- ホーム画面のみ記録を表示 -->
     <div class="home-status-box">
       <span>🔥 <span id="homeStreak">0</span>日連続</span>
       <span>🏆 累計 <span id="homeTotal">0</span>日</span>
@@ -368,7 +390,55 @@
     loadData();
     checkStreak();
     updateHomeDisplay();
+    checkMicSupport();
   };
+
+  function checkMicSupport() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const textEl = document.getElementById("micSupportText");
+    if (SpeechRecognition) {
+      textEl.innerText = "対応（準備OK）";
+      textEl.style.color = "#2E7D32";
+    } else {
+      textEl.innerText = "非対応（ブラウザ未対応）";
+      textEl.style.color = "#E53E3E";
+    }
+  }
+
+  function testMicrophone() {
+    const textEl = document.getElementById("micSupportText");
+    textEl.innerText = "マイク確認中...";
+    textEl.style.color = "#2D3748";
+
+    if (!window.isSecureContext) {
+      textEl.innerText = "❌ 安全な接続ではありません(HTTPSが必要)";
+      textEl.style.color = "#E53E3E";
+      return;
+    }
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      textEl.innerText = "❌ ブラウザがマイクAPI非対応です";
+      textEl.style.color = "#E53E3E";
+      return;
+    }
+
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(function(stream) {
+        textEl.innerText = "✅ マイクOK！正常に取得できました！";
+        textEl.style.color = "#2E7D32";
+        stream.getTracks().forEach(track => track.stop());
+      })
+      .catch(function(err) {
+        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+          textEl.innerText = "❌ マイクの使用が拒否されています (NotAllowedError)";
+        } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+          textEl.innerText = "❌ マイク入力を取得できませんでした (NotReadableError)";
+        } else {
+          textEl.innerText = `❌ エラー: ${err.name}`;
+        }
+        textEl.style.color = "#E53E3E";
+      });
+  }
 
   function loadData() {
     try {
@@ -498,10 +568,9 @@
     const subStage = curriculumData[currentLevel].subStages[currentSubIndex];
     currentIndex++;
 
-    /* 1日分（5問）のレッスンがすべて終わった時の判定 */
     if (currentIndex >= subStage.items.length) {
       currentIndex = 0;
-      coins += 10; /* レッスン完了で+10コイン */
+      coins += 10;
       
       const today = new Date().toISOString().split('T')[0];
       if (lastDate !== today) {
@@ -557,47 +626,4 @@
 
     shopItems.forEach(item => {
       const isOwned = ownedHats.includes(item.id);
-      const isEquipped = equippedHat === item.icon;
-
-      let btnHtml = "";
-      if (isEquipped) {
-        btnHtml = `<button class="shop-btn" style="background:#718096;" onclick="equipHat('')">はずす</button>`;
-      } else if (isOwned) {
-        btnHtml = `<button class="shop-btn" onclick="equipHat('${item.icon}')">ききる</button>`;
-      } else {
-        btnHtml = `<button class="shop-btn" ${coins < item.price ? 'disabled' : ''} onclick="buyHat('${item.id}', ${item.price})">${item.price}🪙 で買う</button>`;
-      }
-
-      list.innerHTML += `
-        <div class="shop-item">
-          <span>${item.icon} <strong>${item.name}</strong></span>
-          ${btnHtml}
-        </div>`;
-    });
-
-    document.getElementById("shopModal").style.display = "flex";
-  }
-
-  function closeShopModal() {
-    document.getElementById("shopModal").style.display = "none";
-    updateHomeDisplay();
-  }
-
-  function buyHat(id, price) {
-    if (coins >= price) {
-      coins -= price;
-      ownedHats.push(id);
-      saveData();
-      openShopModal();
-    }
-  }
-
-  function equipHat(icon) {
-    equippedHat = icon;
-    saveData();
-    openShopModal();
-  }
-</script>
-
-</body>
-</html>
+      const isEquipped = equippedHat === item.icon
