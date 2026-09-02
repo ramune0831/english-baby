@@ -728,4 +728,175 @@
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    listenTimeoutTimer = 
+    listenTimeoutTimer = setTimeout(() => {
+      if (isListening) {
+        try { recognition.stop(); } catch(e){}
+      }
+    }, 8000);
+
+    recognition.onresult = function(event) {
+      clearTimeout(listenTimeoutTimer);
+      isListening = false;
+      if (btnSpeak) btnSpeak.disabled = false;
+
+      const userText = event.results[0][0].transcript;
+      document.getElementById("spokenBox").innerText = "🗣️ あなた: " + userText;
+      checkAnswer(userText);
+    };
+
+    recognition.onerror = function(event) {
+      clearTimeout(listenTimeoutTimer);
+      isListening = false;
+      if (btnSpeak) btnSpeak.disabled = false;
+
+      document.getElementById("spokenBox").innerText = "⚠️ もう一度試してね";
+      document.getElementById("charIcon").innerText = "🐶💦";
+      document.getElementById("charMsg").innerText = "ぽてワン「うまく聞こえなかったよ」";
+    };
+
+    recognition.onend = function() {
+      clearTimeout(listenTimeoutTimer);
+      isListening = false;
+      if (btnSpeak) btnSpeak.disabled = false;
+    };
+
+    try {
+      recognition.start();
+    } catch(e) {
+      isListening = false;
+      if (btnSpeak) btnSpeak.disabled = false;
+      document.getElementById("spokenBox").innerText = "⚠️ エラーが発生しました";
+    }
+  }
+
+  function cleanText(text) {
+    return text.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim();
+  }
+
+  function checkAnswer(userText) {
+    const subStage = getCurrentSubStage();
+    const currentItem = subStage.items[currentIndex];
+
+    const target = cleanText(currentItem.en);
+    const spoken = cleanText(userText);
+
+    const resultEl = document.getElementById("resultMsg");
+
+    if (spoken === target || spoken.includes(target) || target.includes(spoken)) {
+      resultEl.innerText = "🎉 すごい！大正解！";
+      resultEl.style.color = "#2E7D32";
+      document.getElementById("charIcon").innerText = "🐶✨";
+      document.getElementById("charMsg").innerText = "ぽてワン「完璧！素晴らしい発音だよ！」";
+
+      resultEl.classList.remove("pop-animation");
+      void resultEl.offsetWidth;
+      resultEl.classList.add("pop-animation");
+
+      if (typeof confetti === "function") {
+        confetti({
+          particleCount: 70,
+          spread: 60,
+          origin: { y: 0.7 }
+        });
+      }
+    } else {
+      resultEl.innerText = "👍 惜しい！もう一回やってみよう";
+      resultEl.style.color = "#DD6B20";
+      document.getElementById("charIcon").innerText = "🐶💪";
+      document.getElementById("charMsg").innerText = "ぽてワン「惜しい！音を真似してみてね」";
+    }
+  }
+
+  function nextLesson() {
+    const subStage = getCurrentSubStage();
+    currentIndex++;
+
+    if (currentIndex >= subStage.items.length) {
+      currentIndex = 0;
+      currentSubIndex++;
+
+      const levelObj = curriculumData[currentLevel] || curriculumData[1];
+      if (currentSubIndex >= levelObj.subStages.length) {
+        currentSubIndex = 0;
+        alert(`🎉 おめでとうございます！ Level ${currentLevel} をすべてクリアしました！`);
+      }
+    }
+
+    markAttendance();
+    saveData();
+    updateCard();
+  }
+
+  function openRecordModal() {
+    document.getElementById("modalStreak").innerText = streak;
+    document.getElementById("modalTotal").innerText = total;
+
+    [1, 2, 3].forEach(l => {
+      const el = document.getElementById(`mLevel_${l}`);
+      if (el) {
+        if (l === currentLevel) {
+          el.classList.add("selected");
+        } else {
+          el.classList.remove("selected");
+        }
+      }
+    });
+
+    setSpeedUI(currentSpeed);
+    checkMicSupport();
+
+    document.getElementById("recordModal").style.display = "flex";
+  }
+
+  function closeRecordModal() {
+    saveData();
+    updateCard();
+    document.getElementById("recordModal").style.display = "none";
+  }
+
+  function selectModalLevel(lvl) {
+    currentLevel = lvl;
+    currentSubIndex = 0;
+    currentIndex = 0;
+
+    [1, 2, 3].forEach(l => {
+      const el = document.getElementById(`mLevel_${l}`);
+      if (el) {
+        if (l === lvl) {
+          el.classList.add("selected");
+        } else {
+          el.classList.remove("selected");
+        }
+      }
+    });
+  }
+
+  function setSpeed(speed) {
+    currentSpeed = speed;
+    setSpeedUI(speed);
+    saveData();
+  }
+
+  function setSpeedUI(speed) {
+    const btnSlow = document.getElementById("speedSlow");
+    const btnNormal = document.getElementById("speedNormal");
+    const btnFast = document.getElementById("speedFast");
+
+    if (!btnSlow || !btnNormal || !btnFast) return;
+
+    btnSlow.classList.remove("active");
+    btnNormal.classList.remove("active");
+    btnFast.classList.remove("active");
+
+    if (speed <= 0.5) {
+      btnSlow.classList.add("active");
+    } else if (speed <= 0.8) {
+      btnNormal.classList.add("active");
+    } else {
+      btnFast.classList.add("active");
+    }
+  }
+</script>
+
+</body>
+</html>
