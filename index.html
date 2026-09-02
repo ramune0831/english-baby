@@ -626,4 +626,47 @@
 
     shopItems.forEach(item => {
       const isOwned = ownedHats.includes(item.id);
-      const isEquipped = equippedHat === item.icon
+      const isEquipped = equippedHat === item.icon;
+
+      let btnHtml = "";
+      if (isEquipped) {
+        btnHtml = `<button class="shop-btn" style="background:#718096;" onclick="equipHat('')">はずす</button>`;
+      } else if (isOwned) {
+        btnHtml = `<button class="shop-btn" onclick="equipHat('${item.icon}')">ききる</button>`;
+      } else {
+        btnHtml = `<button class="shop-btn" ${coins < item.price ? 'disabled' : ''} onclick="buyHat('${item.id}', ${item.price})">${item.price}🪙 で買う</button>`;
+      }
+
+      list.innerHTML += `
+        <div class="shop-item">
+          <span>${item.icon} <strong>${item.name}</strong></span>
+          ${btnHtml}
+        </div>`;
+    });
+
+    document.getElementById("shopModal").style.display = "flex";
+  }
+
+  function closeShopModal() {
+    document.getElementById("shopModal").style.display = "none";
+    updateHomeDisplay();
+  }
+
+  function buyHat(id, price) {
+    if (coins >= price) {
+      coins -= price;
+      ownedHats.push(id);
+      saveData();
+      openShopModal();
+    }
+  }
+
+  function equipHat(icon) {
+    equippedHat = icon;
+    saveData();
+    openShopModal();
+  }
+</script>
+
+</body>
+</html>
