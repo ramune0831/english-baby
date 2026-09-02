@@ -24,7 +24,7 @@ body {
 .card { 
   background: white; 
   border-radius: 24px; 
-  padding: 20px; 
+  padding: 24px 20px; 
   width: 100%; 
   max-width: 360px; 
   box-shadow: 0 8px 20px rgba(0,0,0,0.06); 
@@ -35,6 +35,36 @@ body {
 
 h1 { font-size: 22px; color: #5A4A42; margin: 6px 0; } 
 .subtitle { color: #8C7A6B; font-size: 13px; margin-bottom: 14px; } 
+
+/* オンボーディング専用スタイル */
+.onboarding-card {
+  text-align: center;
+}
+.concept-box {
+  background: #FFF0E5;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 16px 0;
+  text-align: left;
+  font-size: 13px;
+  color: #5A4A42;
+  line-height: 1.6;
+}
+.concept-box p {
+  margin: 6px 0;
+}
+.start-message {
+  background: #EBF7FF;
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 16px;
+  color: #2B6CB0;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+/* 通常UIスタイル */
 .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; } 
 .btn-icon { background: #F0F4F8; border: none; border-radius: 20px; padding: 6px 12px; font-size: 12px; font-weight: bold; color: #4A5568; cursor: pointer; } 
 .char-area { background: #EBF7FF; border-radius: 16px; padding: 12px; margin: 12px 0; display: flex; align-items: center; gap: 12px; } 
@@ -42,21 +72,24 @@ h1 { font-size: 22px; color: #5A4A42; margin: 6px 0; }
 .char-msg { font-size: 13px; font-weight: bold; color: #2B6CB0; text-align: left; } 
 .en-text { font-size: 25px; font-weight: bold; color: #2D3748; margin: 16px 0 4px; word-break: break-word; } 
 .jp-text { font-size: 15px; color: #718096; margin-bottom: 20px; } 
-.btn { width: 100%; padding: 13px; margin: 5px 0; border: none; border-radius: 30px; font-size: 15px; font-weight: bold; cursor: pointer; box-sizing: border-box; } 
+
+.btn { width: 100%; padding: 14px; margin: 6px 0; border: none; border-radius: 30px; font-size: 15px; font-weight: bold; cursor: pointer; box-sizing: border-box; } 
 .btn:disabled { opacity: 0.55; cursor: not-allowed; } 
 .btn-listen { background: #EBF7FF; color: #2B6CB0; } 
 .btn-speak { background: #FFF0E5; color: #C05621; } 
 .btn-next { background: #FF6B6B; color: white; margin-top: 10px; } 
 .btn-start { background: #FF6B6B; color: white; } 
+
 .spoken-box { font-size: 13px; color: #4A5568; background: #EDF2F7; border-radius: 12px; padding: 10px; margin-top: 8px; min-height: 20px; word-break: break-word; } 
 .result { margin-top: 6px; font-weight: bold; font-size: 14px; min-height: 22px; } 
-.name-input { width: 90%; padding: 12px; border: 2px solid #E2E8F0; border-radius: 14px; font-size: 16px; text-align: center; margin: 8px 0 16px; outline: none; box-sizing: border-box; } 
+.name-input { width: 100%; padding: 12px; border: 2px solid #E2E8F0; border-radius: 14px; font-size: 16px; text-align: center; margin: 8px 0 16px; outline: none; box-sizing: border-box; } 
 .level-option { background: #F7FAFC; border: 2px solid #E2E8F0; border-radius: 16px; padding: 12px; margin: 8px 0; text-align: left; cursor: pointer; transition: all 0.2s; pointer-events: auto; } 
-.level-option * { pointer-events: none; } /* 子要素への誤タップを防止 */
+.level-option * { pointer-events: none; }
 .level-option.selected { border-color: #FF6B6B; background: #FFF5F5; } 
 .level-title { font-weight: bold; color: #2D3748; font-size: 14px; } 
 .level-desc { font-size: 11px; color: #718096; margin-top: 2px; } 
 .recommended-badge { background: #FF6B6B; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 8px; margin-left: 6px; } 
+
 .modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); border-radius: 24px; justify-content: center; align-items: center; z-index: 10; } 
 .modal-content { background: white; padding: 20px; border-radius: 20px; width: 85%; max-height: 90%; overflow-y: auto; text-align: center; box-sizing: border-box; } 
 .status-box { background: #FFF0E5; padding: 10px; border-radius: 16px; margin: 10px 0; font-weight: bold; color: #5A4A42; font-size: 13px; } 
@@ -65,6 +98,7 @@ h1 { font-size: 22px; color: #5A4A42; margin: 6px 0; }
 .speed-selector { display: flex; justify-content: space-between; gap: 6px; background: #F7FAFC; padding: 4px; border-radius: 16px; } 
 .speed-btn { flex: 1; border: none; background: transparent; padding: 8px 0; border-radius: 12px; font-size: 11px; font-weight: bold; color: #718096; cursor: pointer; } 
 .speed-btn.active { background: #FF9F43; color: white; } 
+
 @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.2); } 100% { transform: scale(1); opacity: 1; } } 
 .pop-animation { animation: popIn 0.4s ease-out forwards; }
 </style>
@@ -74,95 +108,119 @@ h1 { font-size: 22px; color: #5A4A42; margin: 6px 0; }
 
 <div class="card" id="app">
 
-<!-- 設定・記録モーダル -->
-<div class="modal" id="recordModal">
-  <div class="modal-content">
-    <div style="font-size:36px;">⚙️🐱</div>
-    <h3 style="color:#5A4A42; margin:4px 0;">設定・記録</h3>
+  <!-- ① オンボーディング画面（初回のみ表示） -->
+  <div id="onboardingArea" class="onboarding-card">
+    <div style="font-size:44px; margin-bottom:8px;">🎬👶🐶</div>
+    <h1>英会話は赤ちゃん以下</h1>
+    <div class="subtitle">音から始める、新しい英語学習のカタチ</div>
 
-    <div class="status-box">
-      <p style="margin:4px 0;">🔥 連続記録: <span id="modalStreak">0</span>日</p>
-      <p style="margin:4px 0;">🏆 累計学習: <span id="modalTotal">0</span>日</p>
+    <div class="concept-box">
+      <p>👶 <strong>赤ちゃんは文法を学びません。</strong><br>
+      まず「音」をたくさん聴いて、マネして喋ることからスタートします。</p>
+      <p>🎧 <strong>このアプリも同じです。</strong><br>
+      難しい勉強は一切なし。耳と口を使って「音の響き」を身体に馴染ませていきます。</p>
+      <p>🎬 <strong>目指すは「洋画をそのまま楽しむ力」！</strong><br>
+      赤ちゃんステップで、着実に階段をのぼりましょう。</p>
     </div>
 
-    <div class="setting-group">
-      <span class="setting-label">🎯 スタートレベルの変更</span>
-      <div class="level-option" id="mLevel_1" data-level="1">
-        <div class="level-title">🍼 レベル1：超初心者</div>
-      </div>
-      <div class="level-option" id="mLevel_2" data-level="2">
-        <div class="level-title">🐣 レベル2：初級・日常英会話</div>
-      </div>
-      <div class="level-option" id="mLevel_3" data-level="3">
-        <div class="level-title">🎬 レベル3：洋画チャレンジ</div>
-      </div>
+    <div class="start-message">
+      🌱 <strong>今日から始めよう</strong><br>
+      1日15分でOK。<br>
+      英語ができなくても大丈夫。<br>
+      ここがスタートラインです！
     </div>
 
-    <div class="setting-group">
-      <span class="setting-label">🔊 音声スピード</span>
-      <div class="speed-selector">
-        <button class="speed-btn" id="speedSlow" data-speed="0.5">🐢 ゆっくり</button>
-        <button class="speed-btn" id="speedNormal" data-speed="0.8">🙂 ふつう</button>
-        <button class="speed-btn" id="speedFast" data-speed="1.0">🐇 洋画スピード</button>
+    <button class="btn btn-start" id="btnGoToSetup">最初のレッスンを始める ▶</button>
+  </div>
+
+  <!-- 設定・記録モーダル -->
+  <div class="modal" id="recordModal">
+    <div class="modal-content">
+      <div style="font-size:36px;">⚙️🐱</div>
+      <h3 style="color:#5A4A42; margin:4px 0;">設定・記録</h3>
+
+      <div class="status-box">
+        <p style="margin:4px 0;">🔥 連続記録: <span id="modalStreak">0</span>日</p>
+        <p style="margin:4px 0;">🏆 累計学習: <span id="modalTotal">0</span>日</p>
       </div>
+
+      <div class="setting-group">
+        <span class="setting-label">🎯 スタートレベルの変更</span>
+        <div class="level-option" id="mLevel_1" data-level="1">
+          <div class="level-title">🍼 レベル1：超初心者</div>
+        </div>
+        <div class="level-option" id="mLevel_2" data-level="2">
+          <div class="level-title">🐣 レベル2：初級・日常英会話</div>
+        </div>
+        <div class="level-option" id="mLevel_3" data-level="3">
+          <div class="level-title">🎬 レベル3：洋画チャレンジ</div>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <span class="setting-label">🔊 音声スピード</span>
+        <div class="speed-selector">
+          <button class="speed-btn" id="speedSlow" data-speed="0.5">🐢 ゆっくり</button>
+          <button class="speed-btn" id="speedNormal" data-speed="0.8">🙂 ふつう</button>
+          <button class="speed-btn" id="speedFast" data-speed="1.0">🐇 洋画スピード</button>
+        </div>
+      </div>
+
+      <button class="btn btn-next" id="btnCloseModal">保存してとじる</button>
+    </div>
+  </div>
+
+  <!-- 初期設定（名前・レベル選択）画面 -->
+  <div id="nameArea" style="display:none;">
+    <div style="font-size:36px;">📝🐶</div>
+    <h2 style="font-size:20px; color:#5A4A42; margin:6px 0;">プロフィール設定</h2>
+
+    <p style="font-weight:bold; color:#5A4A42; margin-bottom:4px; font-size:14px; text-align:left;">お名前</p>
+    <input id="nameInput" class="name-input" type="text" placeholder="例: Taro" maxlength="30">
+
+    <p style="font-weight:bold; color:#5A4A42; margin-bottom:6px; font-size:14px; text-align:left;">あなたの英語レベルを選んでね</p>
+
+    <div class="level-option selected" id="initLevel_1" data-level="1">
+      <div class="level-title">🍼 ① レベル1：超初心者 <span class="recommended-badge">おすすめ</span></div>
+      <div class="level-desc">あいさつ・気持ち・基本動作からスタート</div>
     </div>
 
-    <button class="btn btn-next" id="btnCloseModal">保存してとじる</button>
-  </div>
-</div>
+    <div class="level-option" id="initLevel_2" data-level="2">
+      <div class="level-title">🐣 ② レベル2：初級・日常英会話</div>
+      <div class="level-desc">日常表現・質問・返し・お願いなど</div>
+    </div>
 
-<!-- 初期設定画面 -->
-<div id="nameArea">
-  <div style="font-size:40px;">🎬👶🐶</div>
-  <h1>英会話は赤ちゃん以下</h1>
-  <div class="subtitle">目指せ！洋画を字幕なしで聴き取る力</div>
+    <div class="level-option" id="initLevel_3" data-level="3">
+      <div class="level-title">🎬 ③ レベル3：洋画チャレンジ</div>
+      <div class="level-desc">洋画頻出・音のつながり・感情表現など</div>
+    </div>
 
-  <p style="font-weight:bold; color:#5A4A42; margin-bottom:4px; font-size:14px;">お名前</p>
-  <input id="nameInput" class="name-input" type="text" placeholder="例: Taro" maxlength="30">
-
-  <p style="font-weight:bold; color:#5A4A42; margin-bottom:6px; font-size:14px;">あなたの英語レベルを選んでね</p>
-
-  <div class="level-option selected" id="initLevel_1" data-level="1">
-    <div class="level-title">🍼 ① レベル1：超初心者 <span class="recommended-badge">おすすめ</span></div>
-    <div class="level-desc">あいさつ・気持ち・基本動作からスタート</div>
+    <button class="btn btn-start" id="btnStart" style="margin-top:12px;">学習をスタート！ ▶</button>
   </div>
 
-  <div class="level-option" id="initLevel_2" data-level="2">
-    <div class="level-title">🐣 ② レベル2：初級・日常英会話</div>
-    <div class="level-desc">日常表現・質問・返し・お願いなど</div>
+  <!-- メイン学習画面 -->
+  <div id="lessonArea" style="display:none;">
+    <div class="header-bar">
+      <span style="color:#A0AEC0; font-size:12px; font-weight:bold;" id="stepProgress">Lv.1 (1-1 あいさつ) 1/5</span>
+      <button class="btn-icon" id="btnOpenModal">⚙️ 設定</button>
+    </div>
+
+    <div class="char-area">
+      <div class="char-icon" id="charIcon">🐶</div>
+      <div class="char-msg" id="charMsg">ぽてワン「音の響きをよく聴いてね！」</div>
+    </div>
+
+    <div class="en-text" id="enText">Thank you.</div>
+    <div class="jp-text" id="jpText">ありがとう。</div>
+
+    <button class="btn btn-listen" id="btnListen">🔊 きく</button>
+    <button class="btn btn-speak" id="btnSpeak">🎤 マネして言う</button>
+
+    <div class="spoken-box" id="spokenBox">👂 声を聞かせてね</div>
+    <div class="result" id="resultMsg"></div>
+
+    <button class="btn btn-next" id="btnNext">つぎへ ✨</button>
   </div>
-
-  <div class="level-option" id="initLevel_3" data-level="3">
-    <div class="level-title">🎬 ③ レベル3：洋画チャレンジ</div>
-    <div class="level-desc">洋画頻出・音のつながり・感情表現など</div>
-  </div>
-
-  <button class="btn btn-start" id="btnStart" style="margin-top:12px;">▶ スタート！</button>
-</div>
-
-<!-- メイン学習画面 -->
-<div id="lessonArea" style="display:none;">
-  <div class="header-bar">
-    <span style="color:#A0AEC0; font-size:12px; font-weight:bold;" id="stepProgress">Lv.1 (1-1 あいさつ) 1/5</span>
-    <button class="btn-icon" id="btnOpenModal">⚙️ 設定</button>
-  </div>
-
-  <div class="char-area">
-    <div class="char-icon" id="charIcon">🐶</div>
-    <div class="char-msg" id="charMsg">ぽてワン「音の響きをよく聴いてね！」</div>
-  </div>
-
-  <div class="en-text" id="enText">Thank you.</div>
-  <div class="jp-text" id="jpText">ありがとう。</div>
-
-  <button class="btn btn-listen" id="btnListen">🔊 きく</button>
-  <button class="btn btn-speak" id="btnSpeak">🎤 マネして言う</button>
-
-  <div class="spoken-box" id="spokenBox">👂 声を聞かせてね</div>
-  <div class="result" id="resultMsg"></div>
-
-  <button class="btn btn-next" id="btnNext">つぎへ ✨</button>
-</div>
 
 </div>
 
@@ -178,6 +236,7 @@ let currentSpeed = 0.5;
 let isListening = false;
 let recognitionInstance = null;
 let listenTimeoutTimer = null;
+let hasSeenOnboarding = false;
 
 const curriculumData = {
   1: {
@@ -202,36 +261,6 @@ const curriculumData = {
           { en: "I'm ready.", jp: "準備できたよ。" },
           { en: "I'm home.", jp: "ただいま。" }
         ]
-      },
-      {
-        id: "1-3", title: "好き・嫌い",
-        items: [
-          { en: "I like coffee.", jp: "コーヒーが好き。" },
-          { en: "I like this.", jp: "これが好き。" },
-          { en: "I don't like it.", jp: "それは好きじゃないな。" },
-          { en: "I love it!", jp: "これ大好き！" },
-          { en: "Me too.", jp: "私も。" }
-        ]
-      },
-      {
-        id: "1-4", title: "気持ち",
-        items: [
-          { en: "I don't know.", jp: "分かりません。" },
-          { en: "I'm sorry.", jp: "ごめんなさい。" },
-          { en: "It's fine.", jp: "大丈夫だよ。" },
-          { en: "I'm fine.", jp: "元気ですよ。" },
-          { en: "It's okay.", jp: "問題ないよ。" }
-        ]
-      },
-      {
-        id: "1-5", title: "日常動作",
-        items: [
-          { en: "Let's go!", jp: "行こう！" },
-          { en: "Come here.", jp: "こっち来て。" },
-          { en: "Look at this.", jp: "これ見て。" },
-          { en: "Wait for me.", jp: "待ってて。" },
-          { en: "Sit down.", jp: "座って。" }
-        ]
       }
     ]
   },
@@ -243,29 +272,7 @@ const curriculumData = {
         items: [
           { en: "I'm on my way.", jp: "今向かってるよ。" },
           { en: "Sounds good.", jp: "いいね！" },
-          { en: "Take care.", jp: "気をつけてね。" },
-          { en: "No problem.", jp: "問題ないよ。" },
-          { en: "Have fun!", jp: "楽しんできてね！" }
-        ]
-      },
-      {
-        id: "2-2", title: "質問",
-        items: [
-          { en: "What do you think?", jp: "どう思う？" },
-          { en: "How's it going?", jp: "調子はどう？" },
-          { en: "Where are you?", jp: "どこにいるの？" },
-          { en: "What's wrong?", jp: "どうしたの？" },
-          { en: "Are you sure?", jp: "本当に？" }
-        ]
-      },
-      {
-        id: "2-3", title: "返答・つなぎ",
-        items: [
-          { en: "Give me a minute.", jp: "ちょっと時間を頂戴。" },
-          { en: "Just a second.", jp: "ちょっと待って。" },
-          { en: "I see.", jp: "なるほどね。" },
-          { en: "I got it.", jp: "わかったよ。" },
-          { en: "That makes sense.", jp: "納得だよ。" }
+          { en: "Take care.", jp: "気をつけてね。" }
         ]
       }
     ]
@@ -278,19 +285,7 @@ const curriculumData = {
         items: [
           { en: "What are you talking about?", jp: "何言ってるの？" },
           { en: "Give me a break.", jp: "勘弁してよ。" },
-          { en: "It's up to you.", jp: "君に任せるよ。" },
-          { en: "You gotta be kidding me.", jp: "冗談でしょ！" },
           { en: "I'll be right back.", jp: "すぐ戻るよ。" }
-        ]
-      },
-      {
-        id: "3-2", title: "感情・ネイティブ表現",
-        items: [
-          { en: "Never mind.", jp: "気にしないで。" },
-          { en: "Don't worry about it.", jp: "心配しないで。" },
-          { en: "Are you out of your mind?", jp: "正気なの？" },
-          { en: "Catch you later.", jp: "また後でね。" },
-          { en: "I have no idea.", jp: "さっぱり分からないや。" }
         ]
       }
     ]
@@ -303,8 +298,20 @@ window.addEventListener('DOMContentLoaded', () => {
   setSpeedUI(currentSpeed);
   initEventListeners();
 
-  if (userName) {
-    document.getElementById("nameInput").value = userName;
+  // 表示画面の切り替えロジック
+  if (!hasSeenOnboarding) {
+    // 初回起動：オンボーディング表示
+    document.getElementById("onboardingArea").style.display = "block";
+    document.getElementById("nameArea").style.display = "none";
+    document.getElementById("lessonArea").style.display = "none";
+  } else if (!userName) {
+    // オンボーディング閲覧済みだが名前未登録：設定画面
+    document.getElementById("onboardingArea").style.display = "none";
+    document.getElementById("nameArea").style.display = "block";
+    document.getElementById("lessonArea").style.display = "none";
+  } else {
+    // 登録済み：メインレッスン画面
+    document.getElementById("onboardingArea").style.display = "none";
     document.getElementById("nameArea").style.display = "none";
     document.getElementById("lessonArea").style.display = "block";
     updateCard();
@@ -312,6 +319,17 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function initEventListeners() {
+  // オンボーディング「最初のレッスンを始める」ボタン
+  const btnGoToSetup = document.getElementById("btnGoToSetup");
+  if (btnGoToSetup) {
+    btnGoToSetup.addEventListener('click', () => {
+      hasSeenOnboarding = true;
+      saveData();
+      document.getElementById("onboardingArea").style.display = "none";
+      document.getElementById("nameArea").style.display = "block";
+    });
+  }
+
   // 初期レベル選択
   [1, 2, 3].forEach(lvl => {
     const el = document.getElementById(`initLevel_${lvl}`);
@@ -329,8 +347,10 @@ function initEventListeners() {
   if (btnListen) btnListen.addEventListener('click', speakCurrent);
 
   const btnSpeak = document.getElementById("btnSpeak");
-  if (btnSpeak) btnSpeak.disabled = false; // 強制有効化
-  if (btnSpeak) btnSpeak.addEventListener('click', startListen);
+  if (btnSpeak) {
+    btnSpeak.disabled = false;
+    btnSpeak.addEventListener('click', startListen);
+  }
 
   const btnNext = document.getElementById("btnNext");
   if (btnNext) btnNext.addEventListener('click', nextLesson);
@@ -361,6 +381,7 @@ function initEventListeners() {
 
 function loadData() {
   try {
+    hasSeenOnboarding = localStorage.getItem("eb_onboarding") === "true";
     userName = localStorage.getItem("eb_userName") || "";
     currentLevel = parseInt(localStorage.getItem("eb_level") || "1", 10);
     currentSubIndex = parseInt(localStorage.getItem("eb_subIndex") || "0", 10);
@@ -376,6 +397,7 @@ function loadData() {
 
 function saveData() {
   try {
+    localStorage.setItem("eb_onboarding", hasSeenOnboarding ? "true" : "false");
     localStorage.setItem("eb_userName", userName);
     localStorage.setItem("eb_level", currentLevel.toString());
     localStorage.setItem("eb_subIndex", currentSubIndex.toString());
