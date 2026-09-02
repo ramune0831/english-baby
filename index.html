@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>英会話は赤ちゃん以下 - 洋画リスニングへの道</title>
 
+  <!-- ★① 紙吹雪（コンフェティ）用ライブラリ -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
@@ -62,43 +63,6 @@
       cursor: pointer;
     }
 
-    .selection-group {
-      margin: 12px 0;
-      text-align: left;
-    }
-
-    .selection-label {
-      font-weight: bold;
-      color: #5A4A42;
-      font-size: 14px;
-      margin-bottom: 6px;
-      display: block;
-    }
-
-    .option-grid {
-      display: flex;
-      gap: 8px;
-    }
-
-    .option-btn {
-      flex: 1;
-      background: #F7FAFC;
-      border: 2px solid #E2E8F0;
-      border-radius: 14px;
-      padding: 10px;
-      font-size: 13px;
-      font-weight: bold;
-      color: #4A5568;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .option-btn.selected {
-      border-color: #FF6B6B;
-      background: #FFF5F5;
-      color: #C05621;
-    }
-
     .char-area {
       background: #EBF7FF;
       border-radius: 16px;
@@ -107,26 +71,11 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      position: relative;
     }
 
-    .char-container {
-      position: relative;
-      font-size: 36px;
-      min-width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .char-hat {
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 22px;
-      z-index: 2;
+    .char-icon {
+      font-size: 32px;
+      min-width: 45px;
     }
 
     .char-msg {
@@ -162,10 +111,31 @@
       box-sizing: border-box;
     }
 
-    .btn-listen { background: #EBF7FF; color: #2B6CB0; }
-    .btn-speak { background: #FFF0E5; color: #C05621; }
-    .btn-next { background: #FF6B6B; color: white; margin-top: 10px; }
-    .btn-start { background: #FF6B6B; color: white; }
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .btn-listen {
+      background: #EBF7FF;
+      color: #2B6CB0;
+    }
+
+    .btn-speak {
+      background: #FFF0E5;
+      color: #C05621;
+    }
+
+    .btn-next {
+      background: #FF6B6B;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .btn-start {
+      background: #FF6B6B;
+      color: white;
+    }
 
     .spoken-box {
       font-size: 13px;
@@ -186,20 +156,62 @@
     }
 
     .name-input {
-      width: 100%;
-      padding: 10px;
+      width: 90%;
+      padding: 12px;
       border: 2px solid #E2E8F0;
-      border-radius: 12px;
-      font-size: 15px;
+      border-radius: 14px;
+      font-size: 16px;
       text-align: center;
+      margin: 8px 0 16px;
       outline: none;
       box-sizing: border-box;
+    }
+
+    .level-option {
+      background: #F7FAFC;
+      border: 2px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 12px;
+      margin: 8px 0;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .level-option.selected {
+      border-color: #FF6B6B;
+      background: #FFF5F5;
+    }
+
+    .level-title {
+      font-weight: bold;
+      color: #2D3748;
+      font-size: 14px;
+    }
+
+    .level-desc {
+      font-size: 11px;
+      color: #718096;
+      margin-top: 2px;
+    }
+
+    .recommended-badge {
+      background: #FF6B6B;
+      color: white;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 8px;
+      margin-left: 6px;
     }
 
     .modal {
       display: none;
       position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: rgba(0,0,0,0.4);
       border-radius: 24px;
       justify-content: center;
@@ -218,14 +230,70 @@
       box-sizing: border-box;
     }
 
-    .mic-status {
-      background: #EDF2F7;
+    .status-box {
+      background: #FFF0E5;
       padding: 10px;
-      border-radius: 12px;
+      border-radius: 16px;
       margin: 10px 0;
+      font-weight: bold;
+      color: #5A4A42;
+      font-size: 13px;
+    }
+
+    .setting-group {
+      margin: 14px 0;
+      text-align: left;
+    }
+
+    .setting-label {
       font-size: 12px;
-      color: #2D3748;
-      text-align: center;
+      font-weight: bold;
+      color: #718096;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .speed-selector {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      background: #F7FAFC;
+      padding: 4px;
+      border-radius: 16px;
+    }
+
+    .speed-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 8px 0;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: bold;
+      color: #718096;
+      cursor: pointer;
+    }
+
+    .speed-btn.active {
+      background: #FF9F43;
+      color: white;
+    }
+
+    .mic-status {
+      font-size: 11px;
+      color: #718096;
+      margin-top: 8px;
+    }
+
+    /* ★② ポコッと弾けるアニメーション（CSS） */
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      70% { transform: scale(1.2); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .pop-animation {
+      animation: popIn 0.4s ease-out forwards;
     }
   </style>
 </head>
@@ -234,83 +302,85 @@
 
 <div class="card" id="app">
 
-  <!-- 設定・マイクテストモーダル -->
+  <!-- 設定・記録モーダル -->
   <div class="modal" id="recordModal">
     <div class="modal-content">
-      <div style="font-size:36px;">⚙️</div>
-      <h3 style="color:#5A4A42; margin:4px 0;">設定・マイクテスト</h3>
+      <div style="font-size:36px;">⚙️🐱</div>
+      <h3 style="color:#5A4A42; margin:4px 0;">設定・記録</h3>
       
-      <div class="mic-status">
-        🎤 音声認識：
-        <span id="micSupportText">確認中...</span>
-
-        <button
-          class="btn btn-listen"
-          style="margin-top:8px;"
-          onclick="testMicrophone()">
-          🎤 マイクをテスト
-        </button>
+      <div class="status-box">
+        <p style="margin:4px 0;">🔥 連続記録: <span id="modalStreak">0</span>日</p>
+        <p style="margin:4px 0;">🏆 累計学習: <span id="modalTotal">0</span>日</p>
       </div>
 
-      <button class="btn btn-next" onclick="closeRecordModal()">とじる</button>
+      <div class="setting-group">
+        <span class="setting-label">🎯 スタートレベルの変更</span>
+        <div class="level-option" id="mLevel_1" onclick="selectModalLevel(1)">
+          <div class="level-title">🍼 レベル1：超初心者</div>
+        </div>
+        <div class="level-option" id="mLevel_2" onclick="selectModalLevel(2)">
+          <div class="level-title">🐣 レベル2：初級・日常英会話</div>
+        </div>
+        <div class="level-option" id="mLevel_3" onclick="selectModalLevel(3)">
+          <div class="level-title">🎬 レベル3：洋画チャレンジ</div>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <span class="setting-label">🔊 音声スピード</span>
+        <div class="speed-selector">
+          <button class="speed-btn" id="speedSlow" onclick="setSpeed(0.5)">🐢 ゆっくり</button>
+          <button class="speed-btn" id="speedNormal" onclick="setSpeed(0.8)">🙂 ふつう</button>
+          <button class="speed-btn" id="speedFast" onclick="setSpeed(1.0)">🐇 洋画スピード</button>
+        </div>
+      </div>
+
+      <div class="mic-status">
+        🎤 音声認識：<span id="micSupportText">確認中...</span>
+      </div>
+
+      <button class="btn btn-next" onclick="closeRecordModal()">保存してとじる</button>
     </div>
   </div>
 
-  <!-- ホーム画面 -->
-  <div id="homeArea">
-    <div style="font-size:40px;">🎬👶</div>
+  <!-- 初期設定画面 -->
+  <div id="nameArea">
+    <div style="font-size:40px;">🎬👶🐶</div>
     <h1>英会話は赤ちゃん以下</h1>
     <div class="subtitle">目指せ！洋画を字幕なしで聴き取る力</div>
 
-    <div class="selection-group">
-      <span class="selection-label">お名前</span>
-      <input id="nameInput" class="name-input" type="text" placeholder="例: Taro" maxlength="30">
+    <p style="font-weight:bold; color:#5A4A42; margin-bottom:4px; font-size:14px;">お名前</p>
+    <input id="nameInput" class="name-input" type="text" placeholder="例: Taro" maxlength="30">
+
+    <p style="font-weight:bold; color:#5A4A42; margin-bottom:6px; font-size:14px;">あなたの英語レベルを選んでね</p>
+
+    <div class="level-option selected" id="initLevel_1" onclick="chooseInitLevel(1)">
+      <div class="level-title">🍼 ① レベル1：超初心者 <span class="recommended-badge">おすすめ</span></div>
+      <div class="level-desc">あいさつ・気持ち・基本動作からスタート</div>
     </div>
 
-    <!-- 相棒選択（犬か猫） -->
-    <div class="selection-group">
-      <span class="selection-label">相棒キャラクターを選択</span>
-      <div class="option-grid">
-        <div class="option-btn selected" id="charOpt_dog" onclick="selectChar('dog', '🐶', 'ぽてワン')">🐶 犬 (ぽてワン)</div>
-        <div class="option-btn" id="charOpt_cat" onclick="selectChar('cat', '🐱', 'ぽてニャン')">🐱 猫 (ぽてニャン)</div>
-      </div>
+    <div class="level-option" id="initLevel_2" onclick="chooseInitLevel(2)">
+      <div class="level-title">🐣 ② レベル2：初級・日常英会話</div>
+      <div class="level-desc">日常表現・質問・返し・お願いなど</div>
     </div>
 
-    <!-- 着せ替え選択 -->
-    <div class="selection-group">
-      <span class="selection-label">かぶりもの（着せ替え）</span>
-      <div class="option-grid">
-        <div class="option-btn selected" id="hatOpt_none" onclick="selectHat('')">なし</div>
-        <div class="option-btn" id="hatOpt_crown" onclick="selectHat('👑')">👑 王冠</div>
-        <div class="option-btn" id="hatOpt_party" onclick="selectHat('🥳')">🥳 パーティー</div>
-        <div class="option-btn" id="hatOpt_grad" onclick="selectHat('🎓')">🎓 博士帽</div>
-      </div>
+    <div class="level-option" id="initLevel_3" onclick="chooseInitLevel(3)">
+      <div class="level-title">🎬 ③ レベル3：洋画チャレンジ</div>
+      <div class="level-desc">洋画頻出・音のつながり・感情表現など</div>
     </div>
 
-    <!-- レベル選択 -->
-    <div class="selection-group">
-      <span class="selection-label">英語レベル</span>
-      <div class="option-btn selected" id="levelOpt_1" onclick="selectLevel(1)" style="margin-bottom:6px;">🍼 レベル1：超初心者</div>
-      <div class="option-btn" id="levelOpt_2" onclick="selectLevel(2)" style="margin-bottom:6px;">🐣 レベル2：日常会話</div>
-      <div class="option-btn" id="levelOpt_3" onclick="selectLevel(3)">🎬 レベル3：洋画チャレンジ</div>
-    </div>
-
-    <button class="btn btn-start" onclick="startLesson()" style="margin-top:16px;">▶ レッスンスタート！</button>
+    <button class="btn btn-start" onclick="saveNameAndStart()" style="margin-top:12px;">▶ スタート！</button>
   </div>
 
   <!-- メイン学習画面 -->
   <div id="lessonArea" style="display:none;">
     <div class="header-bar">
-      <button class="btn-icon" onclick="goHome()">🏠 ホーム</button>
-      <span style="color:#A0AEC0; font-size:12px; font-weight:bold;" id="stepProgress">1/5</span>
+      <span style="color:#A0AEC0; font-size:12px; font-weight:bold;" id="stepProgress">Lv.1 (1-1 あいさつ) 1/5</span>
       <button class="btn-icon" onclick="openRecordModal()">⚙️ 設定</button>
     </div>
 
     <div class="char-area">
-      <div class="char-container">
-        <div class="char-hat" id="charHat"></div>
-        <div id="charIcon">🐶</div>
-      </div>
+      <div class="char-icon" id="charIcon">🐶</div>
       <div class="char-msg" id="charMsg">ぽてワン「音の響きをよく聴いてね！」</div>
     </div>
 
@@ -329,227 +399,333 @@
 
 <script>
   let userName = "";
-  let selectedCharType = "dog";
-  let selectedCharIcon = "🐶";
-  let selectedCharName = "ぽてワン";
-  let selectedHat = "";
   let currentLevel = 1;
-
   let currentSubIndex = 0;
   let currentIndex = 0;
+  let streak = 0;
+  let total = 0;
+  let lastDate = "";
   let currentSpeed = 0.5;
+  let isListening = false;
+  let recognitionInstance = null;
+  let listenTimeoutTimer = null;
 
   const curriculumData = {
-    1: { subStages: [{ items: [{ en: "Thank you.", jp: "ありがとう。" }, { en: "Good morning.", jp: "おはよう。" }, { en: "See you.", jp: "またね。" }, { en: "Hello.", jp: "こんにちは。" }, { en: "Yes.", jp: "はい。" }] }] },
-    2: { subStages: [{ items: [{ en: "I'm on my way.", jp: "今向かってるよ。" }, { en: "Sounds good.", jp: "いいね！" }, { en: "No problem.", jp: "問題ないよ。" }, { en: "How are you?", jp: "元気？" }, { en: "Take care.", jp: "気をつけてね。" }] }] },
-    3: { subStages: [{ items: [{ en: "Give me a break.", jp: "勘弁してよ。" }, { en: "It's up to you.", jp: "君に任せるよ。" }, { en: "Never give up.", jp: "諦めないで。" }, { en: "I got it.", jp: "分かったよ。" }, { en: "Believe in yourself.", jp: "自分を信じて。" }] }] }
+    1: {
+      name: "レベル1",
+      subStages: [
+        {
+          id: "1-1", title: "あいさつ",
+          items: [
+            { en: "Thank you.", jp: "ありがとう。" },
+            { en: "Good morning.", jp: "おはよう。" },
+            { en: "See you.", jp: "またね。" },
+            { en: "Good job!", jp: "よくできたね！" },
+            { en: "Hello.", jp: "こんにちは。" }
+          ]
+        },
+        {
+          id: "1-2", title: "自分のこと",
+          items: [
+            { en: "I'm tired.", jp: "疲れたよ。" },
+            { en: "I'm hungry.", jp: "お腹が空いた。" },
+            { en: "I'm happy.", jp: "うれしいな。" },
+            { en: "I'm ready.", jp: "準備できたよ。" },
+            { en: "I'm home.", jp: "ただいま。" }
+          ]
+        },
+        {
+          id: "1-3", title: "好き・嫌い",
+          items: [
+            { en: "I like coffee.", jp: "コーヒーが好き。" },
+            { en: "I like this.", jp: "これが好き。" },
+            { en: "I don't like it.", jp: "それは好きじゃないな。" },
+            { en: "I love it!", jp: "これ大好き！" },
+            { en: "Me too.", jp: "私も。" }
+          ]
+        },
+        {
+          id: "1-4", title: "気持ち",
+          items: [
+            { en: "I don't know.", jp: "分かりません。" },
+            { en: "I'm sorry.", jp: "ごめんなさい。" },
+            { en: "It's fine.", jp: "大丈夫だよ。" },
+            { en: "I'm fine.", jp: "元気ですよ。" },
+            { en: "It's okay.", jp: "問題ないよ。" }
+          ]
+        },
+        {
+          id: "1-5", title: "日常動作",
+          items: [
+            { en: "Let's go!", jp: "行こう！" },
+            { en: "Come here.", jp: "こっち来て。" },
+            { en: "Look at this.", jp: "これ見て。" },
+            { en: "Wait for me.", jp: "待ってて。" },
+            { en: "Sit down.", jp: "座って。" }
+          ]
+        }
+      ]
+    },
+    2: {
+      name: "レベル2",
+      subStages: [
+        {
+          id: "2-1", title: "よく使う日常表現",
+          items: [
+            { en: "I'm on my way.", jp: "今向かってるよ。" },
+            { en: "Sounds good.", jp: "いいね！" },
+            { en: "Take care.", jp: "気をつけてね。" },
+            { en: "No problem.", jp: "問題ないよ。" },
+            { en: "Have fun!", jp: "楽しんできてね！" }
+          ]
+        },
+        {
+          id: "2-2", title: "質問",
+          items: [
+            { en: "What do you think?", jp: "どう思う？" },
+            { en: "How's it going?", jp: "調子はどう？" },
+            { en: "Where are you?", jp: "どこにいるの？" },
+            { en: "What's wrong?", jp: "どうしたの？" },
+            { en: "Are you sure?", jp: "本当に？" }
+          ]
+        },
+        {
+          id: "2-3", title: "返答・つなぎ",
+          items: [
+            { en: "Give me a minute.", jp: "ちょっと時間を頂戴。" },
+            { en: "Just a second.", jp: "ちょっと待って。" },
+            { en: "I see.", jp: "なるほどね。" },
+            { en: "I got it.", jp: "わかったよ。" },
+            { en: "That makes sense.", jp: "納得だよ。" }
+          ]
+        }
+      ]
+    },
+    3: {
+      name: "レベル3",
+      subStages: [
+        {
+          id: "3-1", title: "洋画頻出フレーズ",
+          items: [
+            { en: "What are you talking about?", jp: "何言ってるの？" },
+            { en: "Give me a break.", jp: "勘弁してよ。" },
+            { en: "It's up to you.", jp: "君に任せるよ。" },
+            { en: "You gotta be kidding me.", jp: "冗談でしょ！" },
+            { en: "I'll be right back.", jp: "すぐ戻るよ。" }
+          ]
+        },
+        {
+          id: "3-2", title: "感情・ネイティブ表現",
+          items: [
+            { en: "Never mind.", jp: "気にしないで。" },
+            { en: "Don't worry about it.", jp: "心配しないで。" },
+            { en: "Are you out of your mind?", jp: "正気なの？" },
+            { en: "Catch you later.", jp: "また後でね。" },
+            { en: "I have no idea.", jp: "さっぱり分からないや。" }
+          ]
+        }
+      ]
+    }
   };
 
   window.onload = function() {
     loadData();
+    checkStreak();
+    setSpeedUI(currentSpeed);
     checkMicSupport();
+
+    if (userName) {
+      document.getElementById("nameInput").value = userName;
+      document.getElementById("nameArea").style.display = "none";
+      document.getElementById("lessonArea").style.display = "block";
+      updateCard();
+    }
   };
 
-  function selectChar(type, icon, name) {
-    selectedCharType = type;
-    selectedCharIcon = icon;
-    selectedCharName = name;
-
-    document.getElementById("charOpt_dog").classList.remove("selected");
-    document.getElementById("charOpt_cat").classList.remove("selected");
-    document.getElementById(`charOpt_${type}`).classList.add("selected");
+  function loadData() {
+    try {
+      userName = localStorage.getItem("eb_userName") || "";
+      currentLevel = parseInt(localStorage.getItem("eb_level") || "1", 10);
+      currentSubIndex = parseInt(localStorage.getItem("eb_subIndex") || "0", 10);
+      currentIndex = parseInt(localStorage.getItem("eb_currentIndex") || "0", 10);
+      streak = parseInt(localStorage.getItem("eb_streak") || "0", 10);
+      total = parseInt(localStorage.getItem("eb_total") || "0", 10);
+      lastDate = localStorage.getItem("eb_lastDate") || "";
+      currentSpeed = parseFloat(localStorage.getItem("eb_speed") || "0.5");
+    } catch(e) {
+      console.log("Storage load error:", e);
+    }
   }
 
-  function selectHat(hatIcon) {
-    selectedHat = hatIcon;
-    const hats = { "": "none", "👑": "crown", "🥳": "party", "🎓": "grad" };
-    
-    Object.values(hats).forEach(id => {
-      const el = document.getElementById(`hatOpt_${id}`);
-      if (el) el.classList.remove("selected");
-    });
-    
-    const activeId = hats[hatIcon];
-    if (activeId) document.getElementById(`hatOpt_${activeId}`).classList.add("selected");
+  function saveData() {
+    try {
+      localStorage.setItem("eb_userName", userName);
+      localStorage.setItem("eb_level", currentLevel.toString());
+      localStorage.setItem("eb_subIndex", currentSubIndex.toString());
+      localStorage.setItem("eb_currentIndex", currentIndex.toString());
+      localStorage.setItem("eb_streak", streak.toString());
+      localStorage.setItem("eb_total", total.toString());
+      localStorage.setItem("eb_lastDate", lastDate);
+      localStorage.setItem("eb_speed", currentSpeed.toString());
+    } catch(e) {
+      console.log("Storage save error:", e);
+    }
   }
 
-  function selectLevel(lvl) {
+  function checkStreak() {
+    const today = new Date().toISOString().split('T')[0];
+    if (lastDate) {
+      const last = new Date(lastDate);
+      const current = new Date(today);
+      const diffDays = Math.floor((current - last) / (1000 * 60 * 60 * 24));
+
+      if (diffDays > 1) {
+        streak = 0;
+      }
+    }
+  }
+
+  function markAttendance() {
+    const today = new Date().toISOString().split('T')[0];
+    if (lastDate !== today) {
+      const last = lastDate ? new Date(lastDate) : null;
+      const current = new Date(today);
+      const diffDays = last ? Math.floor((current - last) / (1000 * 60 * 60 * 24)) : 0;
+
+      if (diffDays === 1 || !last) {
+        streak += 1;
+      } else {
+        streak = 1;
+      }
+      total += 1;
+      lastDate = today;
+      saveData();
+    }
+  }
+
+  function checkMicSupport() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const target = document.getElementById("micSupportText");
+    if (target) {
+      if (SpeechRecognition) {
+        target.innerText = "利用可能です";
+        target.style.color = "#2E7D32";
+      } else {
+        target.innerText = "非対応（Chrome推奨）";
+        target.style.color = "#E53E3E";
+      }
+    }
+  }
+
+  function chooseInitLevel(lvl) {
     currentLevel = lvl;
     [1, 2, 3].forEach(l => {
-      const el = document.getElementById(`levelOpt_${l}`);
+      const el = document.getElementById(`initLevel_${l}`);
       if (el) el.classList.remove("selected");
     });
-    document.getElementById(`levelOpt_${lvl}`).classList.add("selected");
+    const selectedEl = document.getElementById(`initLevel_${lvl}`);
+    if (selectedEl) selectedEl.classList.add("selected");
   }
 
-  function startLesson() {
+  function saveNameAndStart() {
     const input = document.getElementById("nameInput").value.trim();
     if (!input) {
       alert("お名前を入力してください！");
       return;
     }
     userName = input;
+    currentSubIndex = 0;
     currentIndex = 0;
+    markAttendance();
     saveData();
 
-    document.getElementById("homeArea").style.display = "none";
+    document.getElementById("nameArea").style.display = "none";
     document.getElementById("lessonArea").style.display = "block";
     updateCard();
   }
 
-  function goHome() {
-    document.getElementById("lessonArea").style.display = "none";
-    document.getElementById("homeArea").style.display = "block";
+  function getCurrentSubStage() {
+    const levelObj = curriculumData[currentLevel] || curriculumData[1];
+    const subStages = levelObj.subStages;
+    if (currentSubIndex < 0 || currentSubIndex >= subStages.length) {
+      currentSubIndex = 0;
+    }
+    return subStages[currentSubIndex];
   }
 
   function updateCard() {
-    const subStage = curriculumData[currentLevel].subStages[currentSubIndex];
-    const item = subStage.items[currentIndex];
+    const subStage = getCurrentSubStage();
+    if (currentIndex < 0 || currentIndex >= subStage.items.length) {
+      currentIndex = 0;
+    }
+    const currentItem = subStage.items[currentIndex];
 
-    document.getElementById("stepProgress").innerText = `${currentIndex + 1}/${subStage.items.length}`;
-    document.getElementById("enText").innerText = item.en;
-    document.getElementById("jpText").innerText = item.jp;
-    
-    document.getElementById("charIcon").innerText = selectedCharIcon;
-    document.getElementById("charHat").innerText = selectedHat;
-    document.getElementById("charMsg").innerText = `${selectedCharName}「音の響きをよく聴いてね！」`;
-
+    document.getElementById("stepProgress").innerText =
+      `Lv.${currentLevel} (${subStage.id} ${subStage.title}) ${currentIndex + 1}/${subStage.items.length}`;
+    document.getElementById("enText").innerText = currentItem.en;
+    document.getElementById("jpText").innerText = currentItem.jp;
     document.getElementById("spokenBox").innerText = "👂 声を聞かせてね";
     document.getElementById("resultMsg").innerText = "";
+    document.getElementById("resultMsg").style.color = "";
+    document.getElementById("charIcon").innerText = "🐶";
+    document.getElementById("charMsg").innerText = "ぽてワン「音の響きをよく聴いてね！」";
   }
 
   function speakCurrent() {
-    const item = curriculumData[currentLevel].subStages[currentSubIndex].items[currentIndex];
+    if (!('speechSynthesis' in window)) {
+      alert("お使いのブラウザは音声読み上げに対応していません。");
+      return;
+    }
+
+    const subStage = getCurrentSubStage();
+    const currentItem = subStage.items[currentIndex];
+
+    document.getElementById("charIcon").innerText = "🐶🎶";
+    document.getElementById("charMsg").innerText = "ぽてワン「音のつながりをよく聴いてね！」";
+
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(item.en);
+
+    const utterance = new SpeechSynthesisUtterance(currentItem.en);
     utterance.lang = "en-US";
     utterance.rate = currentSpeed;
+
+    utterance.onend = function() {
+      document.getElementById("charIcon").innerText = "🐶";
+    };
+
+    utterance.onerror = function() {
+      document.getElementById("charIcon").innerText = "🐶💦";
+    };
+
     window.speechSynthesis.speak(utterance);
   }
 
   function startListen() {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) return alert("お使いのブラウザは音声認識に対応していません。");
+    if (isListening) return;
 
-    document.getElementById("spokenBox").innerText = "🎤 聞き取り中...";
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("お使いのブラウザは音声認識に対応していません。Android Chromeをお使いください。");
+      return;
+    }
+
+    if (recognitionInstance) {
+      try { recognitionInstance.abort(); } catch(e){}
+    }
+
+    isListening = true;
+    const btnSpeak = document.getElementById("btnSpeak");
+    if (btnSpeak) btnSpeak.disabled = true;
+
+    document.getElementById("spokenBox").innerText = "🎙️ 聞き取り中...";
+    document.getElementById("resultMsg").innerText = "";
+    document.getElementById("charIcon").innerText = "🐶👂";
+    document.getElementById("charMsg").innerText = "ぽてワン「どうぞ！喋ってみてね」";
+
     const recognition = new SpeechRecognition();
+    recognitionInstance = recognition;
     recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
 
-    recognition.onresult = function(event) {
-      const userText = event.results[0][0].transcript;
-      document.getElementById("spokenBox").innerText = `🗣️ あなた: "${userText}"`;
-      const item = curriculumData[currentLevel].subStages[currentSubIndex].items[currentIndex];
-
-      if (userText.toLowerCase().replace(/[^a-z0-9]/g, "") === item.en.toLowerCase().replace(/[^a-z0-9]/g, "")) {
-        document.getElementById("resultMsg").innerText = "🌟 大成功！バッチリ聞こえたよ！";
-        document.getElementById("resultMsg").style.color = "#2E7D32";
-        if (typeof confetti === 'function') confetti({ particleCount: 70, spread: 60 });
-      } else {
-        document.getElementById("resultMsg").innerText = "💪 おしい！もう一度やってみよう！";
-        document.getElementById("resultMsg").style.color = "#E53E3E";
-      }
-    };
-
-    recognition.onerror = function() {
-      document.getElementById("spokenBox").innerText = "⚠️ 声がうまく聞き取れなかったよ。";
-    };
-
-    recognition.start();
-  }
-
-  function nextLesson() {
-    const subStage = curriculumData[currentLevel].subStages[currentSubIndex];
-    currentIndex++;
-
-    if (currentIndex >= subStage.items.length) {
-      alert("🎉 レッスン完了！おめでとうございます！");
-      goHome();
-      return;
-    }
-
-    saveData();
-    updateCard();
-  }
-
-  function loadData() {
-    try {
-      userName = localStorage.getItem("eb_userName") || "";
-      selectedCharType = localStorage.getItem("eb_charType") || "dog";
-      selectedCharIcon = localStorage.getItem("eb_charIcon") || "🐶";
-      selectedCharName = localStorage.getItem("eb_charName") || "ぽてワン";
-      selectedHat = localStorage.getItem("eb_hat") || "";
-      currentLevel = parseInt(localStorage.getItem("eb_level") || "1", 10);
-
-      if (userName) document.getElementById("nameInput").value = userName;
-      selectChar(selectedCharType, selectedCharIcon, selectedCharName);
-      selectHat(selectedHat);
-      selectLevel(currentLevel);
-    } catch(e) {}
-  }
-
-  function saveData() {
-    try {
-      localStorage.setItem("eb_userName", userName);
-      localStorage.setItem("eb_charType", selectedCharType);
-      localStorage.setItem("eb_charIcon", selectedCharIcon);
-      localStorage.setItem("eb_charName", selectedCharName);
-      localStorage.setItem("eb_hat", selectedHat);
-      localStorage.setItem("eb_level", currentLevel.toString());
-    } catch(e) {}
-  }
-
-  function checkMicSupport() {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const textEl = document.getElementById("micSupportText");
-    if (textEl) {
-      if (SpeechRecognition) {
-        textEl.innerText = "対応（準備OK）";
-        textEl.style.color = "#2E7D32";
-      } else {
-        textEl.innerText = "非対応（ブラウザ未対応）";
-        textEl.style.color = "#E53E3E";
-      }
-    }
-  }
-
-  function testMicrophone() {
-    const textEl = document.getElementById("micSupportText");
-    textEl.innerText = "マイク確認中...";
-    textEl.style.color = "#2D3748";
-
-    if (!window.isSecureContext) {
-      textEl.innerText = "❌ 安全な接続ではありません(HTTPSが必要)";
-      textEl.style.color = "#E53E3E";
-      return;
-    }
-
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      textEl.innerText = "❌ ブラウザがマイクAPI非対応です";
-      textEl.style.color = "#E53E3E";
-      return;
-    }
-
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(function(stream) {
-        textEl.innerText = "✅ マイクOK！正常に取得できました！";
-        textEl.style.color = "#2E7D32";
-        stream.getTracks().forEach(track => track.stop());
-      })
-      .catch(function(err) {
-        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-          textEl.innerText = "❌ マイクの使用が拒否されています (NotAllowedError)";
-        } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
-          textEl.innerText = "❌ マイク入力を取得できませんでした (NotReadableError)";
-        } else {
-          textEl.innerText = `❌ エラー: ${err.name}`;
-        }
-        textEl.style.color = "#E53E3E";
-      });
-  }
-
-  function openRecordModal() { document.getElementById("recordModal").style.display = "flex"; }
-  function closeRecordModal() { document.getElementById("recordModal").style.display = "none"; }
-</script>
-
-</body>
-</html>
+    listenTimeoutTimer = 
