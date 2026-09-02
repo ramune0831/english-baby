@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>英会話は赤ちゃん以下 - 洋画リスニングへの道</title>
 
-  <!-- ★① 紙吹雪（コンフェティ）用ライブラリ -->
+  <!-- 紙吹雪（コンフェティ）用ライブラリ -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
@@ -285,7 +285,6 @@
       margin-top: 8px;
     }
 
-    /* ★② ポコッと弾けるアニメーション（CSS） */
     @keyframes popIn {
       0% { transform: scale(0.5); opacity: 0; }
       70% { transform: scale(1.2); }
@@ -677,6 +676,14 @@
       return;
     }
 
+    // もし音声認識が走っていたら安全に止める
+    if (recognitionInstance) {
+      try { recognitionInstance.abort(); } catch(e){}
+      isListening = false;
+      const btnSpeak = document.getElementById("btnSpeak");
+      if (btnSpeak) btnSpeak.disabled = false;
+    }
+
     const subStage = getCurrentSubStage();
     const currentItem = subStage.items[currentIndex];
 
@@ -700,27 +707,40 @@
     window.speechSynthesis.speak(utterance);
   }
 
-  function startListen() {
-    if (isListening) return;
+  function resetMicUI() {
+    isListening = false;
+    if (listenTimeoutTimer) clearTimeout(listenTimeoutTimer);
+    const btnSpeak = document.getElementById("btnSpeak");
+    if (btnSpeak) btnSpeak.disabled = false;
+  }
 
+  function startListen() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
       alert("お使いのブラウザは音声認識に対応していません。Android Chromeをお使いください。");
       return;
     }
 
+    // 1. スピーカーの読み上げ音声を強制キャンセル（音声認識との干渉回避）
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+
+    // 2. 既に起動している場合は一旦キャンセル
     if (recognitionInstance) {
       try { recognitionInstance.abort(); } catch(e){}
     }
 
+    resetMicUI();
     isListening = true;
+
     const btnSpeak = document.getElementById("btnSpeak");
     if (btnSpeak) btnSpeak.disabled = true;
 
-    document.getElementById("spokenBox").innerText = "🎙️ 聞き取り中...";
+    document.getElementById("spokenBox").innerText = "🎙️ 準備中...";
     document.getElementById("resultMsg").innerText = "";
     document.getElementById("charIcon").innerText = "🐶👂";
-    document.getElementById("charMsg").innerText = "ぽてワン「どうぞ！喋ってみてね」";
+    document.getElementById("charMsg").innerText = "ぽてワン「マイクを準備しているよ...」";
 
     const recognition = new SpeechRecognition();
     recognitionInstance = recognition;
@@ -728,44 +748,57 @@
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
+    // マイクが実際に音声を拾い始めたときの処理
+    recognition.onstart = function() {
+      document.getElementById("spokenBox").innerText = "🎙️ 聞き取り中...（話しかけてね！）";
+      document.getElementById("charMsg").innerText = "ぽてワン「どうぞ！英語で喋ってみてね！」";
+    };
+
+    // 10秒以上の放置対策タイマー
     listenTimeoutTimer = setTimeout(() => {
       if (isListening) {
         try { recognition.stop(); } catch(e){}
       }
-    }, 8000);
+    }, 10000);
 
+    // 正常に音声が認識された時
     recognition.onresult = function(event) {
-      clearTimeout(listenTimeoutTimer);
-      isListening = false;
-      if (btnSpeak) btnSpeak.disabled = false;
-
+      resetMicUI();
       const userText = event.results[0][0].transcript;
       document.getElementById("spokenBox").innerText = "🗣️ あなた: " + userText;
       checkAnswer(userText);
     };
 
+    // エラー発生時の詳細ハンドリング
     recognition.onerror = function(event) {
-      clearTimeout(listenTimeoutTimer);
-      isListening = false;
-      if (btnSpeak) btnSpeak.disabled = false;
+      resetMicUI();
+      console.log("Speech recognition error:", event.error);
 
-      document.getElementById("spokenBox").innerText = "⚠️ もう一度試してね";
+      if (event.error === 'no-speech') {
+        document.getElementById("spokenBox").innerText = "⚠️ 声が聞こえなかったよ。もう一度押してね！";
+      } else if (event.error === 'not-allowed') {
+        document.getElementById("spokenBox").innerText = "⚠️ マイクの使用が許可されていません。設定をご確認ください。";
+      } else if (event.error === 'network') {
+        document.getElementById("spokenBox").innerText = "⚠️ ネットワーク通信エラーが発生しました。";
+      } else {
+        document.getElementById("spokenBox").innerText = "⚠️ もう一度「🎤 マネして言う」を押してね";
+      }
+
       document.getElementById("charIcon").innerText = "🐶💦";
-      document.getElementById("charMsg").innerText = "ぽてワン「うまく聞こえなかったよ」";
+      document.getElementById("charMsg").innerText = "ぽてワン「うまく聞き取れなかったよ」";
     };
 
+    // 認識が終了した時（後始末）
     recognition.onend = function() {
-      clearTimeout(listenTimeoutTimer);
-      isListening = false;
-      if (btnSpeak) btnSpeak.disabled = false;
+      resetMicUI();
     };
 
     try {
       recognition.start();
     } catch(e) {
-      isListening = false;
-      if (btnSpeak) btnSpeak.disabled = false;
-      document.getElementById("spokenBox").innerText = "⚠️ エラーが発生しました";
+      console.log("Start error:", e);
+      resetMicUI();
+      document.getElementById("spokenBox").innerText = "⚠️ エラーが発生しました。もう一度お試しください。";
     }
   }
 
@@ -808,6 +841,14 @@
   }
 
   function nextLesson() {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    if (recognitionInstance) {
+      try { recognitionInstance.abort(); } catch(e){}
+    }
+    resetMicUI();
+
     const subStage = getCurrentSubStage();
     currentIndex++;
 
