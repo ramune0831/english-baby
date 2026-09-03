@@ -36,19 +36,19 @@ body {
 h1 { font-size: 20px; color: #5A4A42; margin: 6px 0; } 
 .subtitle { color: #8C7A6B; font-size: 13px; margin-bottom: 14px; } 
 
-/* オンボーディング専用スタイル */
-.onboarding-card { text-align: center; }
+/* コンセプト表示ボックス（オンボーディング・ホーム共通） */
 .concept-box {
   background: #FFF0E5;
   border-radius: 16px;
   padding: 16px;
-  margin: 16px 0;
+  margin: 14px 0;
   text-align: left;
   font-size: 13px;
   color: #5A4A42;
   line-height: 1.6;
 }
 .concept-box p { margin: 6px 0; }
+
 .start-message {
   background: #EBF7FF;
   border-radius: 16px;
@@ -61,7 +61,7 @@ h1 { font-size: 20px; color: #5A4A42; margin: 6px 0; }
 }
 
 /* ホーム画面（今日の15分）スタイル */
-.welcome-header { text-align: left; margin-bottom: 16px; }
+.welcome-header { text-align: left; margin-bottom: 12px; }
 .welcome-name { font-size: 18px; font-weight: bold; color: #5A4A42; }
 .streak-badge { 
   display: inline-block; 
@@ -162,8 +162,8 @@ h1 { font-size: 20px; color: #5A4A42; margin: 6px 0; }
 
 <div class="card" id="app">
 
-  <!-- ① オンボーディング画面 -->
-  <div id="onboardingArea" class="onboarding-card">
+  <!-- ① 初回オンボーディング画面 -->
+  <div id="onboardingArea">
     <div style="font-size:44px; margin-bottom:8px;">🎬👶🐶</div>
     <h1>英会話は赤ちゃん以下</h1>
     <div class="subtitle">音から始める、新しい英語学習のカタチ</div>
@@ -187,7 +187,7 @@ h1 { font-size: 20px; color: #5A4A42; margin: 6px 0; }
     <button class="btn btn-start" id="btnGoToSetup">最初のレッスンを始める ▶</button>
   </div>
 
-  <!-- ② ホーム画面（「今日の15分」構造） -->
+  <!-- ② ホーム画面（コンセプト＋「今日の15分」構造） -->
   <div id="homeArea" style="display:none;">
     <div class="header-bar">
       <span style="font-size:12px; font-weight:bold; color:#718096;">🏠 ホーム</span>
@@ -197,6 +197,14 @@ h1 { font-size: 20px; color: #5A4A42; margin: 6px 0; }
     <div class="welcome-header">
       <div class="welcome-name">おかえりなさい！ <span id="homeUserName"></span>さん</div>
       <div class="streak-badge">🔥 <span id="homeStreak">0</span>日連続達成中！</div>
+    </div>
+
+    <!-- ホーム画面用のコンセプト言葉（必ず表示） -->
+    <div class="concept-box">
+      <p>👶 <strong>赤ちゃんスタイルでOK！</strong><br>
+      文法は気にせず、聴こえた通りの「音」をマネしてみましょう。</p>
+      <p>🎬 <strong>目指せ洋画リスニング！</strong><br>
+      毎日の積み重ねで、耳が少しずつ英語に慣れていきます。</p>
     </div>
 
     <div class="today-box">
@@ -259,7 +267,7 @@ h1 { font-size: 20px; color: #5A4A42; margin: 6px 0; }
     <button class="btn btn-start" id="btnStart" style="margin-top:12px;">ホーム画面へ進む ▶</button>
   </div>
 
-  <!-- メイン学習画面（3ステップ進行） -->
+  <!-- メイン学習画面 -->
   <div id="lessonArea" style="display:none;">
     <div class="header-bar">
       <button class="btn-icon" id="btnBackHome">🏠 ホーム</button>
@@ -335,7 +343,7 @@ let isListening = false;
 let recognitionInstance = null;
 let listenTimeoutTimer = null;
 let hasSeenOnboarding = false;
-let isPassed = false; // 正解フラグ（合格ガード）
+let isPassed = false;
 
 const curriculumData = {
   1: {
@@ -423,7 +431,6 @@ function showHome() {
 }
 
 function initEventListeners() {
-  // オンボーディング -> 名前設定
   const btnGoToSetup = document.getElementById("btnGoToSetup");
   if (btnGoToSetup) {
     btnGoToSetup.addEventListener('click', () => {
@@ -433,17 +440,14 @@ function initEventListeners() {
     });
   }
 
-  // 初期レベル選択
   [1, 2, 3].forEach(lvl => {
     const el = document.getElementById(`initLevel_${lvl}`);
     if (el) el.addEventListener('click', () => chooseInitLevel(lvl));
   });
 
-  // 名前登録 -> ホーム画面
   const btnStart = document.getElementById("btnStart");
   if (btnStart) btnStart.addEventListener('click', saveNameAndGoHome);
 
-  // ホーム -> 15分レッスン開始
   const btnStart15Min = document.getElementById("btnStart15Min");
   if (btnStart15Min) {
     btnStart15Min.addEventListener('click', () => {
@@ -453,11 +457,9 @@ function initEventListeners() {
     });
   }
 
-  // レッスン -> ホームに戻る
   const btnBackHome = document.getElementById("btnBackHome");
   if (btnBackHome) btnBackHome.addEventListener('click', showHome);
 
-  // メイン学習操作
   const btnListen = document.getElementById("btnListen");
   if (btnListen) btnListen.addEventListener('click', speakCurrent);
 
@@ -467,7 +469,6 @@ function initEventListeners() {
   const btnNext = document.getElementById("btnNext");
   if (btnNext) btnNext.addEventListener('click', nextLesson);
 
-  // モーダル
   const btnOpenModal = document.getElementById("btnOpenModal");
   if (btnOpenModal) btnOpenModal.addEventListener('click', openRecordModal);
 
@@ -585,7 +586,6 @@ function updateCard() {
   }
   const currentItem = subStage.items[currentIndex];
 
-  // 問題切り替え時は「つぎへ」をロック（合格ガード）
   isPassed = false;
   const btnNext = document.getElementById("btnNext");
   if (btnNext) btnNext.disabled = true;
@@ -723,7 +723,6 @@ function checkAnswer(userText) {
   const resultEl = document.getElementById("resultMsg");
 
   if (spoken === target || spoken.includes(target) || target.includes(spoken)) {
-    // 正解処理：ロック解除
     isPassed = true;
     const btnNext = document.getElementById("btnNext");
     if (btnNext) btnNext.disabled = false;
@@ -741,7 +740,6 @@ function checkAnswer(userText) {
       confetti({ particleCount: 70, spread: 60, origin: { y: 0.7 } });
     }
   } else {
-    // 不正解処理：ボタンロック継続
     isPassed = false;
     const btnNext = document.getElementById("btnNext");
     if (btnNext) btnNext.disabled = true;
@@ -754,7 +752,7 @@ function checkAnswer(userText) {
 }
 
 function nextLesson() {
-  if (!isPassed) return; // 正解ガード
+  if (!isPassed) return;
 
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
