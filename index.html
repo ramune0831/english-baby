@@ -33,13 +33,11 @@ body {
   box-sizing: border-box; 
 } 
 
-h1 { font-size: 22px; color: #5A4A42; margin: 6px 0; } 
+h1 { font-size: 20px; color: #5A4A42; margin: 6px 0; } 
 .subtitle { color: #8C7A6B; font-size: 13px; margin-bottom: 14px; } 
 
 /* オンボーディング専用スタイル */
-.onboarding-card {
-  text-align: center;
-}
+.onboarding-card { text-align: center; }
 .concept-box {
   background: #FFF0E5;
   border-radius: 16px;
@@ -50,9 +48,7 @@ h1 { font-size: 22px; color: #5A4A42; margin: 6px 0; }
   color: #5A4A42;
   line-height: 1.6;
 }
-.concept-box p {
-  margin: 6px 0;
-}
+.concept-box p { margin: 6px 0; }
 .start-message {
   background: #EBF7FF;
   border-radius: 16px;
@@ -62,6 +58,64 @@ h1 { font-size: 22px; color: #5A4A42; margin: 6px 0; }
   font-size: 13px;
   font-weight: bold;
   line-height: 1.5;
+}
+
+/* ホーム画面（今日の15分）スタイル */
+.welcome-header { text-align: left; margin-bottom: 16px; }
+.welcome-name { font-size: 18px; font-weight: bold; color: #5A4A42; }
+.streak-badge { 
+  display: inline-block; 
+  background: #FFF0E5; 
+  color: #C05621; 
+  font-size: 12px; 
+  font-weight: bold; 
+  padding: 4px 10px; 
+  border-radius: 12px; 
+  margin-top: 4px;
+}
+
+.today-box {
+  background: #F7FAFC;
+  border: 2px solid #E2E8F0;
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+.today-title { font-size: 15px; font-weight: bold; color: #2D3748; margin-bottom: 4px; }
+.today-sub { font-size: 12px; color: #718096; margin-bottom: 12px; }
+
+.step-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.step-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+  font-size: 13px;
+  font-weight: bold;
+}
+.step-item.step-1 { border-left: 6px solid #48BB78; color: #2F855A; }
+.step-item.step-2 { border-left: 6px solid #4299E1; color: #2B6CB0; }
+.step-item.step-3 { border-left: 6px solid #ED8936; color: #C05621; }
+.step-time { font-size: 11px; color: #A0AEC0; font-weight: normal; }
+
+.level-list-title { text-align: left; font-size: 13px; font-weight: bold; color: #718096; margin: 16px 0 8px; }
+.menu-grid { display: flex; flex-direction: column; gap: 8px; }
+.menu-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F7FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #4A5568;
+  cursor: pointer;
 }
 
 /* 通常UIスタイル */
@@ -74,7 +128,7 @@ h1 { font-size: 22px; color: #5A4A42; margin: 6px 0; }
 .jp-text { font-size: 15px; color: #718096; margin-bottom: 20px; } 
 
 .btn { width: 100%; padding: 14px; margin: 6px 0; border: none; border-radius: 30px; font-size: 15px; font-weight: bold; cursor: pointer; box-sizing: border-box; } 
-.btn:disabled { opacity: 0.55; cursor: not-allowed; } 
+.btn:disabled { opacity: 0.4; cursor: not-allowed; filter: grayscale(50%); } 
 .btn-listen { background: #EBF7FF; color: #2B6CB0; } 
 .btn-speak { background: #FFF0E5; color: #C05621; } 
 .btn-next { background: #FF6B6B; color: white; margin-top: 10px; } 
@@ -108,7 +162,7 @@ h1 { font-size: 22px; color: #5A4A42; margin: 6px 0; }
 
 <div class="card" id="app">
 
-  <!-- ① オンボーディング画面（初回のみ表示） -->
+  <!-- ① オンボーディング画面 -->
   <div id="onboardingArea" class="onboarding-card">
     <div style="font-size:44px; margin-bottom:8px;">🎬👶🐶</div>
     <h1>英会話は赤ちゃん以下</h1>
@@ -131,6 +185,103 @@ h1 { font-size: 22px; color: #5A4A42; margin: 6px 0; }
     </div>
 
     <button class="btn btn-start" id="btnGoToSetup">最初のレッスンを始める ▶</button>
+  </div>
+
+  <!-- ② ホーム画面（「今日の15分」構造） -->
+  <div id="homeArea" style="display:none;">
+    <div class="header-bar">
+      <span style="font-size:12px; font-weight:bold; color:#718096;">🏠 ホーム</span>
+      <button class="btn-icon" id="btnHomeToModal">⚙️ 設定</button>
+    </div>
+
+    <div class="welcome-header">
+      <div class="welcome-name">おかえりなさい！ <span id="homeUserName"></span>さん</div>
+      <div class="streak-badge">🔥 <span id="homeStreak">0</span>日連続達成中！</div>
+    </div>
+
+    <div class="today-box">
+      <div class="today-title">🎯 今日の15分</div>
+      <div class="today-sub">あと15分で今日の学習完了！</div>
+
+      <div class="step-list">
+        <div class="step-item step-1">
+          <span>🟢 1. 覚える</span>
+          <span class="step-time">5分</span>
+        </div>
+        <div class="step-item step-2">
+          <span>🔵 2. 声に出す</span>
+          <span class="step-time">5分</span>
+        </div>
+        <div class="step-item step-3">
+          <span>🟠 3. 復習する</span>
+          <span class="step-time">5分</span>
+        </div>
+      </div>
+
+      <button class="btn btn-start" id="btnStart15Min">▶ 今日の15分を始める</button>
+    </div>
+
+    <div class="level-list-title">📚 カリキュラム＆コース</div>
+    <div class="menu-grid">
+      <div class="menu-card"><span>🌱 レベル1：超初心者</span> <span>▶</span></div>
+      <div class="menu-card"><span>🗣️ レベル2：日常会話</span> <span>▶</span></div>
+      <div class="menu-card"><span>🎬 レベル3：洋画</span> <span>▶</span></div>
+      <div class="menu-card"><span>🏆 バッジ（準備中）</span> <span>🔒</span></div>
+      <div class="menu-card"><span>🛍️ ショップ（準備中）</span> <span>🔒</span></div>
+    </div>
+  </div>
+
+  <!-- プロフィール設定画面 -->
+  <div id="nameArea" style="display:none;">
+    <div style="font-size:36px;">📝🐶</div>
+    <h2 style="font-size:20px; color:#5A4A42; margin:6px 0;">プロフィール設定</h2>
+
+    <p style="font-weight:bold; color:#5A4A42; margin-bottom:4px; font-size:14px; text-align:left;">お名前</p>
+    <input id="nameInput" class="name-input" type="text" placeholder="例: Taro" maxlength="30">
+
+    <p style="font-weight:bold; color:#5A4A42; margin-bottom:6px; font-size:14px; text-align:left;">あなたの英語レベルを選んでね</p>
+
+    <div class="level-option selected" id="initLevel_1" data-level="1">
+      <div class="level-title">🍼 ① レベル1：超初心者 <span class="recommended-badge">おすすめ</span></div>
+      <div class="level-desc">あいさつ・気持ち・基本動作からスタート</div>
+    </div>
+
+    <div class="level-option" id="initLevel_2" data-level="2">
+      <div class="level-title">🐣 ② レベル2：初級・日常英会話</div>
+      <div class="level-desc">日常表現・質問・返し・お願いなど</div>
+    </div>
+
+    <div class="level-option" id="initLevel_3" data-level="3">
+      <div class="level-title">🎬 ③ レベル3：洋画チャレンジ</div>
+      <div class="level-desc">洋画頻出・音のつながり・感情表現など</div>
+    </div>
+
+    <button class="btn btn-start" id="btnStart" style="margin-top:12px;">ホーム画面へ進む ▶</button>
+  </div>
+
+  <!-- メイン学習画面（3ステップ進行） -->
+  <div id="lessonArea" style="display:none;">
+    <div class="header-bar">
+      <button class="btn-icon" id="btnBackHome">🏠 ホーム</button>
+      <span style="color:#A0AEC0; font-size:11px; font-weight:bold;" id="stepProgress">Lv.1 1/5</span>
+      <button class="btn-icon" id="btnOpenModal">⚙️</button>
+    </div>
+
+    <div class="char-area">
+      <div class="char-icon" id="charIcon">🐶</div>
+      <div class="char-msg" id="charMsg">ぽてワン「音の響きをよく聴いてね！」</div>
+    </div>
+
+    <div class="en-text" id="enText">Thank you.</div>
+    <div class="jp-text" id="jpText">ありがとう。</div>
+
+    <button class="btn btn-listen" id="btnListen">🔊 きく</button>
+    <button class="btn btn-speak" id="btnSpeak">🎤 マネして言う</button>
+
+    <div class="spoken-box" id="spokenBox">👂 声を聞かせてね</div>
+    <div class="result" id="resultMsg"></div>
+
+    <button class="btn btn-next" id="btnNext" disabled>つぎへ ✨</button>
   </div>
 
   <!-- 設定・記録モーダル -->
@@ -170,60 +321,7 @@ h1 { font-size: 22px; color: #5A4A42; margin: 6px 0; }
     </div>
   </div>
 
-  <!-- 初期設定（名前・レベル選択）画面 -->
-  <div id="nameArea" style="display:none;">
-    <div style="font-size:36px;">📝🐶</div>
-    <h2 style="font-size:20px; color:#5A4A42; margin:6px 0;">プロフィール設定</h2>
-
-    <p style="font-weight:bold; color:#5A4A42; margin-bottom:4px; font-size:14px; text-align:left;">お名前</p>
-    <input id="nameInput" class="name-input" type="text" placeholder="例: Taro" maxlength="30">
-
-    <p style="font-weight:bold; color:#5A4A42; margin-bottom:6px; font-size:14px; text-align:left;">あなたの英語レベルを選んでね</p>
-
-    <div class="level-option selected" id="initLevel_1" data-level="1">
-      <div class="level-title">🍼 ① レベル1：超初心者 <span class="recommended-badge">おすすめ</span></div>
-      <div class="level-desc">あいさつ・気持ち・基本動作からスタート</div>
-    </div>
-
-    <div class="level-option" id="initLevel_2" data-level="2">
-      <div class="level-title">🐣 ② レベル2：初級・日常英会話</div>
-      <div class="level-desc">日常表現・質問・返し・お願いなど</div>
-    </div>
-
-    <div class="level-option" id="initLevel_3" data-level="3">
-      <div class="level-title">🎬 ③ レベル3：洋画チャレンジ</div>
-      <div class="level-desc">洋画頻出・音のつながり・感情表現など</div>
-    </div>
-
-    <button class="btn btn-start" id="btnStart" style="margin-top:12px;">学習をスタート！ ▶</button>
-  </div>
-
-  <!-- メイン学習画面 -->
-  <div id="lessonArea" style="display:none;">
-    <div class="header-bar">
-      <span style="color:#A0AEC0; font-size:12px; font-weight:bold;" id="stepProgress">Lv.1 (1-1 あいさつ) 1/5</span>
-      <button class="btn-icon" id="btnOpenModal">⚙️ 設定</button>
-    </div>
-
-    <div class="char-area">
-      <div class="char-icon" id="charIcon">🐶</div>
-      <div class="char-msg" id="charMsg">ぽてワン「音の響きをよく聴いてね！」</div>
-    </div>
-
-    <div class="en-text" id="enText">Thank you.</div>
-    <div class="jp-text" id="jpText">ありがとう。</div>
-
-    <button class="btn btn-listen" id="btnListen">🔊 きく</button>
-    <button class="btn btn-speak" id="btnSpeak">🎤 マネして言う</button>
-
-    <div class="spoken-box" id="spokenBox">👂 声を聞かせてね</div>
-    <div class="result" id="resultMsg"></div>
-
-    <button class="btn btn-next" id="btnNext">つぎへ ✨</button>
-  </div>
-
 </div>
-
 <script>
 let userName = "";
 let currentLevel = 1;
@@ -237,6 +335,7 @@ let isListening = false;
 let recognitionInstance = null;
 let listenTimeoutTimer = null;
 let hasSeenOnboarding = false;
+let isPassed = false; // 正解フラグ（合格ガード）
 
 const curriculumData = {
   1: {
@@ -298,78 +397,91 @@ window.addEventListener('DOMContentLoaded', () => {
   setSpeedUI(currentSpeed);
   initEventListeners();
 
-  // 表示画面の切り替えロジック
   if (!hasSeenOnboarding) {
-    // 初回起動：オンボーディング表示
-    document.getElementById("onboardingArea").style.display = "block";
-    document.getElementById("nameArea").style.display = "none";
-    document.getElementById("lessonArea").style.display = "none";
+    showArea("onboardingArea");
   } else if (!userName) {
-    // オンボーディング閲覧済みだが名前未登録：設定画面
-    document.getElementById("onboardingArea").style.display = "none";
-    document.getElementById("nameArea").style.display = "block";
-    document.getElementById("lessonArea").style.display = "none";
+    showArea("nameArea");
   } else {
-    // 登録済み：メインレッスン画面
-    document.getElementById("onboardingArea").style.display = "none";
-    document.getElementById("nameArea").style.display = "none";
-    document.getElementById("lessonArea").style.display = "block";
-    updateCard();
+    showHome();
   }
 });
 
+function showArea(areaId) {
+  document.getElementById("onboardingArea").style.display = "none";
+  document.getElementById("homeArea").style.display = "none";
+  document.getElementById("nameArea").style.display = "none";
+  document.getElementById("lessonArea").style.display = "none";
+
+  const target = document.getElementById(areaId);
+  if (target) target.style.display = "block";
+}
+
+function showHome() {
+  document.getElementById("homeUserName").innerText = userName || "ゲスト";
+  document.getElementById("homeStreak").innerText = streak;
+  showArea("homeArea");
+}
+
 function initEventListeners() {
-  // オンボーディング「最初のレッスンを始める」ボタン
+  // オンボーディング -> 名前設定
   const btnGoToSetup = document.getElementById("btnGoToSetup");
   if (btnGoToSetup) {
     btnGoToSetup.addEventListener('click', () => {
       hasSeenOnboarding = true;
       saveData();
-      document.getElementById("onboardingArea").style.display = "none";
-      document.getElementById("nameArea").style.display = "block";
+      showArea("nameArea");
     });
   }
 
   // 初期レベル選択
   [1, 2, 3].forEach(lvl => {
     const el = document.getElementById(`initLevel_${lvl}`);
-    if (el) {
-      el.addEventListener('click', () => chooseInitLevel(lvl));
-    }
+    if (el) el.addEventListener('click', () => chooseInitLevel(lvl));
   });
 
-  // スタートボタン
+  // 名前登録 -> ホーム画面
   const btnStart = document.getElementById("btnStart");
-  if (btnStart) btnStart.addEventListener('click', saveNameAndStart);
+  if (btnStart) btnStart.addEventListener('click', saveNameAndGoHome);
 
-  // メイン画面ボタン
+  // ホーム -> 15分レッスン開始
+  const btnStart15Min = document.getElementById("btnStart15Min");
+  if (btnStart15Min) {
+    btnStart15Min.addEventListener('click', () => {
+      markAttendance();
+      showArea("lessonArea");
+      updateCard();
+    });
+  }
+
+  // レッスン -> ホームに戻る
+  const btnBackHome = document.getElementById("btnBackHome");
+  if (btnBackHome) btnBackHome.addEventListener('click', showHome);
+
+  // メイン学習操作
   const btnListen = document.getElementById("btnListen");
   if (btnListen) btnListen.addEventListener('click', speakCurrent);
 
   const btnSpeak = document.getElementById("btnSpeak");
-  if (btnSpeak) {
-    btnSpeak.disabled = false;
-    btnSpeak.addEventListener('click', startListen);
-  }
+  if (btnSpeak) btnSpeak.addEventListener('click', startListen);
 
   const btnNext = document.getElementById("btnNext");
   if (btnNext) btnNext.addEventListener('click', nextLesson);
 
+  // モーダル
   const btnOpenModal = document.getElementById("btnOpenModal");
   if (btnOpenModal) btnOpenModal.addEventListener('click', openRecordModal);
+
+  const btnHomeToModal = document.getElementById("btnHomeToModal");
+  if (btnHomeToModal) btnHomeToModal.addEventListener('click', openRecordModal);
 
   const btnCloseModal = document.getElementById("btnCloseModal");
   if (btnCloseModal) btnCloseModal.addEventListener('click', closeRecordModal);
 
-  // モーダル内レベル選択
   [1, 2, 3].forEach(lvl => {
     const el = document.getElementById(`mLevel_${lvl}`);
-    if (el) {
-      el.addEventListener('click', () => selectModalLevel(lvl));
-    }
+    if (el) el.addEventListener('click', () => selectModalLevel(lvl));
   });
 
-  // スピードボタン
   const speedBtns = document.querySelectorAll('.speed-btn');
   speedBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -444,7 +556,7 @@ function chooseInitLevel(lvl) {
   if (selectedEl) selectedEl.classList.add("selected");
 }
 
-function saveNameAndStart() {
+function saveNameAndGoHome() {
   const input = document.getElementById("nameInput").value.trim();
   if (!input) {
     alert("お名前を入力してください！");
@@ -453,12 +565,8 @@ function saveNameAndStart() {
   userName = input;
   currentSubIndex = 0;
   currentIndex = 0;
-  markAttendance();
   saveData();
-
-  document.getElementById("nameArea").style.display = "none";
-  document.getElementById("lessonArea").style.display = "block";
-  updateCard();
+  showHome();
 }
 
 function getCurrentSubStage() {
@@ -477,7 +585,12 @@ function updateCard() {
   }
   const currentItem = subStage.items[currentIndex];
 
-  document.getElementById("stepProgress").innerText = `Lv.${currentLevel} (${subStage.id} ${subStage.title}) ${currentIndex + 1}/${subStage.items.length}`;
+  // 問題切り替え時は「つぎへ」をロック（合格ガード）
+  isPassed = false;
+  const btnNext = document.getElementById("btnNext");
+  if (btnNext) btnNext.disabled = true;
+
+  document.getElementById("stepProgress").innerText = `Lv.${currentLevel} (${subStage.id}) ${currentIndex + 1}/${subStage.items.length}`;
   document.getElementById("enText").innerText = currentItem.en;
   document.getElementById("jpText").innerText = currentItem.jp;
   document.getElementById("spokenBox").innerText = "👂 声を聞かせてね";
@@ -610,6 +723,11 @@ function checkAnswer(userText) {
   const resultEl = document.getElementById("resultMsg");
 
   if (spoken === target || spoken.includes(target) || target.includes(spoken)) {
+    // 正解処理：ロック解除
+    isPassed = true;
+    const btnNext = document.getElementById("btnNext");
+    if (btnNext) btnNext.disabled = false;
+
     resultEl.innerText = "🎉 すごい！大正解！";
     resultEl.style.color = "#2E7D32";
     document.getElementById("charIcon").innerText = "🐶✨";
@@ -623,6 +741,11 @@ function checkAnswer(userText) {
       confetti({ particleCount: 70, spread: 60, origin: { y: 0.7 } });
     }
   } else {
+    // 不正解処理：ボタンロック継続
+    isPassed = false;
+    const btnNext = document.getElementById("btnNext");
+    if (btnNext) btnNext.disabled = true;
+
     resultEl.innerText = "👍 惜しい！もう一回やってみよう";
     resultEl.style.color = "#DD6B20";
     document.getElementById("charIcon").innerText = "🐶💪";
@@ -631,6 +754,8 @@ function checkAnswer(userText) {
 }
 
 function nextLesson() {
+  if (!isPassed) return; // 正解ガード
+
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
   }
@@ -649,10 +774,11 @@ function nextLesson() {
     if (currentSubIndex >= levelObj.subStages.length) {
       currentSubIndex = 0;
       alert(`🎉 おめでとうございます！ Level ${currentLevel} をすべてクリアしました！`);
+      showHome();
+      return;
     }
   }
 
-  markAttendance();
   saveData();
   updateCard();
 }
@@ -678,7 +804,9 @@ function openRecordModal() {
 
 function closeRecordModal() {
   saveData();
-  updateCard();
+  if (document.getElementById("lessonArea").style.display === "block") {
+    updateCard();
+  }
   document.getElementById("recordModal").style.display = "none";
 }
 
