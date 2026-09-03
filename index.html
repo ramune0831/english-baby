@@ -125,11 +125,12 @@ h1 { font-size: 22px; color: #5A4A42; margin: 8px 0 4px; }
 .pop-animation { animation: popIn 0.4s ease-out forwards; }
 </style>
 </head>
-<body>
+
+  <body>
 
 <div class="card" id="app">
 
-  <!-- ① ホーム画面（ご提示のスクリーンショットの画面） -->
+  <!-- ① ホーム画面 -->
   <div id="homeArea">
     <div style="font-size:44px; margin-bottom:4px;">🎬👶🐶</div>
     <h1>英会話は赤ちゃん以下</h1>
@@ -154,7 +155,7 @@ h1 { font-size: 22px; color: #5A4A42; margin: 8px 0 4px; }
     <button class="btn btn-start" id="btnGoToToday">最初のレッスンを始める ▶</button>
   </div>
 
-  <!-- ② 今日は15分画面（ホームのボタンから遷移） -->
+  <!-- ② 今日は15分画面 -->
   <div id="todayArea" style="display:none;">
     <div class="header-bar">
       <button class="btn-icon" id="btnTodayToHome">🏠 ホーム</button>
@@ -243,9 +244,8 @@ h1 { font-size: 22px; color: #5A4A42; margin: 8px 0 4px; }
       <div style="font-size:36px;">⚙️🐱</div>
       <h3 style="color:#5A4A42; margin:4px 0;">設定・記録</h3>
 
-      <div class="status-box">
-        <p style="margin:4px 0;">🔥 連続記録: <span id="modalStreak">0</span>日</p>
-        <p style="margin:4px 0;">🏆 累計学習: <span id="modalTotal">0</span>日</p>
+      <div class="status-box" id="modalStatusContainer">
+        <!-- 動的に更新 -->
       </div>
 
       <div class="setting-group">
@@ -288,358 +288,61 @@ let isListening = false;
 let recognitionInstance = null;
 let listenTimeoutTimer = null;
 let isPassed = false;
+let coins = 0;
+let badges = [];
 
-// ==========================================
-// ④ レベル1：10ステージ拡張データ
-// ==========================================
+const ALL_BADGES = [
+  { id: "streak_3", name: "🔥 3日連続", desc: "3日連続で学習した", check: () => streak >= 3 },
+  { id: "streak_7", name: "🌟 1週間達成", desc: "7日連続で学習した", check: () => streak >= 7 },
+  { id: "streak_30", name: "👑 1ヶ月達成", desc: "30日連続で学習した", check: () => streak >= 30 },
+  { id: "coin_100", name: "🪙 ブロンズ", desc: "100コイン獲得", check: () => coins >= 100 },
+  { id: "coin_500", name: "💎 ゴールド", desc: "500コイン獲得", check: () => coins >= 500 }
+];
 
 const curriculumData = {
   1: {
     name: "レベル1",
     subStages: [
-      {
-        id: "1-1", title: "あいさつ",
-        items: [
-          { en: "Thank you.", jp: "ありがとう。" },
-          { en: "Good morning.", jp: "おはよう。" },
-          { en: "See you.", jp: "またね。" },
-          { en: "Good job!", jp: "よくできたね！" },
-          { en: "Hello.", jp: "こんにちは。" }
-        ]
-      },
-      {
-        id: "1-2", title: "自分のこと",
-        items: [
-          { en: "I'm tired.", jp: "疲れたよ。" },
-          { en: "I'm hungry.", jp: "お腹が空いた。" },
-          { en: "I'm happy.", jp: "うれしいな。" },
-          { en: "I'm ready.", jp: "準備できたよ。" },
-          { en: "I'm home.", jp: "ただいま。" }
-        ]
-      },
-      {
-        id: "1-3", title: "お返し・返事",
-        items: [
-          { en: "You're welcome.", jp: "どういたしまして。" },
-          { en: "No problem.", jp: "問題ないよ・気にしないで。" },
-          { en: "All right.", jp: "わかったよ・了解。" },
-          { en: "Sure!", jp: "もちろん！" },
-          { en: "Okay.", jp: "オッケー。" }
-        ]
-      },
-      {
-        id: "1-4", title: "感情・気分",
-        items: [
-          { en: "I'm sad.", jp: "悲しいな。" },
-          { en: "I'm excited!", jp: "ワクワクする！" },
-          { en: "I'm fine.", jp: "元気だよ。" },
-          { en: "I'm scared.", jp: "怖いよ。" },
-          { en: "I'm sleepy.", jp: "ねむいな。" }
-        ]
-      },
-      {
-        id: "1-5", title: "おねだり・許可",
-        items: [
-          { en: "Please.", jp: "おねがい。" },
-          { en: "Help me.", jp: "助けて。" },
-          { en: "Can I?", jp: "いいかな？" },
-          { en: "Give me this.", jp: "これちょうだい。" },
-          { en: "Let's go!", jp: "行こう！" }
-        ]
-      },
-      {
-        id: "1-6", title: "返答・リアクション",
-        items: [
-          { en: "Yes, please.", jp: "はい、お願いします。" },
-          { en: "No, thanks.", jp: "いいえ、けっこうです。" },
-          { en: "Maybe.", jp: "たぶんね。" },
-          { en: "I like it.", jp: "これ好き。" },
-          { en: "I don't know.", jp: "わからないな。" }
-        ]
-      },
-      {
-        id: "1-7", title: "家での動作",
-        items: [
-          { en: "Good night.", jp: "おやすみ。" },
-          { en: "Let's eat.", jp: "ご飯にしよう。" },
-          { en: "It's good!", jp: "美味しい！" },
-          { en: "I'm leaving.", jp: "行ってきます。" },
-          { en: "Welcome back.", jp: "おかえり。" }
-        ]
-      },
-      {
-        id: "1-8", title: "確認・質問",
-        items: [
-          { en: "Really?", jp: "本当？" },
-          { en: "Why?", jp: "なんで？" },
-          { en: "Where?", jp: "どこ？" },
-          { en: "What's this?", jp: "これなに？" },
-          { en: "Are you ready?", jp: "準備はいい？" }
-        ]
-      },
-      {
-        id: "1-9", title: "あいづち",
-        items: [
-          { en: "I see.", jp: "なるほどね。" },
-          { en: "Me too.", jp: "私も。" },
-          { en: "Exactly!", jp: "その通り！" },
-          { en: "Nice!", jp: "いいね！" },
-          { en: "Oh no!", jp: "あーあ！・大変！" }
-        ]
-      },
-      {
-        id: "1-10", title: "とっさの一言",
-        items: [
-          { en: "Watch out!", jp: "気をつけて！" },
-          { en: "Wait!", jp: "ちょっと待って！" },
-          { en: "Look!", jp: "みて！" },
-          { en: "Come here.", jp: "ここに来て。" },
-          { en: "Don't worry.", jp: "心配しないで。" }
-        ]
-      }
+      { id: "1-1", title: "あいさつ", items: [{ en: "Thank you.", jp: "ありがとう。" }, { en: "Good morning.", jp: "おはよう。" }, { en: "See you.", jp: "またね。" }, { en: "Good job!", jp: "よくできたね！" }, { en: "Hello.", jp: "こんにちは。" }] },
+      { id: "1-2", title: "自分のこと", items: [{ en: "I'm tired.", jp: "疲れたよ。" }, { en: "I'm hungry.", jp: "お腹が空いた。" }, { en: "I'm happy.", jp: "うれしいな。" }, { en: "I'm ready.", jp: "準備できたよ。" }, { en: "I'm home.", jp: "ただいま。" }] },
+      { id: "1-3", title: "お返し・返事", items: [{ en: "You're welcome.", jp: "どういたしまして。" }, { en: "No problem.", jp: "気にしないで。" }, { en: "All right.", jp: "了解。" }, { en: "Sure!", jp: "もちろん！" }, { en: "Okay.", jp: "オッケー。" }] },
+      { id: "1-4", title: "感情・気分", items: [{ en: "I'm sad.", jp: "悲しいな。" }, { en: "I'm excited!", jp: "ワクワクする！" }, { en: "I'm fine.", jp: "元気だよ。" }, { en: "I'm scared.", jp: "怖いよ。" }, { en: "I'm sleepy.", jp: "ねむいな。" }] },
+      { id: "1-5", title: "おねだり・許可", items: [{ en: "Please.", jp: "おねがい。" }, { en: "Help me.", jp: "助けて。" }, { en: "Can I?", jp: "いいかな？" }, { en: "Give me this.", jp: "これちょうだい。" }, { en: "Let's go!", jp: "行こう！" }] },
+      { id: "1-6", title: "返答・リアクション", items: [{ en: "Yes, please.", jp: "はい、お願いします。" }, { en: "No, thanks.", jp: "いいえ、けっこうです。" }, { en: "Maybe.", jp: "たぶんね。" }, { en: "I like it.", jp: "これ好き。" }, { en: "I don't know.", jp: "わからないな。" }] },
+      { id: "1-7", title: "家での動作", items: [{ en: "Good night.", jp: "おやすみ。" }, { en: "Let's eat.", jp: "ご飯にしよう。" }, { en: "It's good!", jp: "美味しい！" }, { en: "I'm leaving.", jp: "行ってきます。" }, { en: "Welcome back.", jp: "おかえり。" }] },
+      { id: "1-8", title: "確認・質問", items: [{ en: "Really?", jp: "本当？" }, { en: "Why?", jp: "なんで？" }, { en: "Where?", jp: "どこ？" }, { en: "What's this?", jp: "これなに？" }, { en: "Are you ready?", jp: "準備はいい？" }] },
+      { id: "1-9", title: "あいづち", items: [{ en: "I see.", jp: "なるほどね。" }, { en: "Me too.", jp: "私も。" }, { en: "Exactly!", jp: "その通り！" }, { en: "Nice!", jp: "いいね！" }, { en: "Oh no!", jp: "大変！" }] },
+      { id: "1-10", title: "とっさの一言", items: [{ en: "Watch out!", jp: "気をつけて！" }, { en: "Wait!", jp: "ちょっと待って！" }, { en: "Look!", jp: "みて！" }, { en: "Come here.", jp: "ここに来て。" }, { en: "Don't worry.", jp: "心配しないで。" }] }
     ]
-  },
-  2: {
-    // ...既存のレベル2データ
-  },
-  3: {
-    // ...既存のレベル3データ
-  }
-};
-// ==========================================
-// ⑤ レベル2：10ステージ構築データ
-// ==========================================
-
-const curriculumData = {
-  1: {
-    // ...既存のレベル1データ
   },
   2: {
     name: "レベル2",
     subStages: [
-      {
-        id: "2-1", title: "あいさつ・近況",
-        items: [
-          { en: "How are you?", jp: "調子はどう？" },
-          { en: "How's it going?", jp: "調子はどうだい？" },
-          { en: "Long time no see.", jp: "お久しぶり！" },
-          { en: "What's up?", jp: "どうしたの？・調子どう？" },
-          { en: "Nice to meet you.", jp: "はじめまして。" }
-        ]
-      },
-      {
-        id: "2-2", title: "連絡・移動",
-        items: [
-          { en: "I'm on my way.", jp: "今向かってるよ。" },
-          { en: "Call me later.", jp: "後で電話してね。" },
-          { en: "I'm almost there.", jp: "もうすぐ着くよ。" },
-          { en: "Text me.", jp: "メッセージ送ってね。" },
-          { en: "See you there.", jp: "現地で会おう。" }
-        ]
-      },
-      {
-        id: "2-3", title: "共感・あいづち",
-        items: [
-          { en: "Sounds good.", jp: "いいね！" },
-          { en: "I agree.", jp: "賛成・同意するよ。" },
-          { en: "That's true.", jp: "確かにそうだね。" },
-          { en: "That sounds fun!", jp: "楽しそうだね！" },
-          { en: "I see what you mean.", jp: "言いたいことはわかるよ。" }
-        ]
-      },
-      {
-        id: "2-4", title: "感謝・ねぎらい",
-        items: [
-          { en: "Thanks anyway.", jp: "とにかくありがとう。" },
-          { en: "Take care.", jp: "体に気をつけてね。" },
-          { en: "Have a good one.", jp: "良い一日を！" },
-          { en: "I appreciate it.", jp: "感謝するよ。" },
-          { en: "You made my day.", jp: "おかげで最高の1日になったよ。" }
-        ]
-      },
-      {
-        id: "2-5", title: "質問・確認",
-        items: [
-          { en: "What do you think?", jp: "どう思う？" },
-          { en: "Are you sure?", jp: "本当・確実なの？" },
-          { en: "Is everything OK?", jp: "全部大丈夫？" },
-          { en: "What happened?", jp: "何があったの？" },
-          { en: "Is that so?", jp: "そうなの？" }
-        ]
-      },
-      {
-        id: "2-6", title: "お願い・依頼",
-        items: [
-          { en: "Could you help me?", jp: "手伝ってもらえる？" },
-          { en: "Let me see.", jp: "ええっと・見せて。" },
-          { en: "Just a minute.", jp: "ちょっと待ってね。" },
-          { en: "Hold on.", jp: "ちょっと待って。" },
-          { en: "Take your time.", jp: "ごゆっくりね。" }
-        ]
-      },
-      {
-        id: "2-7", title: "提案・誘い",
-        items: [
-          { en: "Why not?", jp: "もちろん・いいよ！" },
-          { en: "How about you?", jp: "あなたはどう？" },
-          { en: "Shall we go?", jp: "行こうか？" },
-          { en: "Let's check it out.", jp: "見に行ってみよう。" },
-          { en: "Why don't we try?", jp: "試してみない？" }
-        ]
-      },
-      {
-        id: "2-8", title: "聞き返し・理解",
-        items: [
-          { en: "Pardon?", jp: "なんて言ったの？" },
-          { en: "I got it.", jp: "分かった・了解。" },
-          { en: "Makes sense.", jp: "なるほど・筋が通ってるね。" },
-          { en: "Say that again?", jp: "もう一回言って？" },
-          { en: "What do you mean?", jp: "どういう意味？" }
-        ]
-      },
-      {
-        id: "2-9", title: "予定・都合",
-        items: [
-          { en: "I'm busy.", jp: "忙しいんだ。" },
-          { en: "Are you free?", jp: "時間ある？" },
-          { en: "Sounds like a plan.", jp: "それで決まりだね。" },
-          { en: "I have no time.", jp: "時間がないんだ。" },
-          { en: "I'll be there.", jp: "そこに行くよ。" }
-        ]
-      },
-      {
-        id: "2-10", title: "感情の吐露",
-        items: [
-          { en: "I can't wait!", jp: "待ちきれない！" },
-          { en: "No way!", jp: "嘘でしょ！・ありえない！" },
-          { en: "I'm relieved.", jp: "安心したよ。" },
-          { en: "I'm nervous.", jp: "緊張するな。" },
-          { en: "I'm amazed!", jp: "驚いた！" }
-        ]
-      }
+      { id: "2-1", title: "あいさつ・近況", items: [{ en: "How are you?", jp: "調子はどう？" }, { en: "How's it going?", jp: "調子はどうだい？" }, { en: "Long time no see.", jp: "お久しぶり！" }, { en: "What's up?", jp: "どうしたの？" }, { en: "Nice to meet you.", jp: "はじめまして。" }] },
+      { id: "2-2", title: "連絡・移動", items: [{ en: "I'm on my way.", jp: "今向かってるよ。" }, { en: "Call me later.", jp: "後で電話してね。" }, { en: "I'm almost there.", jp: "もうすぐ着くよ。" }, { en: "Text me.", jp: "メッセージ送ってね。" }, { en: "See you there.", jp: "現地で会おう。" }] },
+      { id: "2-3", title: "共感・あいづち", items: [{ en: "Sounds good.", jp: "いいね！" }, { en: "I agree.", jp: "同意するよ。" }, { en: "That's true.", jp: "確かにそうだね。" }, { en: "That sounds fun!", jp: "楽しそうだね！" }, { en: "I see what you mean.", jp: "言いたいことはわかるよ。" }] },
+      { id: "2-4", title: "感謝・ねぎらい", items: [{ en: "Thanks anyway.", jp: "とにかくありがとう。" }, { en: "Take care.", jp: "体に気をつけてね。" }, { en: "Have a good one.", jp: "良い一日を！" }, { en: "I appreciate it.", jp: "感謝するよ。" }, { en: "You made my day.", jp: "最高の日になったよ。" }] },
+      { id: "2-5", title: "質問・確認", items: [{ en: "What do you think?", jp: "どう思う？" }, { en: "Are you sure?", jp: "確実なの？" }, { en: "Is everything OK?", jp: "全部大丈夫？" }, { en: "What happened?", jp: "何があったの？" }, { en: "Is that so?", jp: "そうなの？" }] },
+      { id: "2-6", title: "お願い・依頼", items: [{ en: "Could you help me?", jp: "手伝ってもらえる？" }, { en: "Let me see.", jp: "ええっと・見せて。" }, { en: "Just a minute.", jp: "ちょっと待ってね。" }, { en: "Hold on.", jp: "ちょっと待って。" }, { en: "Take your time.", jp: "ごゆっくりね。" }] },
+      { id: "2-7", title: "提案・誘い", items: [{ en: "Why not?", jp: "もちろん・いいよ！" }, { en: "How about you?", jp: "あなたはどう？" }, { en: "Shall we go?", jp: "行こうか？" }, { en: "Let's check it out.", jp: "見に行ってみよう。" }, { en: "Why don't we try?", jp: "試してみない？" }] },
+      { id: "2-8", title: "聞き返し・理解", items: [{ en: "Pardon?", jp: "なんて言ったの？" }, { en: "I got it.", jp: "分かった・了解。" }, { en: "Makes sense.", jp: "なるほどね。" }, { en: "Say that again?", jp: "もう一回言って？" }, { en: "What do you mean?", jp: "どういう意味？" }] },
+      { id: "2-9", title: "予定・都合", items: [{ en: "I'm busy.", jp: "忙しいんだ。" }, { en: "Are you free?", jp: "時間ある？" }, { en: "Sounds like a plan.", jp: "それで決まりだね。" }, { en: "I have no time.", jp: "時間がないんだ。" }, { en: "I'll be there.", jp: "そこに行くよ。" }] },
+      { id: "2-10", title: "感情の吐露", items: [{ en: "I can't wait!", jp: "待ちきれない！" }, { en: "No way!", jp: "ありえない！" }, { en: "I'm relieved.", jp: "安心したよ。" }, { en: "I'm nervous.", jp: "緊張するな。" }, { en: "I'm amazed!", jp: "驚いた！" }] }
     ]
-  },
-  3: {
-    // ...既存のレベル3データ
-  }
-};
-// ==========================================
-// ⑥ レベル3：10ステージ構築データ
-// ==========================================
-
-const curriculumData = {
-  1: {
-    // ...既存のレベル1データ
-  },
-  2: {
-    // ...既存のレベル2データ
   },
   3: {
     name: "レベル3",
     subStages: [
-      {
-        id: "3-1", title: "洋画定番アクション",
-        items: [
-          { en: "Give me a break.", jp: "勘弁してくれよ。" },
-          { en: "Get out of here!", jp: "出ていけ！・嘘だろ！" },
-          { en: "Watch your back.", jp: "背後に気をつけろ。" },
-          { en: "I'll be right back.", jp: "すぐ戻る。" },
-          { en: "Hold on tight.", jp: "しっかりつかまってろ。" }
-        ]
-      },
-      {
-        id: "3-2", title: "感情の激突",
-        items: [
-          { en: "What are you talking about?", jp: "一体何言ってるんだ？" },
-          { en: "What's wrong with you?", jp: "どうかしちゃったのか？" },
-          { en: "I can't take it anymore.", jp: "もう我慢できない。" },
-          { en: "Are you out of your mind?", jp: "正気かよ？" },
-          { en: "Mind your own business.", jp: "余計なお世話だ。" }
-        ]
-      },
-      {
-        id: "3-3", title: "とっさの約束・友情",
-        items: [
-          { en: "I've got your back.", jp: "俺がついている。" },
-          { en: "Count me in.", jp: "仲間に入れてくれ。" },
-          { en: "Trust me.", jp: "俺を信じろ。" },
-          { en: "You can count on me.", jp: "任せておけ。" },
-          { en: "We're in this together.", jp: "俺たちは一蓮托生だ。" }
-        ]
-      },
-      {
-        id: "3-4", title: "秘密・本音",
-        items: [
-          { en: "To be honest.", jp: "正直に言うとな。" },
-          { en: "Keep it to yourself.", jp: "他言無用だぞ。" },
-          { en: "Out of the question.", jp: "論外だ・あり得ない。" },
-          { en: "Between you and me.", jp: "ここだけの話だが。" },
-          { en: "Don't tell anyone.", jp: "誰にも言うなよ。" }
-        ]
-      },
-      {
-        id: "3-5", title: "決意・覚悟",
-        items: [
-          { en: "I have no choice.", jp: "選択の余地はない。" },
-          { en: "No turning back.", jp: "もう後戻りはできない。" },
-          { en: "It's now or never.", jp: "今やるしかない。" },
-          { en: "Whatever it takes.", jp: "どんな手を使っても。" },
-          { en: "I'm ready for this.", jp: "覚悟はできている。" }
-        ]
-      },
-      {
-        id: "3-6", title: "とっさの回避・言い訳",
-        items: [
-          { en: "It's not what it looks like.", jp: "見かけ通りじゃないんだ（誤解だ）。" },
-          { en: "I didn't mean to.", jp: "そんなつもりじゃなかったんだ。" },
-          { en: "Forget about it.", jp: "今の話は忘れてくれ。" },
-          { en: "It was a mistake.", jp: "間違いだったんだ。" },
-          { en: "I had no idea.", jp: "全く知らなかったんだ。" }
-        ]
-      },
-      {
-        id: "3-7", title: "皮肉・決め台詞",
-        items: [
-          { en: "You must be kidding.", jp: "冗談だろう？" },
-          { en: "Don't get me wrong.", jp: "誤解しないでくれよ。" },
-          { en: "Wish me luck.", jp: "幸運を祈ってくれ。" },
-          { en: "Is that the best you got?", jp: "せいぜいその程度か？" },
-          { en: "You asked for it.", jp: "自業自得だな。" }
-        ]
-      },
-      {
-        id: "3-8", title: "展開・トラブル",
-        items: [
-          { en: "We have a problem.", jp: "問題発生だ。" },
-          { en: "What's going on?", jp: "何が起きているんだ？" },
-          { en: "Something's wrong.", jp: "何かがおかしい。" },
-          { en: "Stay where you are.", jp: "そこから動くな。" },
-          { en: "Time is running out.", jp: "時間がないぞ。" }
-        ]
-      },
-      {
-        id: "3-9", title: "提案・押し切り",
-        items: [
-          { en: "Let's get this over with.", jp: "さっさと終わらせよう。" },
-          { en: "Take it easy.", jp: "気楽にいこうぜ。" },
-          { en: "Leave it to me.", jp: "俺に任せろ。" },
-          { en: "Make yourself at home.", jp: "自分の家だと思ってくつろいで。" },
-          { en: "Don't push your luck.", jp: "調子に乗るなよ。" }
-        ]
-      },
-      {
-        id: "3-10", title: "ラストシーン",
-        items: [
-          { en: "It was a pleasure.", jp: "光栄だったよ。" },
-          { en: "Until next time.", jp: "また会う日まで。" },
-          { en: "Here we go.", jp: "さあ、始まるぞ・行くぞ。" },
-          { en: "It's time to go.", jp: "行く時間だ。" },
-          { en: "See you on the other side.", jp: "向こう側（無事）で会おう。" }
-        ]
-      }
-    ]
-  }
-};
+      { id: "3-1", title: "洋画定番アクション", items: [{ en: "Give me a break.", jp: "勘弁してくれよ。" }, { en: "Get out of here!", jp: "嘘だろ！" }, { en: "Watch your back.", jp: "背後に気をつけろ。" }, { en: "I'll be right back.", jp: "すぐ戻る。" }, { en: "Hold on tight.", jp: "しっかりつかまってろ。" }] },
+      { id: "3-2", title: "感情の激突", items: [{ en: "What are you talking about?", jp: "何言ってるんだ？" }, { en: "What's wrong with you?", jp: "どうかしちゃったのか？" }, { en: "I can't take it anymore.", jp: "もう我慢できない。" }, { en: "Are you out of your mind?", jp: "正気かよ？" }, { en: "Mind your own business.", jp: "余計なお世話だ。" }] },
+      { id: "3-3", title: "とっさの約束・友情", items: [{ en: "I've got your back.", jp: "俺がついている。" }, { en: "Count me in.", jp: "仲間に入れてくれ。" }, { en: "Trust me.", jp: "俺を信じろ。" }, { en: "You can count on me.", jp: "任せておけ。" }, { en: "We're in this together.", jp: "俺たちは一蓮托生だ。" }] },
+      { id: "3-4", title: "秘密・本音", items: [{ en: "To be honest.", jp: "正直に言うとな。" }, { en: "Keep it to yourself.", jp: "他言無用だぞ。" }, { en: "Out of the question.", jp: "あり得ない。" }, { en: "Between you and me.", jp: "ここだけの話だが。" }, { en: "Don't tell anyone.", jp: "誰にも言うなよ。" }] },
+      { id: "3-5", title: "決意・覚悟", items: [{ en: "I have no choice.", jp: "選択の余地はない。" }, { en: "No turning back.", jp: "後戻りはできない。" }, { en: "It's now or never.", jp: "今やるしかない。" }, { en: "Whatever it takes.", jp: "どんな手を使っても。" }, { en: "I'm ready for this.", jp: "覚悟はできている。" }] },
+      { id: "3-6", title: "とっさの回避・言い訳", items: [{ en: "It's not what it looks like.", jp: "誤解だ。" }, { en: "I didn't mean to.", jp: "そんなつもりじゃなかった。" }, { en: "Forget about it.", jp: "今の話は忘れて。" }, { en: "It was a mistake.", jp: "間違いだった。" }, { en: "I had no idea.", jp: "知らなかったんだ。" }] },
+      { id: "3-7", title: "皮肉・決め台詞", items: [{ en: "You must be kidding.", jp: "冗談だろう？" }, { en: "Don't get me wrong.", jp: "誤解しないでくれ。" }, { en: "Wish me luck.", jp: "幸運を祈ってくれ。" }, { en: "Is that the best you got?", jp: "せいぜいその程度か？" }, { en: "You asked for it.", jp: "自業自得だな。" }] },
+      { id: "3-8", title: "展開・トラブル", items: [{ en: "We have a problem.", jp: "問題発生だ。" }, { en: "What's going on?", jp: "何が起きている？" }, { en: "Something's wrong.", jp: "何かがおかしい。" }, { en: "Stay where you are.", jp: "そこから動くな。" }, { en: "Time is running out.", jp: "時間がないぞ。" }] },
+      { id: "3-9", title: "提案・押し切り", items: [{ en: "Let's get this over with.", jp: "さっさと終わらせよう。" }, { en: "Take it easy.", jp: "気楽にいこうぜ。" }, { en: "Leave it to me.", jp: "俺に任せろ。" }, { en: "Make yourself at home.", jp: "くつろいでね。" }, { en: "Don't push your luck.", jp: "調子に乗るなよ。" }] },
+      { id: "3-10", title: "ラストシーン", items: [{ en: "It was a pleasure.", jp: "光栄だったよ。" }, { en: "Until next time.", jp: "また会う日まで。" }, { en: "Here we go.", jp: "さあ行くぞ。" }, { en: "It's time to go.", jp: "行く時間だ。" }, { en: "See you on the other side.", jp: "無事に向こうで会おう。" }] }
     ]
   }
 };
@@ -652,32 +355,23 @@ window.addEventListener('DOMContentLoaded', () => {
   showHome();
 });
 
-function showArea(areaId) {
+  function showArea(areaId) {
   document.getElementById("homeArea").style.display = "none";
   document.getElementById("todayArea").style.display = "none";
   document.getElementById("nameArea").style.display = "none";
   document.getElementById("lessonArea").style.display = "none";
-
   const target = document.getElementById(areaId);
   if (target) target.style.display = "block";
 }
 
-function showHome() {
-  showArea("homeArea");
-}
+function showHome() { showArea("homeArea"); }
 
 function initEventListeners() {
   const btnGoToToday = document.getElementById("btnGoToToday");
-  if (btnGoToToday) {
-    btnGoToToday.addEventListener('click', () => {
-      showArea("todayArea");
-    });
-  }
+  if (btnGoToToday) btnGoToToday.addEventListener('click', () => showArea("todayArea"));
 
   const btnTodayToHome = document.getElementById("btnTodayToHome");
-  if (btnTodayToHome) {
-    btnTodayToHome.addEventListener('click', showHome);
-  }
+  if (btnTodayToHome) btnTodayToHome.addEventListener('click', showHome);
 
   [1, 2, 3].forEach(lvl => {
     const el = document.getElementById(`initLevel_${lvl}`);
@@ -690,13 +384,8 @@ function initEventListeners() {
   const btnStart15Min = document.getElementById("btnStart15Min");
   if (btnStart15Min) {
     btnStart15Min.addEventListener('click', () => {
-      if (!userName) {
-        showArea("nameArea");
-      } else {
-        markAttendance();
-        showArea("lessonArea");
-        updateCard();
-      }
+      if (!userName) { showArea("nameArea"); } 
+      else { markAttendance(); showArea("lessonArea"); updateCard(); }
     });
   }
 
@@ -726,16 +415,13 @@ function initEventListeners() {
     if (el) el.addEventListener('click', () => selectModalLevel(lvl));
   });
 
-  const speedBtns = document.querySelectorAll('.speed-btn');
-  speedBtns.forEach(btn => {
+  document.querySelectorAll('.speed-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      const spd = parseFloat(e.target.getAttribute('data-speed'));
-      setSpeed(spd);
+      setSpeed(parseFloat(e.target.getAttribute('data-speed')));
     });
   });
 }
-
-function loadData() {
+  function loadData() {
   try {
     userName = localStorage.getItem("eb_userName") || "";
     currentLevel = parseInt(localStorage.getItem("eb_level") || "1", 10);
@@ -745,9 +431,9 @@ function loadData() {
     total = parseInt(localStorage.getItem("eb_total") || "0", 10);
     lastDate = localStorage.getItem("eb_lastDate") || "";
     currentSpeed = parseFloat(localStorage.getItem("eb_speed") || "0.5");
-  } catch(e) {
-    console.log("Storage load error:", e);
-  }
+    coins = parseInt(localStorage.getItem("eb_coins") || "0", 10);
+    badges = JSON.parse(localStorage.getItem("eb_badges") || "[]");
+  } catch(e) {}
 }
 
 function saveData() {
@@ -760,9 +446,9 @@ function saveData() {
     localStorage.setItem("eb_total", total.toString());
     localStorage.setItem("eb_lastDate", lastDate);
     localStorage.setItem("eb_speed", currentSpeed.toString());
-  } catch(e) {
-    console.log("Storage save error:", e);
-  }
+    localStorage.setItem("eb_coins", coins.toString());
+    localStorage.setItem("eb_badges", JSON.stringify(badges));
+  } catch(e) {}
 }
 
 function checkStreak() {
@@ -770,8 +456,7 @@ function checkStreak() {
   if (lastDate) {
     const last = new Date(lastDate);
     const current = new Date(today);
-    const diffDays = Math.floor((current - last) / (1000 * 60 * 60 * 24));
-    if (diffDays > 1) { streak = 0; }
+    if (Math.floor((current - last) / (1000 * 60 * 60 * 24)) > 1) { streak = 0; }
   }
 }
 
@@ -781,11 +466,20 @@ function markAttendance() {
     const last = lastDate ? new Date(lastDate) : null;
     const current = new Date(today);
     const diffDays = last ? Math.floor((current - last) / (1000 * 60 * 60 * 24)) : 0;
-    if (diffDays === 1 || !last) { streak += 1; } else { streak = 1; }
+    streak = (diffDays === 1 || !last) ? streak + 1 : 1;
     total += 1;
     lastDate = today;
     saveData();
   }
+}
+
+  function checkBadges() {
+  ALL_BADGES.forEach(b => {
+    if (!badges.includes(b.id) && b.check()) {
+      badges.push(b.id);
+      alert(`🎉 バッジを獲得しました！\n【${b.name}】\n${b.desc}`);
+    }
+  });
 }
 
 function chooseInitLevel(lvl) {
@@ -800,10 +494,7 @@ function chooseInitLevel(lvl) {
 
 function saveNameAndGoLesson() {
   const input = document.getElementById("nameInput").value.trim();
-  if (!input) {
-    alert("お名前を入力してください！");
-    return;
-  }
+  if (!input) { alert("お名前を入力してください！"); return; }
   userName = input;
   currentSubIndex = 0;
   currentIndex = 0;
@@ -815,18 +506,13 @@ function saveNameAndGoLesson() {
 
 function getCurrentSubStage() {
   const levelObj = curriculumData[currentLevel] || curriculumData[1];
-  const subStages = levelObj.subStages;
-  if (currentSubIndex < 0 || currentSubIndex >= subStages.length) {
-    currentSubIndex = 0;
-  }
-  return subStages[currentSubIndex];
+  if (currentSubIndex < 0 || currentSubIndex >= levelObj.subStages.length) currentSubIndex = 0;
+  return levelObj.subStages[currentSubIndex];
 }
 
 function updateCard() {
   const subStage = getCurrentSubStage();
-  if (currentIndex < 0 || currentIndex >= subStage.items.length) {
-    currentIndex = 0;
-  }
+  if (currentIndex < 0 || currentIndex >= subStage.items.length) currentIndex = 0;
   const currentItem = subStage.items[currentIndex];
 
   isPassed = false;
@@ -842,28 +528,15 @@ function updateCard() {
   document.getElementById("charIcon").innerText = "🐶";
   document.getElementById("charMsg").innerText = "ぽてワン「音の響きをよく聴いてね！」";
 }
-
-function speakCurrent() {
-  if (!('speechSynthesis' in window)) {
-    alert("お使いのブラウザは音声読み上げに対応していません。");
-    return;
-  }
-
+  function speakCurrent() {
+  if (!('speechSynthesis' in window)) { alert("音声読み上げに未対応です。"); return; }
   if (recognitionInstance) {
-    try { 
-      recognitionInstance.onstart = null;
-      recognitionInstance.onresult = null;
-      recognitionInstance.onerror = null;
-      recognitionInstance.onend = null;
-      recognitionInstance.abort(); 
-    } catch(e){}
+    try { recognitionInstance.abort(); } catch(e){}
     recognitionInstance = null;
   }
   resetMicUI();
 
-  const subStage = getCurrentSubStage();
-  const currentItem = subStage.items[currentIndex];
-
+  const currentItem = getCurrentSubStage().items[currentIndex];
   document.getElementById("charIcon").innerText = "🐶🎶";
   document.getElementById("charMsg").innerText = "ぽてワン「音のつながりをよく聴いてね！」";
 
@@ -871,26 +544,15 @@ function speakCurrent() {
   const utterance = new SpeechSynthesisUtterance(currentItem.en);
   utterance.lang = "en-US";
   utterance.rate = currentSpeed;
-  utterance.onend = function() {
-    document.getElementById("charIcon").innerText = "🐶";
-  };
-  utterance.onerror = function() {
-    document.getElementById("charIcon").innerText = "🐶💦";
-  };
+  utterance.onend = () => { document.getElementById("charIcon").innerText = "🐶"; };
   window.speechSynthesis.speak(utterance);
 }
 
 function resetMicUI() {
   isListening = false;
-  if (listenTimeoutTimer) {
-    clearTimeout(listenTimeoutTimer);
-    listenTimeoutTimer = null;
-  }
+  if (listenTimeoutTimer) { clearTimeout(listenTimeoutTimer); listenTimeoutTimer = null; }
   const btnSpeak = document.getElementById("btnSpeak");
-  if (btnSpeak) {
-    btnSpeak.disabled = false;
-    btnSpeak.innerText = "🎤 マネして言う";
-  }
+  if (btnSpeak) { btnSpeak.disabled = false; btnSpeak.innerText = "🎤 マネして言う"; }
 }
 
 function startListen() {
@@ -900,18 +562,9 @@ function startListen() {
     return;
   }
 
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-  }
-
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   if (recognitionInstance) {
-    try { 
-      recognitionInstance.onstart = null;
-      recognitionInstance.onresult = null;
-      recognitionInstance.onerror = null;
-      recognitionInstance.onend = null;
-      recognitionInstance.abort(); 
-    } catch(e){}
+    try { recognitionInstance.abort(); } catch(e){}
     recognitionInstance = null;
   }
 
@@ -919,35 +572,19 @@ function startListen() {
   isListening = true;
 
   const btnSpeak = document.getElementById("btnSpeak");
-  if (btnSpeak) {
-    btnSpeak.disabled = true;
-    btnSpeak.innerText = "🎙️ 聞き取り中...";
-  }
+  if (btnSpeak) { btnSpeak.disabled = true; btnSpeak.innerText = "🎙️ 聞き取り中..."; }
 
   document.getElementById("spokenBox").innerText = "🎙️ マイクを準備中...";
   document.getElementById("resultMsg").innerText = "";
 
   const recognition = new SpeechRecognition();
   recognitionInstance = recognition;
-  
   recognition.lang = "en-US";
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
   recognition.continuous = false;
 
-  recognition.onstart = function() {
-    document.getElementById("spokenBox").innerText = "🎙️ 声を聞いています... 喋ってください！";
-  };
-
-  listenTimeoutTimer = setTimeout(() => {
-    if (isListening) {
-      try { recognition.stop(); } catch(e){}
-      document.getElementById("spokenBox").innerText = "⏱️ タイムアウト：もう一度ボタンを押して喋ってください。";
-      resetMicUI();
-    }
-  }, 10000);
-
-  recognition.onresult = function(event) {
+  recognition.onresult = (event) => {
     resetMicUI();
     if (event.results && event.results[0] && event.results[0][0]) {
       const userText = event.results[0][0].transcript;
@@ -958,10 +595,8 @@ function startListen() {
     }
   };
 
-  recognition.onerror = function(event) {
+  recognition.onerror = (event) => {
     resetMicUI();
-    console.error("SpeechRecognition Error:", event.error);
-    
     switch (event.error) {
       case 'not-allowed':
       case 'service-not-allowed':
@@ -971,47 +606,38 @@ function startListen() {
         document.getElementById("spokenBox").innerText = "🔇 声が検出されませんでした。もう少しマイクに近づけて喋ってみてください。";
         break;
       case 'network':
-        document.getElementById("spokenBox").innerText = "🌐 ネットワークエラー：音声認識にはインターネット接続が必要です。";
-        break;
-      case 'aborted':
+        document.getElementById("spokenBox").innerText = "🌐 ネットワークエラー：インターネット接続が必要です。";
         break;
       default:
-        document.getElementById("spokenBox").innerText = "❌ エラーが発生しました (" + event.error + ")。もう一度お試しください。";
+        document.getElementById("spokenBox").innerText = "❌ エラーが発生しました (" + event.error + ")。";
         break;
     }
   };
 
-  recognition.onend = function() {
-    resetMicUI();
-  };
+  recognition.onend = () => resetMicUI();
 
-  try {
-    recognition.start();
-  } catch (e) {
-    console.error("Start Exception:", e);
-    resetMicUI();
-    document.getElementById("spokenBox").innerText = "❌ マイク起動エラー。ページを更新してお試しください。";
-  }
+  try { recognition.start(); } catch (e) { resetMicUI(); }
 }
 
-function cleanText(text) {
-  return text.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim();
-}
+function cleanText(text) { return text.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim(); }
 
 function checkAnswer(userText) {
-  const subStage = getCurrentSubStage();
-  const currentItem = subStage.items[currentIndex];
-
+  const currentItem = getCurrentSubStage().items[currentIndex];
   const target = cleanText(currentItem.en);
   const spoken = cleanText(userText);
   const resultEl = document.getElementById("resultMsg");
 
   if (spoken === target || spoken.includes(target) || target.includes(spoken)) {
+    if (!isPassed) {
+      coins += 10;
+      checkBadges();
+      saveData();
+    }
     isPassed = true;
     const btnNext = document.getElementById("btnNext");
     if (btnNext) btnNext.disabled = false;
 
-    resultEl.innerText = "🎉 すごい！大正解！";
+    resultEl.innerText = "🎉 すごい！大正解！ (+10🪙)";
     resultEl.style.color = "#2E7D32";
     document.getElementById("charIcon").innerText = "🐶✨";
     document.getElementById("charMsg").innerText = "ぽてワン「完璧！素晴らしい発音だよ！」";
@@ -1020,15 +646,13 @@ function checkAnswer(userText) {
     void resultEl.offsetWidth;
     resultEl.classList.add("pop-animation");
 
-    if (typeof confetti === "function") {
-      confetti({ particleCount: 70, spread: 60, origin: { y: 0.7 } });
-    }
+    if (typeof confetti === "function") confetti({ particleCount: 70, spread: 60, origin: { y: 0.7 } });
   } else {
     isPassed = false;
     const btnNext = document.getElementById("btnNext");
     if (btnNext) btnNext.disabled = true;
 
-    resultEl.innerText = "👍 惜しい！もう一回やってみよう";
+  resultEl.innerText = "👍 惜しい！もう一回やってみよう";
     resultEl.style.color = "#DD6B20";
     document.getElementById("charIcon").innerText = "🐶💪";
     document.getElementById("charMsg").innerText = "ぽてワン「惜しい！音を真似してみてね」";
@@ -1037,32 +661,22 @@ function checkAnswer(userText) {
 
 function nextLesson() {
   if (!isPassed) return;
-
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-  }
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   if (recognitionInstance) {
-    try { 
-      recognitionInstance.onstart = null;
-      recognitionInstance.onresult = null;
-      recognitionInstance.onerror = null;
-      recognitionInstance.onend = null;
-      recognitionInstance.abort(); 
-    } catch(e){}
+    try { recognitionInstance.abort(); } catch(e){}
     recognitionInstance = null;
   }
   resetMicUI();
 
-  const subStage = getCurrentSubStage();
+  const levelObj = curriculumData[currentLevel] || curriculumData[1];
   currentIndex++;
 
-  if (currentIndex >= subStage.items.length) {
+  if (currentIndex >= levelObj.subStages[currentSubIndex].items.length) {
     currentIndex = 0;
     currentSubIndex++;
-    const levelObj = curriculumData[currentLevel] || curriculumData[1];
     if (currentSubIndex >= levelObj.subStages.length) {
       currentSubIndex = 0;
-      alert(`🎉 おめでとうございます！ Level ${currentLevel} をすべてクリアしました！`);
+      alert(`🎉 おめでとうございます！ ${levelObj.name} を全クリアしました！`);
       showHome();
       return;
     }
@@ -1073,17 +687,30 @@ function nextLesson() {
 }
 
 function openRecordModal() {
-  document.getElementById("modalStreak").innerText = streak;
-  document.getElementById("modalTotal").innerText = total;
+  const statusContainer = document.getElementById("modalStatusContainer");
+  if (statusContainer) {
+    statusContainer.innerHTML = `
+      <p style="margin:4px 0;">🔥 連続記録: ${streak}日</p>
+      <p style="margin:4px 0;">🏆 累計学習: ${total}日</p>
+      <p style="margin:4px 0;">🪙 所持コイン: ${coins}枚</p>
+      <div style="margin-top:10px; text-align:left;">
+        <span class="setting-label">🎖️ 獲得バッジ</span>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:4px;">
+          ${ALL_BADGES.map(b => `
+            <span style="font-size:11px; padding:4px 8px; border-radius:12px; background:${badges.includes(b.id) ? '#FFD700' : '#E2E8F0'}; color:${badges.includes(b.id) ? '#744210' : '#A0AEC0'}; font-weight:bold;">
+              ${b.name}
+            </span>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
 
   [1, 2, 3].forEach(l => {
     const el = document.getElementById(`mLevel_${l}`);
     if (el) {
-      if (l === currentLevel) {
-        el.classList.add("selected");
-      } else {
-        el.classList.remove("selected");
-      }
+      if (l === currentLevel) el.classList.add("selected");
+      else el.classList.remove("selected");
     }
   });
 
@@ -1093,9 +720,7 @@ function openRecordModal() {
 
 function closeRecordModal() {
   saveData();
-  if (document.getElementById("lessonArea").style.display === "block") {
-    updateCard();
-  }
+  if (document.getElementById("lessonArea").style.display === "block") updateCard();
   document.getElementById("recordModal").style.display = "none";
 }
 
@@ -1103,15 +728,11 @@ function selectModalLevel(lvl) {
   currentLevel = lvl;
   currentSubIndex = 0;
   currentIndex = 0;
-
   [1, 2, 3].forEach(l => {
     const el = document.getElementById(`mLevel_${l}`);
     if (el) {
-      if (l === lvl) {
-        el.classList.add("selected");
-      } else {
-        el.classList.remove("selected");
-      }
+      if (l === lvl) el.classList.add("selected");
+      else el.classList.remove("selected");
     }
   });
 }
@@ -1126,20 +747,15 @@ function setSpeedUI(speed) {
   const btnSlow = document.getElementById("speedSlow");
   const btnNormal = document.getElementById("speedNormal");
   const btnFast = document.getElementById("speedFast");
-
   if (!btnSlow || !btnNormal || !btnFast) return;
 
   btnSlow.classList.remove("active");
   btnNormal.classList.remove("active");
   btnFast.classList.remove("active");
 
-  if (speed <= 0.5) {
-    btnSlow.classList.add("active");
-  } else if (speed <= 0.8) {
-    btnNormal.classList.add("active");
-  } else {
-    btnFast.classList.add("active");
-  }
+  if (speed <= 0.5) btnSlow.classList.add("active");
+  else if (speed <= 0.8) btnNormal.classList.add("active");
+  else btnFast.classList.add("active");
 }
 </script>
 
