@@ -2,16 +2,27 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>英会話は赤ちゃん以下 - 洋画リスニングへの道</title>
 
 <!-- 紙吹雪（コンフェティ）用ライブラリ -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
+/* ==========================================================================
+   Base Styles & Reset
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background-color: #FFF9F2;
+  color: #2D3748;
   margin: 0;
   padding: 16px;
   display: flex;
@@ -19,576 +30,463 @@ body {
   align-items: center;
   min-height: 100vh;
   box-sizing: border-box;
+  line-height: 1.5;
 }
 
-.card { 
-  background: white; 
-  border-radius: 24px; 
-  padding: 24px 20px; 
-  width: 100%; 
-  max-width: 360px; 
-  box-shadow: 0 8px 20px rgba(0,0,0,0.06); 
-  text-align: center; 
-  position: relative; 
-  box-sizing: border-box; 
-} 
+/* ==========================================================================
+   Card Container
+   ========================================================================== */
+.card {
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 24px 20px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 10px 25px rgba(90, 74, 66, 0.08);
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
 
-h1 { font-size: 22px; color: #5A4A42; margin: 8px 0 4px; } 
-.subtitle { color: #8C7A6B; font-size: 13px; margin-bottom: 16px; } 
+/* ==========================================================================
+   Typography & Headers
+   ========================================================================== */
+h1 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #5A4A42;
+  margin: 8px 0 4px 0;
+  letter-spacing: -0.5px;
+}
 
+.subtitle {
+  color: #8C7A6B;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+/* ==========================================================================
+   Screen 1: Concept Section
+   ========================================================================== */
 .concept-box {
   background: #FFF0E5;
-  border-radius: 16px;
-  padding: 16px;
+  border: 1px solid #FFE4D6;
+  border-radius: 18px;
+  padding: 18px;
   margin: 16px 0;
   text-align: left;
   font-size: 13px;
   color: #5A4A42;
-  line-height: 1.6;
-}
-.concept-box p { margin: 10px 0; }
-
-.start-message {
-  background: #EBF7FF;
-  border-radius: 16px;
-  padding: 14px;
-  margin-bottom: 20px;
-  color: #2B6CB0;
-  font-size: 13px;
-  font-weight: bold;
-  line-height: 1.5;
+  line-height: 1.65;
 }
 
+.concept-box p {
+  margin-bottom: 10px;
+}
+
+.concept-box p:last-child {
+  margin-bottom: 0;
+}
+
+.concept-box b {
+  color: #C05621;
+}
+
+/* ==========================================================================
+   Screen 2: Today's Schedule Section
+   ========================================================================== */
 .today-box {
   background: #F7FAFC;
   border: 2px solid #E2E8F0;
   border-radius: 20px;
   padding: 20px 16px;
-  margin-top: 10px;
+  margin: 12px 0 20px 0;
   text-align: left;
 }
-.today-title { font-size: 16px; font-weight: bold; color: #2D3748; margin-bottom: 4px; }
-.today-sub { font-size: 12px; color: #718096; margin-bottom: 16px; }
 
-.step-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.today-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2D3748;
+  margin-bottom: 4px;
+}
+
+.today-sub {
+  font-size: 12px;
+  color: #718096;
+  margin-bottom: 16px;
+}
+
+.step-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .step-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: white;
+  background: #FFFFFF;
   padding: 12px 14px;
   border-radius: 12px;
   border: 1px solid #E2E8F0;
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
+
 .step-item.step-1 { border-left: 6px solid #48BB78; color: #2F855A; }
 .step-item.step-2 { border-left: 6px solid #4299E1; color: #2B6CB0; }
 .step-item.step-3 { border-left: 6px solid #ED8936; color: #C05621; }
-.step-time { font-size: 12px; color: #A0AEC0; font-weight: normal; }
 
-.header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; } 
-.btn-icon { background: #F0F4F8; border: none; border-radius: 20px; padding: 6px 12px; font-size: 12px; font-weight: bold; color: #4A5568; cursor: pointer; } 
-.char-area { background: #EBF7FF; border-radius: 16px; padding: 12px; margin: 12px 0; display: flex; align-items: center; gap: 12px; } 
-.char-icon { font-size: 32px; min-width: 45px; } 
-.char-msg { font-size: 13px; font-weight: bold; color: #2B6CB0; text-align: left; } 
-.en-text { font-size: 25px; font-weight: bold; color: #2D3748; margin: 16px 0 4px; word-break: break-word; } 
-.jp-text { font-size: 15px; color: #718096; margin-bottom: 20px; } 
+.step-time {
+  font-size: 11px;
+  color: #A0AEC0;
+  font-weight: 500;
+  background: #EDF2F7;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
 
-.btn { width: 100%; padding: 14px; margin: 6px 0; border: none; border-radius: 30px; font-size: 15px; font-weight: bold; cursor: pointer; box-sizing: border-box; } 
-.btn:disabled { opacity: 0.4; cursor: not-allowed; filter: grayscale(50%); } 
-.btn-listen { background: #EBF7FF; color: #2B6CB0; } 
-.btn-speak { background: #FFF0E5; color: #C05621; } 
-.btn-next { background: #FF6B6B; color: white; margin-top: 10px; } 
-.btn-start { background: #FF6B6B; color: white; } 
+/* ==========================================================================
+   Screen 3: Setup Section
+   ========================================================================== */
+.name-input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #E2E8F0;
+  border-radius: 16px;
+  font-size: 16px;
+  text-align: center;
+  margin: 8px 0 16px 0;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  background-color: #FAFAFA;
+}
 
-.spoken-box { font-size: 13px; color: #4A5568; background: #EDF2F7; border-radius: 12px; padding: 10px; margin-top: 8px; min-height: 20px; word-break: break-word; } 
-.result { margin-top: 6px; font-weight: bold; font-size: 14px; min-height: 22px; } 
-.name-input { width: 100%; padding: 12px; border: 2px solid #E2E8F0; border-radius: 14px; font-size: 16px; text-align: center; margin: 8px 0 16px; outline: none; box-sizing: border-box; } 
-.level-option { background: #F7FAFC; border: 2px solid #E2E8F0; border-radius: 16px; padding: 12px; margin: 8px 0; text-align: left; cursor: pointer; transition: all 0.2s; pointer-events: auto; } 
-.level-option * { pointer-events: none; }
-.level-option.selected { border-color: #FF6B6B; background: #FFF5F5; } 
-.level-title { font-weight: bold; color: #2D3748; font-size: 14px; } 
-.level-desc { font-size: 11px; color: #718096; margin-top: 2px; } 
-.recommended-badge { background: #FF6B6B; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 8px; margin-left: 6px; } 
+.name-input:focus {
+  border-color: #FF6B6B;
+  background-color: #FFFFFF;
+}
 
-.modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); border-radius: 24px; justify-content: center; align-items: center; z-index: 10; } 
-.modal-content { background: white; padding: 20px; border-radius: 20px; width: 85%; max-height: 90%; overflow-y: auto; text-align: center; box-sizing: border-box; } 
-.status-box { background: #FFF0E5; padding: 10px; border-radius: 16px; margin: 10px 0; font-weight: bold; color: #5A4A42; font-size: 13px; } 
-.setting-group { margin: 14px 0; text-align: left; } 
-.setting-label { font-size: 12px; font-weight: bold; color: #718096; margin-bottom: 6px; display: block; } 
-.speed-selector { display: flex; justify-content: space-between; gap: 6px; background: #F7FAFC; padding: 4px; border-radius: 16px; } 
-.speed-btn { flex: 1; border: none; background: transparent; padding: 8px 0; border-radius: 12px; font-size: 11px; font-weight: bold; color: #718096; cursor: pointer; } 
-.speed-btn.active { background: #FF9F43; color: white; } 
+.level-option {
+  background: #F7FAFC;
+  border: 2px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 14px;
+  margin: 10px 0;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
 
-@keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.2); } 100% { transform: scale(1); opacity: 1; } } 
-.pop-animation { animation: popIn 0.4s ease-out forwards; }
+.level-option * {
+  pointer-events: none;
+}
+
+.level-option:hover {
+  border-color: #CBD5E0;
+}
+
+.level-option.selected {
+  border-color: #FF6B6B;
+  background: #FFF5F5;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.12);
+}
+
+.level-title {
+  font-weight: 700;
+  color: #2D3748;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.level-desc {
+  font-size: 11px;
+  color: #718096;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.recommended-badge {
+  background: #FF6B6B;
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 8px;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   Screen 4: Main Learning View
+   ========================================================================== */
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.stage-badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8C7A6B;
+  background: #F0EAE1;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.header-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-icon {
+  background: #F0F4F8;
+  border: none;
+  border-radius: 16px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4A5568;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-icon:hover {
+  background: #E2E8F0;
+}
+
+.char-area {
+  background: #EBF7FF;
+  border: 1px solid #DCEEFE;
+  border-radius: 18px;
+  padding: 12px 16px;
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.char-icon {
+  font-size: 36px;
+  min-width: 48px;
+  text-align: center;
+}
+
+.char-msg {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2B6CB0;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.en-text {
+  font-size: 28px;
+  font-weight: 800;
+  color: #2D3748;
+  margin: 16px 0 4px 0;
+  word-break: break-word;
+  letter-spacing: -0.5px;
+}
+
+.jp-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: #718096;
+  margin-bottom: 20px;
+}
+
+/* ==========================================================================
+   Buttons & Interactive Elements
+   ========================================================================== */
+.btn {
+  width: 100%;
+  padding: 14px;
+  margin: 6px 0;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: transform 0.1s, opacity 0.2s, background-color 0.2s;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(60%);
+  transform: none;
+}
+
+.btn-listen {
+  background: #EBF7FF;
+  color: #2B6CB0;
+  border: 1px solid #C3E2FE;
+}
+
+.btn-listen:hover:not(:disabled) {
+  background: #DCEEFE;
+}
+
+.btn-speak {
+  background: #FFF0E5;
+  color: #C05621;
+  border: 1px solid #FFD8C2;
+}
+
+.btn-speak:hover:not(:disabled) {
+  background: #FFE4D6;
+}
+
+.btn-next {
+  background: #FF6B6B;
+  color: #FFFFFF;
+  margin-top: 12px;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.25);
+}
+
+.btn-next:hover {
+  background: #EE5253;
+}
+
+.btn-start {
+  background: #FF6B6B;
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.25);
+}
+
+.btn-start:hover {
+  background: #EE5253;
+}
+
+.spoken-box {
+  font-size: 13px;
+  color: #4A5568;
+  background: #EDF2F7;
+  border-radius: 14px;
+  padding: 12px;
+  margin-top: 10px;
+  min-height: 24px;
+  word-break: break-word;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.result {
+  margin-top: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  min-height: 22px;
+}
+
+/* ==========================================================================
+   Modals & Overlays
+   ========================================================================== */
+.modal {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  border-radius: 24px;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: #FFFFFF;
+  padding: 24px 20px;
+  border-radius: 20px;
+  width: 88%;
+  max-height: 85%;
+  overflow-y: auto;
+  text-align: center;
+  box-sizing: border-box;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.setting-group {
+  margin: 16px 0;
+  text-align: left;
+}
+
+.setting-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #718096;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.speed-selector {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  background: #F7FAFC;
+  padding: 4px;
+  border-radius: 16px;
+  border: 1px solid #E2E8F0;
+}
+
+.speed-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 0;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #718096;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.speed-btn.active {
+  background: #FF9F43;
+  color: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(255, 159, 67, 0.3);
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+@keyframes popIn {
+  0% { transform: scale(0.6); opacity: 0; }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.pop-animation {
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
 </style>
 </head>
+
 <body>
 
 <div class="card">
-  <!-- モード1: コンセプト解説 -->
-  <div id="screen-concept">
-    <div style="font-size: 32px;">👶🍿</div>
-    <h1>英会話は赤ちゃん以下</h1>
-    <div class="subtitle">〜洋画リスニングへの道〜</div>
-
-    <div class="concept-box">
-      <p><b>【このアプリの目的】</b><br>映画やドラマの英語が聞き取れない理由は、単語力不足ではありません。「英語特有の音のつながり」に耳が慣れていないからです。</p>
-      <p>まずは<b>赤ちゃんの耳</b>になって、理屈抜きで簡単な日常の「短い音」から耳と口を慣らしていきましょう！</p>
-    </div>
-
-    <button class="btn btn-start" onclick="nextConceptScreen()">次へ進む</button>
-  </div>
-
-  <!-- モード2: 本日の学習ステップ -->
-  <div id="screen-today" style="display: none;">
-    <div style="font-size: 32px;">🎯</div>
-    <h1>本日の学習</h1>
-    <div class="subtitle">1日3ステップで着実に進めよう</div>
-
-    <div class="today-box">
-      <div class="today-title">今日のメニュー</div>
-      <div class="today-sub">毎日少しずつの積み重ねがリスニング力を育てます</div>
-
-      <div class="step-list">
-        <div class="step-item step-1">
-          <span>STEP 1: 聴く（耳を慣らす）</span>
-          <span class="step-time">1分</span>
-        </div>
-        <div class="step-item step-2">
-          <span>STEP 2: 発音（口を慣らす）</span>
-          <span class="step-time">2分</span>
-        </div>
-        <div class="step-item step-3">
-          <span>STEP 3: 定着（チェック）</span>
-          <span class="step-time">1分</span>
-        </div>
-      </div>
-    </div>
-
-    <button class="btn btn-start" onclick="goToSetupScreen()">学習を開始する</button>
-  </div>
-
-  <!-- モード3: 初期設定 -->
-  <div id="screen-setup" style="display: none;">
-    <div style="font-size: 32px;">🐣</div>
-    <h1>プロフィール設定</h1>
-    <div class="subtitle">あなたに合わせたレッスンを準備します</div>
-    
-    <input type="text" id="user-name-input" class="name-input" placeholder="お名前（ニックネーム）" value="たろう">
-
-    <div style="text-align: left; font-size: 12px; font-weight: bold; color: #718096; margin-bottom: 6px;">コース選択</div>
-    
-    <div class="level-option selected" id="opt-lvl1" onclick="selectLevel('lvl1')">
-      <div class="level-title">レベル1: あいさつ・感情 <span class="recommended-badge">推奨</span></div>
-      <div class="level-desc">Hi / Thanks / Bye などの超基本音（全10ステージ）</div>
-    </div>
-    
-    <div class="level-option" id="opt-lvl2" onclick="selectLevel('lvl2')">
-      <div class="level-title">レベル2: 短いフレーズ</div>
-      <div class="level-desc">Let's go / I see などの2語フレーズ</div>
-    </div>
-
-    <button class="btn btn-start" onclick="startApp()" style="margin-top: 16px;">スタート！</button>
-  </div>
-
-  <!-- モード4: メイン学習画面 -->
-  <div id="screen-main" style="display: none;">
-    <div class="header-bar">
-      <div style="font-size: 12px; font-weight: bold; color: #8C7A6B;" id="stage-indicator">Stage 1/10</div>
-      <div>
-        <button class="btn-icon" onclick="openReviewModal()">復習帳</button>
-        <button class="btn-icon" onclick="openSettingsModal()">⚙️</button>
-      </div>
-    </div>
-
-    <div class="char-area">
-      <div class="char-icon" id="char-icon">👶</div>
-      <div class="char-msg" id="char-msg">一緒にがんばろう！</div>
-    </div>
-
-    <div id="learning-content">
-      <div class="en-text" id="target-en">---</div>
-      <div class="jp-text" id="target-jp">---</div>
-
-      <button class="btn btn-listen" id="listen-btn" onclick="playAudio()">🔊 お手本を聴く</button>
-      <button class="btn btn-speak" id="speak-btn" onclick="startSpeechRecognition()">🎤 まねして発音する</button>
-
-      <div class="spoken-box" id="spoken-text">ここにあなたの声が表示されます</div>
-      <div class="result" id="result-msg"></div>
-
-      <button class="btn btn-next" id="next-btn" onclick="nextStage()" style="display: none;">つぎへ進む ➔</button>
-    </div>
-  </div>
-
-  <!-- 復習モーダル -->
-  <div class="modal" id="review-modal">
-    <div class="modal-content">
-      <h3>📚 チェックしたフレーズ</h3>
-      <div id="review-list" style="text-align: left; font-size: 14px; margin: 16px 0; max-height: 200px; overflow-y: auto;">
-        <!-- JSで動的生成 -->
-      </div>
-      <button class="btn btn-start" onclick="closeReviewModal()">閉じる</button>
-    </div>
-  </div>
-
-  <!-- 設定モーダル -->
-  <div class="modal" id="settings-modal">
-    <div class="modal-content">
-      <h3>⚙️ 設定</h3>
-      
-      <div class="setting-group">
-        <label class="setting-label">再生速度</label>
-        <div class="speed-selector">
-          <button class="speed-btn" id="speed-0.8" onclick="setSpeed(0.8)">ゆっくり</button>
-          <button class="speed-btn active" id="speed-1.0" onclick="setSpeed(1.0)">ふつう</button>
-          <button class="speed-btn" id="speed-1.2" onclick="setSpeed(1.2)">はやめ</button>
-        </div>
-      </div>
-
-      <button class="btn btn-start" onclick="closeSettingsModal()">保存して閉じる</button>
-    </div>
-  </div>
-</div>
-<script>
-// ==========================================
-// 1. データ定義（レベル1：全10ステージ構成に拡張）
-// ==========================================
-const STAGES_LEVEL1 = [
-  { en: "Hi!", jp: "やあ！", char: "👶", msg: "まずは基本のあいさつから！" },
-  { en: "Hello!", jp: "こんにちは！", char: "🐣", msg: "元気にあいさつしてみよう！" },
-  { en: "Bye!", jp: "バイバイ！", char: "🐥", msg: "手を振りながら言ってみよう！" },
-  { en: "Thanks!", jp: "ありがとう！", char: "🐶", msg: "感謝の気持ちを込めて！" },
-  { en: "Sorry!", jp: "ごめんね！", char: "🐱", msg: "素直に言えると素敵だね！" },
-  { en: "Yes!", jp: "うん！/ はい！", char: "🐰", msg: "元気に返事をしてみよう！" },
-  { en: "No!", jp: "ううん！/ いいえ！", char: "🐻", msg: "はっきり言ってみよう！" },
-  { en: "Okay!", jp: "分かった！/ いいよ！", char: "🐼", msg: "かるくうなずきながら！" },
-  { en: "Help!", jp: "たすけて！", char: "🦁", msg: "大きめの声で言ってみよう！" },
-  { en: "Wow!", jp: "すごい！/ わあ！", char: "👑", msg: "感情を込めて驚いてみよう！" }
-];
-
-const STAGES_LEVEL2 = [
-  { en: "Let's go!", jp: "行こう！", char: "🚀", msg: "2語のフレーズに挑戦！" },
-  { en: "I see.", jp: "なるほど。", char: "💡", msg: "相づちの基本だよ！" },
-  { en: "Good job!", jp: "よくできたね！", char: "👏", msg: "ほめるときに使ってみよう！" },
-  { en: "See you!", jp: "またね！", char: "👋", msg: "かるいお別れのあいさつ！" },
-  { en: "Thank you!", jp: "ありがとうございます！", char: "🎁", msg: "ていねいなお礼だよ！" }
-];
-
-// ==========================================
-// 2. 状態管理変数
-// ==========================================
-let currentCourse = "lvl1";
-let currentStages = STAGES_LEVEL1;
-let currentStageIndex = 0;
-let playbackSpeed = 1.0;
-let userName = "たろう";
-let reviewList = [];
-
-// 音声認識・合成の状態変数
-let recognition = null;
-let isListening = false;
-let isSpeaking = false;
-let speechTimeoutTimer = null;
-
-// ==========================================
-// 3. 画面遷移ロジック
-// ==========================================
-function nextConceptScreen() {
-  document.getElementById("screen-concept").style.display = "none";
-  document.getElementById("screen-today").style.display = "block";
-}
-
-function goToSetupScreen() {
-  document.getElementById("screen-today").style.display = "none";
-  document.getElementById("screen-setup").style.display = "block";
-}
-
-function selectLevel(lvl) {
-  currentCourse = lvl;
-  document.getElementById("opt-lvl1").classList.remove("selected");
-  document.getElementById("opt-lvl2").classList.remove("selected");
-  
-  if(lvl === 'lvl1') {
-    document.getElementById("opt-lvl1").classList.add("selected");
-    currentStages = STAGES_LEVEL1;
-  } else {
-    document.getElementById("opt-lvl2").classList.add("selected");
-    currentStages = STAGES_LEVEL2;
-  }
-}
-
-function startApp() {
-  const inputName = document.getElementById("user-name-input").value.trim();
-  if(inputName) userName = inputName;
-
-  document.getElementById("screen-setup").style.display = "none";
-  document.getElementById("screen-main").style.display = "block";
-
-  currentStageIndex = 0;
-  loadStage();
-}
-
-// ==========================================
-// 4. ステージ読み込み & 表示更新
-// ==========================================
-function loadStage() {
-  // ステータスリセット
-  stopEverything();
-
-  const data = currentStages[currentStageIndex];
-  
-  document.getElementById("stage-indicator").innerText = `Stage ${currentStageIndex + 1}/${currentStages.length}`;
-  document.getElementById("char-icon").innerText = data.char;
-  document.getElementById("char-msg").innerText = `${userName}さん、${data.msg}`;
-  document.getElementById("target-en").innerText = data.en;
-  document.getElementById("target-jp").innerText = data.jp;
-
-  document.getElementById("spoken-text").innerText = "ここにあなたの声が表示されます";
-  document.getElementById("result-msg").innerText = "";
-  document.getElementById("result-msg").className = "result";
-  document.getElementById("next-btn").style.display = "none";
-
-  // ボタン状態の初期化
-  setButtonsState(false, false);
-}
-
-// ==========================================
-// 5. 音声合成（読み上げ）機能
-// ==========================================
-function playAudio() {
-  if (!('speechSynthesis' in window)) {
-    alert("お使いのブラウザは音声読み上げに対応していません。");
-    return;
-  }
-
-  // 他の処理を停止
-  stopEverything();
-
-  const data = currentStages[currentStageIndex];
-  const uttr = new SpeechSynthesisUtterance(data.en);
-  uttr.lang = 'en-US';
-  uttr.rate = playbackSpeed;
-
-  uttr.onstart = () => {
-    isSpeaking = true;
-    setButtonsState(true, true);
-    document.getElementById("result-msg").innerText = "🔊 再生中...";
-  };
-
-  uttr.onend = () => {
-    isSpeaking = false;
-    setButtonsState(false, false);
-    document.getElementById("result-msg").innerText = "";
-  };
-
-  uttr.onerror = () => {
-    isSpeaking = false;
-    setButtonsState(false, false);
-    document.getElementById("result-msg").innerText = "再生エラーが発生しました";
-  };
-
-  window.speechSynthesis.speak(uttr);
-}
-
-// ==========================================
-// 6. 音声認識（発音チェック）機能
-// ==========================================
-function startSpeechRecognition() {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  
-  if (!SpeechRecognition) {
-    alert("お使いのブラウザは音声認識に対応していません。ChromeやSafariでお試しください。");
-    return;
-  }
-
-  // 他の処理を停止
-  stopEverything();
-
-  recognition = new SpeechRecognition();
-  recognition.lang = 'en-US';
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
-
-  recognition.onstart = () => {
-    isListening = true;
-    setButtonsState(true, true);
-    document.getElementById("spoken-text").innerText = "🎤 聞き取り中... 発音してください";
-    document.getElementById("result-msg").innerText = "";
-
-    // 10秒のタイムアウト設定
-    speechTimeoutTimer = setTimeout(() => {
-      if (isListening) {
-        recognition.stop();
-        document.getElementById("spoken-text").innerText = "タイムアウト：声が検出されませんでした";
-        document.getElementById("result-msg").innerText = "もう一度お試しください";
-        resetRecognitionState();
-      }
-    }, 10000);
-  };
-
-  recognition.onresult = (event) => {
-    clearTimeout(speechTimeoutTimer);
-    const spoken = event.results[0][0].transcript;
-    document.getElementById("spoken-text").innerText = `「 ${spoken} 」`;
-
-    checkAnswer(spoken);
-  };
-
-  recognition.onerror = (event) => {
-    clearTimeout(speechTimeoutTimer);
-    resetRecognitionState();
-
-    if (event.error === 'no-speech') {
-      document.getElementById("spoken-text").innerText = "声が聞こえませんでした";
-    } else if (event.error === 'not-allowed') {
-      document.getElementById("spoken-text").innerText = "マイクの使用が許可されていません";
-    } else {
-      document.getElementById("spoken-text").innerText = "認識エラーが発生しました";
-    }
-  };
-
-  recognition.onend = () => {
-    clearTimeout(speechTimeoutTimer);
-    resetRecognitionState();
-  };
-
-  recognition.start();
-}
-
-function resetRecognitionState() {
-  isListening = false;
-  setButtonsState(false, false);
-}
-
-// 排他制御・停止用まとめ関数
-function stopEverything() {
-  if (window.speechSynthesis && window.speechSynthesis.speaking) {
-    window.speechSynthesis.cancel();
-  }
-  isSpeaking = false;
-
-  if (recognition && isListening) {
-    recognition.abort();
-  }
-  isListening = false;
-
-  if (speechTimeoutTimer) {
-    clearTimeout(speechTimeoutTimer);
-  }
-
-  setButtonsState(false, false);
-}
-
-function setButtonsState(listenDisabled, speakDisabled) {
-  document.getElementById("listen-btn").disabled = listenDisabled;
-  document.getElementById("speak-btn").disabled = speakDisabled;
-}
-
-// ==========================================
-// 7. 判定・進行ロジック
-// ==========================================
-function checkAnswer(spokenText) {
-  const targetText = currentStages[currentStageIndex].en;
-  
-  // 記号除去＆小文字化で比較
-  const cleanSpoken = spokenText.toLowerCase().replace(/[^a-z0-9]/g, "");
-  const cleanTarget = targetText.toLowerCase().replace(/[^a-z0-9]/g, "");
-
-  const resultEl = document.getElementById("result-msg");
-
-  if (cleanSpoken === cleanTarget || cleanSpoken.includes(cleanTarget)) {
-    resultEl.innerText = "🎉 GREAT!! すばらしい発音です！";
-    resultEl.className = "result pop-animation";
-    resultEl.style.color = "#48BB78";
-
-    // コンフェティ（紙吹雪）演出
-    if (typeof confetti === 'function') {
-      confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
-    }
-
-    document.getElementById("next-btn").style.display = "block";
-
-    // 復習リストへ自動追加（重複防止）
-    if (!reviewList.some(item => item.en === targetText)) {
-      reviewList.push(currentStages[currentStageIndex]);
-    }
-  } else {
-    resultEl.innerText = "👍 惜しい！もう一度やってみよう！";
-    resultEl.className = "result";
-    resultEl.style.color = "#ED8936";
-  }
-}
-
-function nextStage() {
-  currentStageIndex++;
-  if (currentStageIndex < currentStages.length) {
-    loadStage();
-  } else {
-    // 全ステージクリア処理
-    stopEverything();
-    document.getElementById("target-en").innerText = "🏆 CLEAR!!";
-    document.getElementById("target-jp").innerText = "全ステージを完了しました！";
-    document.getElementById("char-icon").innerText = "👑";
-    document.getElementById("char-msg").innerText = `${userName}さん、お見事です！`;
-    
-    document.getElementById("listen-btn").style.display = "none";
-    document.getElementById("speak-btn").style.display = "none";
-    document.getElementById("spoken-text").style.display = "none";
-    document.getElementById("result-msg").innerText = "素晴らしい集中力でした！";
-    document.getElementById("next-btn").style.display = "none";
-
-    if (typeof confetti === 'function') {
-      confetti({ particleCount: 150, spread: 100, origin: { y: 0.5 } });
-    }
-  }
-}
-
-// ==========================================
-// 8. モーダル & 設定処理
-// ==========================================
-function setSpeed(speed) {
-  playbackSpeed = speed;
-  document.querySelectorAll(".speed-btn").forEach(btn => btn.classList.remove("active"));
-  document.getElementById(`speed-${speed}`).classList.add("active");
-}
-
-function openSettingsModal() {
-  document.getElementById("settings-modal").style.display = "flex";
-}
-
-function closeSettingsModal() {
-  document.getElementById("settings-modal").style.display = "none";
-}
-
-function openReviewModal() {
-  const listEl = document.getElementById("review-list");
-  if (reviewList.length === 0) {
-    listEl.innerHTML = "<p style='color:#A0AEC0; text-align:center;'>まだクリアしたフレーズがありません</p>";
-  } else {
-    listEl.innerHTML = reviewList.map(item => `
-      <div style="padding: 8px 0; border-bottom: 1px solid #EDF2F7;">
-        <strong style="color:#2D3748;">${item.en}</strong> - <span style="color:#718096;">${item.jp}</span>
-      </div>
-    `).join("");
-  }
-  document.getElementById("review-modal").style.display = "flex";
-}
-
-function closeReviewModal() {
-  document.getElementById("review-modal").style.display = "none";
-}
-</script>
-</body>
-</html>
-<body>
-
-<div class="card">
-  <!-- =================================================================== -->
-  <!-- Screen 1: コンセプト解説画面                                         -->
-  <!-- =================================================================== -->
+  <!-- Screen 1: コンセプト解説画面 -->
   <div id="screen-concept">
     <div style="font-size: 36px; margin-top: 8px;">👶🍿</div>
     <h1>英会話は赤ちゃん以下</h1>
@@ -596,15 +494,13 @@ function closeReviewModal() {
 
     <div class="concept-box">
       <p><b>【このアプリの目的】</b><br>映画やドラマの英語が聞き取れない最大の理由は、単語力不足ではありません。「英語特有の音のつながり（ネイティブの音）」に耳が慣れていないからです。</p>
-      <p>まずは文法や理屈を一度忘れて<b>赤ちゃんの耳</b>になり、日常で使われる「超・短い音」からリラックスして耳と口を鳴らしていきましょう！</p>
+      <p>まずは文法や理屈を一度忘れて<b>赤ちゃんの耳</b>になり、日常で使われる「超・短い音」からリラックスして耳と口を慣らしていきましょう！</p>
     </div>
 
     <button class="btn btn-start" onclick="nextConceptScreen()">次へ進む</button>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- Screen 2: 本日の学習ステップ画面                                   -->
-  <!-- =================================================================== -->
+  <!-- Screen 2: 本日の学習ステップ画面 -->
   <div id="screen-today" style="display: none;">
     <div style="font-size: 36px; margin-top: 8px;">🎯</div>
     <h1>本日の学習メニュー</h1>
@@ -633,9 +529,7 @@ function closeReviewModal() {
     <button class="btn btn-start" onclick="goToSetupScreen()">学習を開始する</button>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- Screen 3: プロフィール＆コース設定画面                             -->
-  <!-- =================================================================== -->
+  <!-- Screen 3: プロフィール＆コース設定画面 -->
   <div id="screen-setup" style="display: none;">
     <div style="font-size: 36px; margin-top: 8px;">🐣</div>
     <h1>プロフィール設定</h1>
@@ -662,9 +556,7 @@ function closeReviewModal() {
     <button class="btn btn-start" onclick="startApp()" style="margin-top: 16px;">スタート！</button>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- Screen 4: メイン学習画面                                            -->
-  <!-- =================================================================== -->
+  <!-- Screen 4: メイン学習画面 -->
   <div id="screen-main" style="display: none;">
     <div class="header-bar">
       <div class="stage-badge" id="stage-indicator">Stage 1/10</div>
@@ -693,9 +585,7 @@ function closeReviewModal() {
     </div>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- Modal 1: 復習帳モーダル                                            -->
-  <!-- =================================================================== -->
+  <!-- Modal 1: 復習帳モーダル -->
   <div class="modal" id="review-modal">
     <div class="modal-content">
       <h3 style="font-size: 16px; color: #2D3748; margin-bottom: 12px;">📚 クリアしたフレーズ一覧</h3>
@@ -706,9 +596,7 @@ function closeReviewModal() {
     </div>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- Modal 2: 設定モーダル                                              -->
-  <!-- =================================================================== -->
+  <!-- Modal 2: 設定モーダル -->
   <div class="modal" id="settings-modal">
     <div class="modal-content">
       <h3 style="font-size: 16px; color: #2D3748; margin-bottom: 12px;">⚙️ 各種設定</h3>
@@ -731,7 +619,6 @@ function closeReviewModal() {
    1. データ構造の定義（レベル1：全10ステージ / レベル2構成）
    ========================================================================== */
 
-// レベル1: 超基本のあいさつ・感情（全10ステージ拡大版）
 const STAGES_LEVEL1 = [
   { en: "Hi!", jp: "やあ！", char: "👶", msg: "まずは基本のあいさつから！" },
   { en: "Hello!", jp: "こんにちは！", char: "🐣", msg: "元気にあいさつしてみよう！" },
@@ -745,7 +632,6 @@ const STAGES_LEVEL1 = [
   { en: "Wow!", jp: "すごい！/ わあ！", char: "👑", msg: "感情を込めて驚いてみよう！" }
 ];
 
-// レベル2: 短いフレーズ
 const STAGES_LEVEL2 = [
   { en: "Let's go!", jp: "行こう！", char: "🚀", msg: "2語のフレーズに挑戦！" },
   { en: "I see.", jp: "なるほど。", char: "💡", msg: "相づちの基本だよ！" },
@@ -757,14 +643,13 @@ const STAGES_LEVEL2 = [
 /* ==========================================================================
    2. グローバル状態管理変数
    ========================================================================== */
-let currentCourse = "lvl1";            // 選択中のコース ('lvl1' | 'lvl2')
-let currentStages = STAGES_LEVEL1;     // 現在のステージ配列
-let currentStageIndex = 0;             // 現在のインデックス
-let playbackSpeed = 1.0;               // 音声再生速度
-let userName = "たろう";               // ユーザー名
-let reviewList = [];                   // 復習リスト（クリア済みフレーズ）
+let currentCourse = "lvl1";
+let currentStages = STAGES_LEVEL1;
+let currentStageIndex = 0;
+let playbackSpeed = 1.0;
+let userName = "たろう";
+let reviewList = [];
 
-// 音声認識および音声合成（発音再生）の内部管理オブジェクト
 let recognition = null;
 let isListening = false;
 let isSpeaking = false;
@@ -774,26 +659,16 @@ let speechTimeoutTimer = null;
    3. 画面遷移ロジック（UI制御）
    ========================================================================== */
 
-/**
- * コンセプト画面から本日のメニュー画面へ遷移
- */
 function nextConceptScreen() {
   document.getElementById("screen-concept").style.display = "none";
   document.getElementById("screen-today").style.display = "block";
 }
 
-/**
- * 本日のメニュー画面から初期設定画面へ遷移
- */
 function goToSetupScreen() {
   document.getElementById("screen-today").style.display = "none";
   document.getElementById("screen-setup").style.display = "block";
 }
 
-/**
- * コース選択処理
- * @param {string} lvl - 'lvl1' または 'lvl2'
- */
 function selectLevel(lvl) {
   currentCourse = lvl;
   const opt1 = document.getElementById("opt-lvl1");
@@ -811,9 +686,6 @@ function selectLevel(lvl) {
   }
 }
 
-/**
- * アプリのメイン学習画面を起動
- */
 function startApp() {
   const inputName = document.getElementById("user-name-input").value.trim();
   if (inputName !== "") {
@@ -831,29 +703,22 @@ function startApp() {
    4. ステージ読み込み & UI表示更新
    ========================================================================== */
 
-/**
- * 現在のインデックスに応じたステージデータを画面にロードする
- */
 function loadStage() {
-  // 読み込み時にマイクや音声を完全停止して初期状態に戻す
   stopEverything();
 
   const data = currentStages[currentStageIndex];
 
-  // 各テキスト表示の更新
   document.getElementById("stage-indicator").innerText = `Stage ${currentStageIndex + 1}/${currentStages.length}`;
   document.getElementById("char-icon").innerText = data.char;
   document.getElementById("char-msg").innerText = `${userName}さん、${data.msg}`;
   document.getElementById("target-en").innerText = data.en;
   document.getElementById("target-jp").innerText = data.jp;
 
-  // フィードバック領域のリセット
   document.getElementById("spoken-text").innerText = "ここにあなたの声が表示されます";
   document.getElementById("result-msg").innerText = "";
   document.getElementById("result-msg").className = "result";
   document.getElementById("next-btn").style.display = "none";
 
-  // ボタンの活性化状態をリセット
   setButtonsState(false, false);
 }
 
@@ -861,16 +726,12 @@ function loadStage() {
    5. 音声合成（お手本再生）制御部
    ========================================================================== */
 
-/**
- * お手本英語音声の再生
- */
 function playAudio() {
   if (!('speechSynthesis' in window)) {
     alert("お使いのブラウザは音声読み上げ機能に対応していません。別のブラウザでお試しください。");
     return;
   }
 
-  // 実行中の処理があればすべて停止
   stopEverything();
 
   const data = currentStages[currentStageIndex];
@@ -878,7 +739,6 @@ function playAudio() {
   uttr.lang = 'en-US';
   uttr.rate = playbackSpeed;
 
-  // イベントハンドラ設定
   uttr.onstart = function() {
     isSpeaking = true;
     setButtonsState(true, true);
@@ -900,7 +760,6 @@ function playAudio() {
     document.getElementById("result-msg").style.color = "#E53E3E";
   };
 
-  // 発音再生の実行
   window.speechSynthesis.speak(uttr);
 }
 
@@ -908,9 +767,6 @@ function playAudio() {
    6. 音声認識（マイク発音チェック）制御部
    ========================================================================== */
 
-/**
- * マイクを起動して音声認識を開始
- */
 function startSpeechRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -919,7 +775,6 @@ function startSpeechRecognition() {
     return;
   }
 
-  // 実行中の音声合成・過去の認識処理を即時クリア
   stopEverything();
 
   recognition = new SpeechRecognition();
@@ -927,14 +782,12 @@ function startSpeechRecognition() {
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
 
-  // 音声認識開始時のイベント
   recognition.onstart = function() {
     isListening = true;
     setButtonsState(true, true);
     document.getElementById("spoken-text").innerText = "🎤 聞き取り中... 発音してください";
     document.getElementById("result-msg").innerText = "";
 
-    // 10秒間音声が入らない場合のセーフティタイムアウト設定
     speechTimeoutTimer = setTimeout(function() {
       if (isListening) {
         try {
@@ -950,17 +803,14 @@ function startSpeechRecognition() {
     }, 10000);
   };
 
-  // 音声認識成功（結果取得）時のイベント
   recognition.onresult = function(event) {
     clearTimeout(speechTimeoutTimer);
     const spoken = event.results[0][0].transcript;
     document.getElementById("spoken-text").innerText = `「 ${spoken} 」`;
 
-    // 発音の判定 logic 呼び出し
     checkAnswer(spoken);
   };
 
-  // エラーハンドリング
   recognition.onerror = function(event) {
     clearTimeout(speechTimeoutTimer);
     resetRecognitionState();
@@ -982,13 +832,11 @@ function startSpeechRecognition() {
     }
   };
 
-  // 音声認識終了時のイベント
   recognition.onend = function() {
     clearTimeout(speechTimeoutTimer);
     resetRecognitionState();
   };
 
-  // 音声認識の起動
   try {
     recognition.start();
   } catch(err) {
@@ -997,25 +845,17 @@ function startSpeechRecognition() {
   }
 }
 
-/**
- * 音声認識状態の安全なリセット
- */
 function resetRecognitionState() {
   isListening = false;
   setButtonsState(false, false);
 }
 
-/**
- * 音声再生・音声認識・タイマーの完全排他制御および停止処理
- */
 function stopEverything() {
-  // 音声合成（読み上げ）の強制キャンセル
   if (window.speechSynthesis && window.speechSynthesis.speaking) {
     window.speechSynthesis.cancel();
   }
   isSpeaking = false;
 
-  // 音声認識の強制終了
   if (recognition && isListening) {
     try {
       recognition.abort();
@@ -1025,19 +865,14 @@ function stopEverything() {
   }
   isListening = false;
 
-  // タイムアウトタイマーの解除
   if (speechTimeoutTimer) {
     clearTimeout(speechTimeoutTimer);
     speechTimeoutTimer = null;
   }
 
-  // ボタン状態を元に戻す
   setButtonsState(false, false);
 }
 
-/**
- * ボタンの有効・無効（disabled）の切り替え制御
- */
 function setButtonsState(listenDisabled, speakDisabled) {
   const listenBtn = document.getElementById("listen-btn");
   const speakBtn = document.getElementById("speak-btn");
@@ -1050,26 +885,19 @@ function setButtonsState(listenDisabled, speakDisabled) {
    7. 判定・判定後の進行処理
    ========================================================================== */
 
-/**
- * 発音の正誤判定処理
- * @param {string} spokenText - 認識した英文テキスト
- */
 function checkAnswer(spokenText) {
   const targetText = currentStages[currentStageIndex].en;
 
-  // 記号除去および小文字化処理（表記揺れの吸収）
   const cleanSpoken = spokenText.toLowerCase().replace(/[^a-z0-9]/g, "");
   const cleanTarget = targetText.toLowerCase().replace(/[^a-z0-9]/g, "");
 
   const resultEl = document.getElementById("result-msg");
 
-  // 一致判定（完全一致または包含判定）
   if (cleanSpoken === cleanTarget || cleanSpoken.includes(cleanTarget) || cleanTarget.includes(cleanSpoken)) {
     resultEl.innerText = "🎉 GREAT!! すばらしい発音です！";
     resultEl.className = "result pop-animation";
     resultEl.style.color = "#48BB78";
 
-    // コンフェティ（紙吹雪）アニメーションの実行
     if (typeof confetti === 'function') {
       confetti({
         particleCount: 60,
@@ -1078,10 +906,8 @@ function checkAnswer(spokenText) {
       });
     }
 
-    // 次へ進むボタンを表示
     document.getElementById("next-btn").style.display = "block";
 
-    // クリアしたフレーズを復習リストへ保存（重複チェック付き）
     const currentItem = currentStages[currentStageIndex];
     if (!reviewList.some(item => item.en === currentItem.en)) {
       reviewList.push(currentItem);
@@ -1093,16 +919,12 @@ function checkAnswer(spokenText) {
   }
 }
 
-/**
- * 次のステージに進む、またはクリア画面を表示する処理
- */
 function nextStage() {
   currentStageIndex++;
 
   if (currentStageIndex < currentStages.length) {
     loadStage();
   } else {
-    // 全ステージクリア時の演出とUI変更
     stopEverything();
 
     document.getElementById("target-en").innerText = "🏆 CLEAR!!";
@@ -1117,7 +939,6 @@ function nextStage() {
     document.getElementById("result-msg").style.color = "#2B6CB0";
     document.getElementById("next-btn").style.display = "none";
 
-    // 盛大な紙吹雪演出
     if (typeof confetti === 'function') {
       confetti({
         particleCount: 180,
@@ -1132,10 +953,6 @@ function nextStage() {
    8. モーダル・設定・復習機能の制御
    ========================================================================== */
 
-/**
- * 再生速度の選択とスタイルの変更
- * @param {number} speed - 0.8 | 1.0 | 1.2
- */
 function setSpeed(speed) {
   playbackSpeed = speed;
   document.querySelectorAll(".speed-btn").forEach(function(btn) {
@@ -1148,23 +965,14 @@ function setSpeed(speed) {
   }
 }
 
-/**
- * 設定モーダルの表示
- */
 function openSettingsModal() {
   document.getElementById("settings-modal").style.display = "flex";
 }
 
-/**
- * 設定モーダルの非表示
- */
 function closeSettingsModal() {
   document.getElementById("settings-modal").style.display = "none";
 }
 
-/**
- * 復習帳モーダルの表示と動的要素構築
- */
 function openReviewModal() {
   const listEl = document.getElementById("review-list");
 
@@ -1189,9 +997,6 @@ function openReviewModal() {
   document.getElementById("review-modal").style.display = "flex";
 }
 
-/**
- * 復習帳モーダルの非表示
- */
 function closeReviewModal() {
   document.getElementById("review-modal").style.display = "none";
 }
