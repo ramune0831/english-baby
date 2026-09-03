@@ -36,18 +36,17 @@ body {
 h1 { font-size: 20px; color: #5A4A42; margin: 6px 0; } 
 .subtitle { color: #8C7A6B; font-size: 13px; margin-bottom: 14px; } 
 
-/* コンセプト表示ボックス（オンボーディング・ホーム共通） */
 .concept-box {
   background: #FFF0E5;
   border-radius: 16px;
   padding: 16px;
-  margin: 14px 0;
+  margin: 16px 0;
   text-align: left;
   font-size: 13px;
   color: #5A4A42;
   line-height: 1.6;
 }
-.concept-box p { margin: 6px 0; }
+.concept-box p { margin: 8px 0; }
 
 .start-message {
   background: #EBF7FF;
@@ -60,7 +59,6 @@ h1 { font-size: 20px; color: #5A4A42; margin: 6px 0; }
   line-height: 1.5;
 }
 
-/* ホーム画面（今日の15分）スタイル */
 .welcome-header { text-align: left; margin-bottom: 12px; }
 .welcome-name { font-size: 18px; font-weight: bold; color: #5A4A42; }
 .streak-badge { 
@@ -78,47 +76,30 @@ h1 { font-size: 20px; color: #5A4A42; margin: 6px 0; }
   background: #F7FAFC;
   border: 2px solid #E2E8F0;
   border-radius: 20px;
-  padding: 16px;
-  margin-bottom: 20px;
+  padding: 20px 16px;
+  margin-top: 10px;
   text-align: left;
 }
-.today-title { font-size: 15px; font-weight: bold; color: #2D3748; margin-bottom: 4px; }
-.today-sub { font-size: 12px; color: #718096; margin-bottom: 12px; }
+.today-title { font-size: 16px; font-weight: bold; color: #2D3748; margin-bottom: 4px; }
+.today-sub { font-size: 12px; color: #718096; margin-bottom: 16px; }
 
-.step-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.step-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
 .step-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: white;
-  padding: 10px 14px;
+  padding: 12px 14px;
   border-radius: 12px;
   border: 1px solid #E2E8F0;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
 }
 .step-item.step-1 { border-left: 6px solid #48BB78; color: #2F855A; }
 .step-item.step-2 { border-left: 6px solid #4299E1; color: #2B6CB0; }
 .step-item.step-3 { border-left: 6px solid #ED8936; color: #C05621; }
-.step-time { font-size: 11px; color: #A0AEC0; font-weight: normal; }
+.step-time { font-size: 12px; color: #A0AEC0; font-weight: normal; }
 
-.level-list-title { text-align: left; font-size: 13px; font-weight: bold; color: #718096; margin: 16px 0 8px; }
-.menu-grid { display: flex; flex-direction: column; gap: 8px; }
-.menu-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #F7FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 14px;
-  padding: 10px 14px;
-  font-size: 13px;
-  font-weight: bold;
-  color: #4A5568;
-  cursor: pointer;
-}
-
-/* 通常UIスタイル */
 .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; } 
 .btn-icon { background: #F0F4F8; border: none; border-radius: 20px; padding: 6px 12px; font-size: 12px; font-weight: bold; color: #4A5568; cursor: pointer; } 
 .char-area { background: #EBF7FF; border-radius: 16px; padding: 12px; margin: 12px 0; display: flex; align-items: center; gap: 12px; } 
@@ -187,7 +168,7 @@ h1 { font-size: 20px; color: #5A4A42; margin: 6px 0; }
     <button class="btn btn-start" id="btnGoToSetup">最初のレッスンを始める ▶</button>
   </div>
 
-  <!-- ② ホーム画面（コンセプト＋「今日の15分」構造） -->
+  <!-- ② ホーム画面（コンセプト全文＋次へボタンのみにスッキリ化） -->
   <div id="homeArea" style="display:none;">
     <div class="header-bar">
       <span style="font-size:12px; font-weight:bold; color:#718096;">🏠 ホーム</span>
@@ -199,12 +180,24 @@ h1 { font-size: 20px; color: #5A4A42; margin: 6px 0; }
       <div class="streak-badge">🔥 <span id="homeStreak">0</span>日連続達成中！</div>
     </div>
 
-    <!-- ホーム画面用のコンセプト言葉（必ず表示） -->
+    <!-- コンセプトメッセージ全文 -->
     <div class="concept-box">
-      <p>👶 <strong>赤ちゃんスタイルでOK！</strong><br>
-      文法は気にせず、聴こえた通りの「音」をマネしてみましょう。</p>
-      <p>🎬 <strong>目指せ洋画リスニング！</strong><br>
-      毎日の積み重ねで、耳が少しずつ英語に慣れていきます。</p>
+      <p>👶 <strong>赤ちゃんは文法を学びません。</strong><br>
+      まず「音」をたくさん聴いて、マネして喋ることからスタートします。</p>
+      <p>🎧 <strong>このアプリも同じです。</strong><br>
+      難しい勉強は一切なし。耳と口を使って「音の響き」を身体に馴染ませていきます。</p>
+      <p>🎬 <strong>目指すは「洋画をそのまま楽しむ力」！</strong><br>
+      赤ちゃんステップで、着実に階段をのぼりましょう。</p>
+    </div>
+
+    <button class="btn btn-start" id="btnGoToToday" style="margin-top:20px;">次へ ▶</button>
+  </div>
+
+  <!-- ③ 今日は15分画面（ホームの「次へ」から遷移） -->
+  <div id="todayArea" style="display:none;">
+    <div class="header-bar">
+      <button class="btn-icon" id="btnTodayToHome">🏠 ホーム</button>
+      <button class="btn-icon" id="btnTodayToModal">⚙️ 設定</button>
     </div>
 
     <div class="today-box">
@@ -227,15 +220,6 @@ h1 { font-size: 20px; color: #5A4A42; margin: 6px 0; }
       </div>
 
       <button class="btn btn-start" id="btnStart15Min">▶ 今日の15分を始める</button>
-    </div>
-
-    <div class="level-list-title">📚 カリキュラム＆コース</div>
-    <div class="menu-grid">
-      <div class="menu-card"><span>🌱 レベル1：超初心者</span> <span>▶</span></div>
-      <div class="menu-card"><span>🗣️ レベル2：日常会話</span> <span>▶</span></div>
-      <div class="menu-card"><span>🎬 レベル3：洋画</span> <span>▶</span></div>
-      <div class="menu-card"><span>🏆 バッジ（準備中）</span> <span>🔒</span></div>
-      <div class="menu-card"><span>🛍️ ショップ（準備中）</span> <span>🔒</span></div>
     </div>
   </div>
 
@@ -417,6 +401,7 @@ window.addEventListener('DOMContentLoaded', () => {
 function showArea(areaId) {
   document.getElementById("onboardingArea").style.display = "none";
   document.getElementById("homeArea").style.display = "none";
+  document.getElementById("todayArea").style.display = "none";
   document.getElementById("nameArea").style.display = "none";
   document.getElementById("lessonArea").style.display = "none";
 
@@ -438,6 +423,18 @@ function initEventListeners() {
       saveData();
       showArea("nameArea");
     });
+  }
+
+  const btnGoToToday = document.getElementById("btnGoToToday");
+  if (btnGoToToday) {
+    btnGoToToday.addEventListener('click', () => {
+      showArea("todayArea");
+    });
+  }
+
+  const btnTodayToHome = document.getElementById("btnTodayToHome");
+  if (btnTodayToHome) {
+    btnTodayToHome.addEventListener('click', showHome);
   }
 
   [1, 2, 3].forEach(lvl => {
@@ -474,6 +471,9 @@ function initEventListeners() {
 
   const btnHomeToModal = document.getElementById("btnHomeToModal");
   if (btnHomeToModal) btnHomeToModal.addEventListener('click', openRecordModal);
+
+  const btnTodayToModal = document.getElementById("btnTodayToModal");
+  if (btnTodayToModal) btnTodayToModal.addEventListener('click', openRecordModal);
 
   const btnCloseModal = document.getElementById("btnCloseModal");
   if (btnCloseModal) btnCloseModal.addEventListener('click', closeRecordModal);
