@@ -2,27 +2,16 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>英会話は赤ちゃん以下 - 洋画リスニングへの道</title>
 
 <!-- 紙吹雪（コンフェティ）用ライブラリ -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
-/* ==========================================================================
-   Base Styles & Reset
-   ========================================================================== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background-color: #FFF9F2;
-  color: #2D3748;
   margin: 0;
   padding: 16px;
   display: flex;
@@ -30,976 +19,918 @@ body {
   align-items: center;
   min-height: 100vh;
   box-sizing: border-box;
-  line-height: 1.5;
 }
 
-/* ==========================================================================
-   Card Container
-   ========================================================================== */
-.card {
-  background: #FFFFFF;
-  border-radius: 24px;
-  padding: 24px 20px;
-  width: 100%;
-  max-width: 380px;
-  box-shadow: 0 10px 25px rgba(90, 74, 66, 0.08);
-  text-align: center;
-  position: relative;
-  box-sizing: border-box;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
+.card { 
+  background: white; 
+  border-radius: 24px; 
+  padding: 24px 20px; 
+  width: 100%; 
+  max-width: 360px; 
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06); 
+  text-align: center; 
+  position: relative; 
+  box-sizing: border-box; 
+} 
 
-/* ==========================================================================
-   Typography & Headers
-   ========================================================================== */
-h1 {
-  font-size: 22px;
-  font-weight: 800;
-  color: #5A4A42;
-  margin: 8px 0 4px 0;
-  letter-spacing: -0.5px;
-}
+h1 { font-size: 22px; color: #5A4A42; margin: 8px 0 4px; } 
+.subtitle { color: #8C7A6B; font-size: 13px; margin-bottom: 16px; } 
 
-.subtitle {
-  color: #8C7A6B;
-  font-size: 13px;
-  font-weight: 500;
-  margin-bottom: 16px;
-}
-
-/* ==========================================================================
-   Screen 1: Concept Section
-   ========================================================================== */
 .concept-box {
   background: #FFF0E5;
-  border: 1px solid #FFE4D6;
-  border-radius: 18px;
-  padding: 18px;
+  border-radius: 16px;
+  padding: 16px;
   margin: 16px 0;
   text-align: left;
   font-size: 13px;
   color: #5A4A42;
-  line-height: 1.65;
+  line-height: 1.6;
+}
+.concept-box p { margin: 10px 0; }
+
+.start-message {
+  background: #EBF7FF;
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 20px;
+  color: #2B6CB0;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1.5;
 }
 
-.concept-box p {
-  margin-bottom: 10px;
-}
-
-.concept-box p:last-child {
-  margin-bottom: 0;
-}
-
-.concept-box b {
-  color: #C05621;
-}
-
-/* ==========================================================================
-   Screen 2: Today's Schedule Section
-   ========================================================================== */
 .today-box {
   background: #F7FAFC;
   border: 2px solid #E2E8F0;
   border-radius: 20px;
   padding: 20px 16px;
-  margin: 12px 0 20px 0;
+  margin-top: 10px;
   text-align: left;
 }
+.today-title { font-size: 16px; font-weight: bold; color: #2D3748; margin-bottom: 4px; }
+.today-sub { font-size: 12px; color: #718096; margin-bottom: 16px; }
 
-.today-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #2D3748;
-  margin-bottom: 4px;
-}
-
-.today-sub {
-  font-size: 12px;
-  color: #718096;
-  margin-bottom: 16px;
-}
-
-.step-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
+.step-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
 .step-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #FFFFFF;
+  background: white;
   padding: 12px 14px;
   border-radius: 12px;
   border: 1px solid #E2E8F0;
-  font-size: 13px;
-  font-weight: 700;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  font-size: 14px;
+  font-weight: bold;
 }
-
 .step-item.step-1 { border-left: 6px solid #48BB78; color: #2F855A; }
 .step-item.step-2 { border-left: 6px solid #4299E1; color: #2B6CB0; }
 .step-item.step-3 { border-left: 6px solid #ED8936; color: #C05621; }
+.step-time { font-size: 12px; color: #A0AEC0; font-weight: normal; }
 
-.step-time {
-  font-size: 11px;
-  color: #A0AEC0;
-  font-weight: 500;
-  background: #EDF2F7;
-  padding: 2px 8px;
-  border-radius: 10px;
-}
+.header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; } 
+.btn-icon { background: #F0F4F8; border: none; border-radius: 20px; padding: 6px 12px; font-size: 12px; font-weight: bold; color: #4A5568; cursor: pointer; } 
+.char-area { background: #EBF7FF; border-radius: 16px; padding: 12px; margin: 12px 0; display: flex; align-items: center; gap: 12px; } 
+.char-icon { font-size: 32px; min-width: 45px; } 
+.char-msg { font-size: 13px; font-weight: bold; color: #2B6CB0; text-align: left; } 
+.en-text { font-size: 25px; font-weight: bold; color: #2D3748; margin: 16px 0 4px; word-break: break-word; } 
+.jp-text { font-size: 15px; color: #718096; margin-bottom: 20px; } 
 
-/* ==========================================================================
-   Screen 3: Setup Section
-   ========================================================================== */
-.name-input {
-  width: 100%;
-  padding: 14px;
-  border: 2px solid #E2E8F0;
-  border-radius: 16px;
-  font-size: 16px;
-  text-align: center;
-  margin: 8px 0 16px 0;
-  outline: none;
-  box-sizing: border-box;
-  transition: border-color 0.2s;
-  background-color: #FAFAFA;
-}
+.btn { width: 100%; padding: 14px; margin: 6px 0; border: none; border-radius: 30px; font-size: 15px; font-weight: bold; cursor: pointer; box-sizing: border-box; } 
+.btn:disabled { opacity: 0.4; cursor: not-allowed; filter: grayscale(50%); } 
+.btn-listen { background: #EBF7FF; color: #2B6CB0; } 
+.btn-speak { background: #FFF0E5; color: #C05621; } 
+.btn-next { background: #FF6B6B; color: white; margin-top: 10px; } 
+.btn-start { background: #FF6B6B; color: white; } 
 
-.name-input:focus {
-  border-color: #FF6B6B;
-  background-color: #FFFFFF;
-}
+.spoken-box { font-size: 13px; color: #4A5568; background: #EDF2F7; border-radius: 12px; padding: 10px; margin-top: 8px; min-height: 20px; word-break: break-word; } 
+.result { margin-top: 6px; font-weight: bold; font-size: 14px; min-height: 22px; } 
+.name-input { width: 100%; padding: 12px; border: 2px solid #E2E8F0; border-radius: 14px; font-size: 16px; text-align: center; margin: 8px 0 16px; outline: none; box-sizing: border-box; } 
+.level-option { background: #F7FAFC; border: 2px solid #E2E8F0; border-radius: 16px; padding: 12px; margin: 8px 0; text-align: left; cursor: pointer; transition: all 0.2s; pointer-events: auto; } 
+.level-option * { pointer-events: none; }
+.level-option.selected { border-color: #FF6B6B; background: #FFF5F5; } 
+.level-title { font-weight: bold; color: #2D3748; font-size: 14px; } 
+.level-desc { font-size: 11px; color: #718096; margin-top: 2px; } 
+.recommended-badge { background: #FF6B6B; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 8px; margin-left: 6px; } 
 
-.level-option {
-  background: #F7FAFC;
-  border: 2px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 14px;
-  margin: 10px 0;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-}
+.modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); border-radius: 24px; justify-content: center; align-items: center; z-index: 10; } 
+.modal-content { background: white; padding: 20px; border-radius: 20px; width: 85%; max-height: 90%; overflow-y: auto; text-align: center; box-sizing: border-box; } 
+.status-box { background: #FFF0E5; padding: 10px; border-radius: 16px; margin: 10px 0; font-weight: bold; color: #5A4A42; font-size: 13px; } 
+.setting-group { margin: 14px 0; text-align: left; } 
+.setting-label { font-size: 12px; font-weight: bold; color: #718096; margin-bottom: 6px; display: block; } 
+.speed-selector { display: flex; justify-content: space-between; gap: 6px; background: #F7FAFC; padding: 4px; border-radius: 16px; } 
+.speed-btn { flex: 1; border: none; background: transparent; padding: 8px 0; border-radius: 12px; font-size: 11px; font-weight: bold; color: #718096; cursor: pointer; } 
+.speed-btn.active { background: #FF9F43; color: white; } 
 
-.level-option * {
-  pointer-events: none;
-}
-
-.level-option:hover {
-  border-color: #CBD5E0;
-}
-
-.level-option.selected {
-  border-color: #FF6B6B;
-  background: #FFF5F5;
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.12);
-}
-
-.level-title {
-  font-weight: 700;
-  color: #2D3748;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-}
-
-.level-desc {
-  font-size: 11px;
-  color: #718096;
-  margin-top: 4px;
-  line-height: 1.4;
-}
-
-.recommended-badge {
-  background: #FF6B6B;
-  color: #FFFFFF;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 10px;
-  margin-left: 8px;
-  display: inline-block;
-}
-
-/* ==========================================================================
-   Screen 4: Main Learning View
-   ========================================================================== */
-.header-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.stage-badge {
-  font-size: 12px;
-  font-weight: 700;
-  color: #8C7A6B;
-  background: #F0EAE1;
-  padding: 4px 12px;
-  border-radius: 12px;
-}
-
-.header-controls {
-  display: flex;
-  gap: 6px;
-}
-
-.btn-icon {
-  background: #F0F4F8;
-  border: none;
-  border-radius: 16px;
-  padding: 6px 12px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #4A5568;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-icon:hover {
-  background: #E2E8F0;
-}
-
-.char-area {
-  background: #EBF7FF;
-  border: 1px solid #DCEEFE;
-  border-radius: 18px;
-  padding: 12px 16px;
-  margin: 12px 0;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.char-icon {
-  font-size: 36px;
-  min-width: 48px;
-  text-align: center;
-}
-
-.char-msg {
-  font-size: 13px;
-  font-weight: 700;
-  color: #2B6CB0;
-  text-align: left;
-  line-height: 1.4;
-}
-
-.en-text {
-  font-size: 28px;
-  font-weight: 800;
-  color: #2D3748;
-  margin: 16px 0 4px 0;
-  word-break: break-word;
-  letter-spacing: -0.5px;
-}
-
-.jp-text {
-  font-size: 15px;
-  font-weight: 500;
-  color: #718096;
-  margin-bottom: 20px;
-}
-
-/* ==========================================================================
-   Buttons & Interactive Elements
-   ========================================================================== */
-.btn {
-  width: 100%;
-  padding: 14px;
-  margin: 6px 0;
-  border: none;
-  border-radius: 30px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  box-sizing: border-box;
-  transition: transform 0.1s, opacity 0.2s, background-color 0.2s;
-}
-
-.btn:active {
-  transform: scale(0.98);
-}
-
-.btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  filter: grayscale(60%);
-  transform: none;
-}
-
-.btn-listen {
-  background: #EBF7FF;
-  color: #2B6CB0;
-  border: 1px solid #C3E2FE;
-}
-
-.btn-listen:hover:not(:disabled) {
-  background: #DCEEFE;
-}
-
-.btn-speak {
-  background: #FFF0E5;
-  color: #C05621;
-  border: 1px solid #FFD8C2;
-}
-
-.btn-speak:hover:not(:disabled) {
-  background: #FFE4D6;
-}
-
-.btn-next {
-  background: #FF6B6B;
-  color: #FFFFFF;
-  margin-top: 12px;
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.25);
-}
-
-.btn-next:hover {
-  background: #EE5253;
-}
-
-.btn-start {
-  background: #FF6B6B;
-  color: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.25);
-}
-
-.btn-start:hover {
-  background: #EE5253;
-}
-
-.spoken-box {
-  font-size: 13px;
-  color: #4A5568;
-  background: #EDF2F7;
-  border-radius: 14px;
-  padding: 12px;
-  margin-top: 10px;
-  min-height: 24px;
-  word-break: break-word;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.result {
-  margin-top: 8px;
-  font-weight: 700;
-  font-size: 14px;
-  min-height: 22px;
-}
-
-/* ==========================================================================
-   Modals & Overlays
-   ========================================================================== */
-.modal {
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(2px);
-  border-radius: 24px;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-}
-
-.modal-content {
-  background: #FFFFFF;
-  padding: 24px 20px;
-  border-radius: 20px;
-  width: 88%;
-  max-height: 85%;
-  overflow-y: auto;
-  text-align: center;
-  box-sizing: border-box;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-}
-
-.setting-group {
-  margin: 16px 0;
-  text-align: left;
-}
-
-.setting-label {
-  font-size: 12px;
-  font-weight: 700;
-  color: #718096;
-  margin-bottom: 8px;
-  display: block;
-}
-
-.speed-selector {
-  display: flex;
-  justify-content: space-between;
-  gap: 6px;
-  background: #F7FAFC;
-  padding: 4px;
-  border-radius: 16px;
-  border: 1px solid #E2E8F0;
-}
-
-.speed-btn {
-  flex: 1;
-  border: none;
-  background: transparent;
-  padding: 10px 0;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #718096;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.speed-btn.active {
-  background: #FF9F43;
-  color: #FFFFFF;
-  box-shadow: 0 2px 6px rgba(255, 159, 67, 0.3);
-}
-
-/* ==========================================================================
-   Animations
-   ========================================================================== */
-@keyframes popIn {
-  0% { transform: scale(0.6); opacity: 0; }
-  70% { transform: scale(1.15); }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-.pop-animation {
-  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
+@keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.2); } 100% { transform: scale(1); opacity: 1; } } 
+.pop-animation { animation: popIn 0.4s ease-out forwards; }
 </style>
 </head>
-
 <body>
 
-<div class="card">
-  <!-- Screen 1: コンセプト解説画面 -->
-  <div id="screen-concept">
-    <div style="font-size: 36px; margin-top: 8px;">👶🍿</div>
+<div class="card" id="app">
+
+  <!-- ① ホーム画面（ご提示のスクリーンショットの画面） -->
+  <div id="homeArea">
+    <div style="font-size:44px; margin-bottom:4px;">🎬👶🐶</div>
     <h1>英会話は赤ちゃん以下</h1>
-    <div class="subtitle">〜洋画リスニングへの道〜</div>
+    <div class="subtitle">音から始める、新しい英語学習のカタチ</div>
 
     <div class="concept-box">
-      <p><b>【このアプリの目的】</b><br>映画やドラマの英語が聞き取れない最大の理由は、単語力不足ではありません。「英語特有の音のつながり（ネイティブの音）」に耳が慣れていないからです。</p>
-      <p>まずは文法や理屈を一度忘れて<b>赤ちゃんの耳</b>になり、日常で使われる「超・短い音」からリラックスして耳と口を慣らしていきましょう！</p>
+      <p>👶 <strong>赤ちゃんは文法を学びません。</strong><br>
+      まず「音」をたくさん聴いて、マネして喋ることからスタートします。</p>
+      <p>🎧 <strong>このアプリも同じです。</strong><br>
+      難しい勉強は一切なし。耳と口を使って「音の響き」を身体に馴染ませていきます。</p>
+      <p>🎬 <strong>目指すは「洋画をそのまま楽しむ力」！</strong><br>
+      赤ちゃんステップで、着実に階段をのぼりましょう。</p>
     </div>
 
-    <button class="btn btn-start" onclick="nextConceptScreen()">次へ進む</button>
+    <div class="start-message">
+      🌱 <strong>今日から始めよう</strong><br>
+      1日15分でOK。<br>
+      英語ができなくても大丈夫。<br>
+      ここがスタートラインです！
+    </div>
+
+    <button class="btn btn-start" id="btnGoToToday">最初のレッスンを始める ▶</button>
   </div>
 
-  <!-- Screen 2: 本日の学習ステップ画面 -->
-  <div id="screen-today" style="display: none;">
-    <div style="font-size: 36px; margin-top: 8px;">🎯</div>
-    <h1>本日の学習メニュー</h1>
-    <div class="subtitle">1日3ステップで確実にステップアップ</div>
+  <!-- ② 今日は15分画面（ホームのボタンから遷移） -->
+  <div id="todayArea" style="display:none;">
+    <div class="header-bar">
+      <button class="btn-icon" id="btnTodayToHome">🏠 ホーム</button>
+      <button class="btn-icon" id="btnTodayToModal">⚙️ 設定</button>
+    </div>
 
     <div class="today-box">
-      <div class="today-title">今日のルーティン</div>
-      <div class="today-sub">毎日少しずつ音を身体に染み込ませていきましょう</div>
+      <div class="today-title">🎯 今日の15分</div>
+      <div class="today-sub">あと15分で今日の学習完了！</div>
 
       <div class="step-list">
         <div class="step-item step-1">
-          <span>STEP 1: 聴く（耳を慣らす）</span>
-          <span class="step-time">1分</span>
+          <span>🟢 1. 覚える</span>
+          <span class="step-time">5分</span>
         </div>
         <div class="step-item step-2">
-          <span>STEP 2: 発音（口を慣らす）</span>
-          <span class="step-time">2分</span>
+          <span>🔵 2. 声に出す</span>
+          <span class="step-time">5分</span>
         </div>
         <div class="step-item step-3">
-          <span>STEP 3: 定着（セルフチェック）</span>
-          <span class="step-time">1分</span>
+          <span>🟠 3. 復習する</span>
+          <span class="step-time">5分</span>
         </div>
       </div>
-    </div>
 
-    <button class="btn btn-start" onclick="goToSetupScreen()">学習を開始する</button>
+      <button class="btn btn-start" id="btnStart15Min">▶ 今日の15分を始める</button>
+    </div>
   </div>
 
-  <!-- Screen 3: プロフィール＆コース設定画面 -->
-  <div id="screen-setup" style="display: none;">
-    <div style="font-size: 36px; margin-top: 8px;">🐣</div>
-    <h1>プロフィール設定</h1>
-    <div class="subtitle">あなたに最適なコースをセットアップします</div>
-    
-    <div style="text-align: left; font-size: 12px; font-weight: bold; color: #718096; margin-bottom: 4px;">お名前（ニックネーム）</div>
-    <input type="text" id="user-name-input" class="name-input" placeholder="例: たろう" value="たろう">
+  <!-- プロフィール設定画面 -->
+  <div id="nameArea" style="display:none;">
+    <div style="font-size:36px;">📝🐶</div>
+    <h2 style="font-size:20px; color:#5A4A42; margin:6px 0;">プロフィール設定</h2>
 
-    <div style="text-align: left; font-size: 12px; font-weight: bold; color: #718096; margin-bottom: 6px;">学習コース選択</div>
-    
-    <div class="level-option selected" id="opt-lvl1" onclick="selectLevel('lvl1')">
-      <div class="level-title">
-        レベル1: 超基本のあいさつ・感情 
-        <span class="recommended-badge">推奨</span>
-      </div>
-      <div class="level-desc">Hi / Thanks / Bye などの超基本音（全10ステージ構成）</div>
-    </div>
-    
-    <div class="level-option" id="opt-lvl2" onclick="selectLevel('lvl2')">
-      <div class="level-title">レベル2: 短いフレーズ</div>
-      <div class="level-desc">Let's go / I see などの日常2語フレーズ</div>
+    <p style="font-weight:bold; color:#5A4A42; margin-bottom:4px; font-size:14px; text-align:left;">お名前</p>
+    <input id="nameInput" class="name-input" type="text" placeholder="例: Taro" maxlength="30">
+
+    <p style="font-weight:bold; color:#5A4A42; margin-bottom:6px; font-size:14px; text-align:left;">あなたの英語レベルを選んでね</p>
+
+    <div class="level-option selected" id="initLevel_1" data-level="1">
+      <div class="level-title">🍼 ① レベル1：超初心者 <span class="recommended-badge">おすすめ</span></div>
+      <div class="level-desc">あいさつ・気持ち・基本動作からスタート</div>
     </div>
 
-    <button class="btn btn-start" onclick="startApp()" style="margin-top: 16px;">スタート！</button>
+    <div class="level-option" id="initLevel_2" data-level="2">
+      <div class="level-title">🐣 ② レベル2：初級・日常英会話</div>
+      <div class="level-desc">日常表現・質問・返し・お願いなど</div>
+    </div>
+
+    <div class="level-option" id="initLevel_3" data-level="3">
+      <div class="level-title">🎬 ③ レベル3：洋画チャレンジ</div>
+      <div class="level-desc">洋画頻出・音のつながり・感情表現など</div>
+    </div>
+
+    <button class="btn btn-start" id="btnStart" style="margin-top:12px;">学習を開始する ▶</button>
   </div>
 
-  <!-- Screen 4: メイン学習画面 -->
-  <div id="screen-main" style="display: none;">
+  <!-- メイン学習画面 -->
+  <div id="lessonArea" style="display:none;">
     <div class="header-bar">
-      <div class="stage-badge" id="stage-indicator">Stage 1/10</div>
-      <div class="header-controls">
-        <button class="btn-icon" onclick="openReviewModal()">📚 復習帳</button>
-        <button class="btn-icon" onclick="openSettingsModal()">⚙️</button>
-      </div>
+      <button class="btn-icon" id="btnBackHome">🏠 ホーム</button>
+      <span style="color:#A0AEC0; font-size:11px; font-weight:bold;" id="stepProgress">Lv.1 1/5</span>
+      <button class="btn-icon" id="btnOpenModal">⚙️</button>
     </div>
 
     <div class="char-area">
-      <div class="char-icon" id="char-icon">👶</div>
-      <div class="char-msg" id="char-msg">一緒にがんばろう！</div>
+      <div class="char-icon" id="charIcon">🐶</div>
+      <div class="char-msg" id="charMsg">ぽてワン「音の響きをよく聴いてね！」</div>
     </div>
 
-    <div id="learning-content">
-      <div class="en-text" id="target-en">---</div>
-      <div class="jp-text" id="target-jp">---</div>
+    <div class="en-text" id="enText">Thank you.</div>
+    <div class="jp-text" id="jpText">ありがとう。</div>
 
-      <button class="btn btn-listen" id="listen-btn" onclick="playAudio()">🔊 お手本を聴く</button>
-      <button class="btn btn-speak" id="speak-btn" onclick="startSpeechRecognition()">🎤 まねして発音する</button>
+    <button class="btn btn-listen" id="btnListen">🔊 きく</button>
+    <button class="btn btn-speak" id="btnSpeak">🎤 マネして言う</button>
 
-      <div class="spoken-box" id="spoken-text">ここにあなたの声が表示されます</div>
-      <div class="result" id="result-msg"></div>
+    <div class="spoken-box" id="spokenBox">👂 声を聞かせてね</div>
+    <div class="result" id="resultMsg"></div>
 
-      <button class="btn btn-next" id="next-btn" onclick="nextStage()" style="display: none;">つぎへ進む ➔</button>
-    </div>
+    <button class="btn btn-next" id="btnNext" disabled>つぎへ ✨</button>
   </div>
 
-  <!-- Modal 1: 復習帳モーダル -->
-  <div class="modal" id="review-modal">
+  <!-- 設定・記録モーダル -->
+  <div class="modal" id="recordModal">
     <div class="modal-content">
-      <h3 style="font-size: 16px; color: #2D3748; margin-bottom: 12px;">📚 クリアしたフレーズ一覧</h3>
-      <div id="review-list" style="text-align: left; font-size: 13px; margin: 16px 0; max-height: 220px; overflow-y: auto;">
-        <!-- JavaScriptで動的追加 -->
+      <div style="font-size:36px;">⚙️🐱</div>
+      <h3 style="color:#5A4A42; margin:4px 0;">設定・記録</h3>
+
+      <div class="status-box">
+        <p style="margin:4px 0;">🔥 連続記録: <span id="modalStreak">0</span>日</p>
+        <p style="margin:4px 0;">🏆 累計学習: <span id="modalTotal">0</span>日</p>
       </div>
-      <button class="btn btn-start" onclick="closeReviewModal()">閉じる</button>
-    </div>
-  </div>
 
-  <!-- Modal 2: 設定モーダル -->
-  <div class="modal" id="settings-modal">
-    <div class="modal-content">
-      <h3 style="font-size: 16px; color: #2D3748; margin-bottom: 12px;">⚙️ 各種設定</h3>
-      
       <div class="setting-group">
-        <label class="setting-label">音声の再生速度</label>
-        <div class="speed-selector">
-          <button class="speed-btn" id="speed-0.8" onclick="setSpeed(0.8)">ゆっくり (0.8x)</button>
-          <button class="speed-btn active" id="speed-1.0" onclick="setSpeed(1.0)">ふつう (1.0x)</button>
-          <button class="speed-btn" id="speed-1.2" onclick="setSpeed(1.2)">はやめ (1.2x)</button>
+        <span class="setting-label">🎯 スタートレベルの変更</span>
+        <div class="level-option" id="mLevel_1" data-level="1">
+          <div class="level-title">🍼 レベル1：超初心者</div>
+        </div>
+        <div class="level-option" id="mLevel_2" data-level="2">
+          <div class="level-title">🐣 レベル2：初級・日常英会話</div>
+        </div>
+        <div class="level-option" id="mLevel_3" data-level="3">
+          <div class="level-title">🎬 レベル3：洋画チャレンジ</div>
         </div>
       </div>
 
-      <button class="btn btn-start" onclick="closeSettingsModal()" style="margin-top: 12px;">保存して閉じる</button>
+      <div class="setting-group">
+        <span class="setting-label">🔊 音声スピード</span>
+        <div class="speed-selector">
+          <button class="speed-btn" id="speedSlow" data-speed="0.5">🐢 ゆっくり</button>
+          <button class="speed-btn" id="speedNormal" data-speed="0.8">🙂 ふつう</button>
+          <button class="speed-btn" id="speedFast" data-speed="1.0">🐇 洋画スピード</button>
+        </div>
+      </div>
+
+      <button class="btn btn-next" id="btnCloseModal">保存してとじる</button>
     </div>
   </div>
+
 </div>
 <script>
-/* ==========================================================================
-   1. データ構造の定義（レベル1：全10ステージ / レベル2構成）
-   ========================================================================== */
-
-const STAGES_LEVEL1 = [
-  { en: "Hi!", jp: "やあ！", char: "👶", msg: "まずは基本のあいさつから！" },
-  { en: "Hello!", jp: "こんにちは！", char: "🐣", msg: "元気にあいさつしてみよう！" },
-  { en: "Bye!", jp: "バイバイ！", char: "🐥", msg: "手を振りながら言ってみよう！" },
-  { en: "Thanks!", jp: "ありがとう！", char: "🐶", msg: "感謝の気持ちを込めて！" },
-  { en: "Sorry!", jp: "ごめんね！", char: "🐱", msg: "素直に言えると素敵だね！" },
-  { en: "Yes!", jp: "うん！/ はい！", char: "🐰", msg: "元気に返事をしてみよう！" },
-  { en: "No!", jp: "ううん！/ いいえ！", char: "🐻", msg: "はっきり言ってみよう！" },
-  { en: "Okay!", jp: "分かった！/ いいよ！", char: "🐼", msg: "かるくうなずきながら！" },
-  { en: "Help!", jp: "たすけて！", char: "🦁", msg: "大きめの声で言ってみよう！" },
-  { en: "Wow!", jp: "すごい！/ わあ！", char: "👑", msg: "感情を込めて驚いてみよう！" }
-];
-
-const STAGES_LEVEL2 = [
-  { en: "Let's go!", jp: "行こう！", char: "🚀", msg: "2語のフレーズに挑戦！" },
-  { en: "I see.", jp: "なるほど。", char: "💡", msg: "相づちの基本だよ！" },
-  { en: "Good job!", jp: "よくできたね！", char: "👏", msg: "ほめるときに使ってみよう！" },
-  { en: "See you!", jp: "またね！", char: "👋", msg: "かるいお別れのあいさつ！" },
-  { en: "Thank you!", jp: "ありがとうございます！", char: "🎁", msg: "ていねいなお礼だよ！" }
-];
-
-/* ==========================================================================
-   2. グローバル状態管理変数
-   ========================================================================== */
-let currentCourse = "lvl1";
-let currentStages = STAGES_LEVEL1;
-let currentStageIndex = 0;
-let playbackSpeed = 1.0;
-let userName = "たろう";
-let reviewList = [];
-
-let recognition = null;
+let userName = "";
+let currentLevel = 1;
+let currentSubIndex = 0;
+let currentIndex = 0;
+let streak = 0;
+let total = 0;
+let lastDate = "";
+let currentSpeed = 0.5;
 let isListening = false;
-let isSpeaking = false;
-let speechTimeoutTimer = null;
+let recognitionInstance = null;
+let listenTimeoutTimer = null;
+let isPassed = false;
 
-/* ==========================================================================
-   3. 画面遷移ロジック（UI制御）
-   ========================================================================== */
+// ==========================================
+// ④ レベル1：10ステージ拡張データ
+// ==========================================
 
-function nextConceptScreen() {
-  document.getElementById("screen-concept").style.display = "none";
-  document.getElementById("screen-today").style.display = "block";
+const curriculumData = {
+  1: {
+    name: "レベル1",
+    subStages: [
+      {
+        id: "1-1", title: "あいさつ",
+        items: [
+          { en: "Thank you.", jp: "ありがとう。" },
+          { en: "Good morning.", jp: "おはよう。" },
+          { en: "See you.", jp: "またね。" },
+          { en: "Good job!", jp: "よくできたね！" },
+          { en: "Hello.", jp: "こんにちは。" }
+        ]
+      },
+      {
+        id: "1-2", title: "自分のこと",
+        items: [
+          { en: "I'm tired.", jp: "疲れたよ。" },
+          { en: "I'm hungry.", jp: "お腹が空いた。" },
+          { en: "I'm happy.", jp: "うれしいな。" },
+          { en: "I'm ready.", jp: "準備できたよ。" },
+          { en: "I'm home.", jp: "ただいま。" }
+        ]
+      },
+      {
+        id: "1-3", title: "お返し・返事",
+        items: [
+          { en: "You're welcome.", jp: "どういたしまして。" },
+          { en: "No problem.", jp: "問題ないよ・気にしないで。" },
+          { en: "All right.", jp: "わかったよ・了解。" },
+          { en: "Sure!", jp: "もちろん！" },
+          { en: "Okay.", jp: "オッケー。" }
+        ]
+      },
+      {
+        id: "1-4", title: "感情・気分",
+        items: [
+          { en: "I'm sad.", jp: "悲しいな。" },
+          { en: "I'm excited!", jp: "ワクワクする！" },
+          { en: "I'm fine.", jp: "元気だよ。" },
+          { en: "I'm scared.", jp: "怖いよ。" },
+          { en: "I'm sleepy.", jp: "ねむいな。" }
+        ]
+      },
+      {
+        id: "1-5", title: "おねだり・許可",
+        items: [
+          { en: "Please.", jp: "おねがい。" },
+          { en: "Help me.", jp: "助けて。" },
+          { en: "Can I?", jp: "いいかな？" },
+          { en: "Give me this.", jp: "これちょうだい。" },
+          { en: "Let's go!", jp: "行こう！" }
+        ]
+      },
+      {
+        id: "1-6", title: "返答・リアクション",
+        items: [
+          { en: "Yes, please.", jp: "はい、お願いします。" },
+          { en: "No, thanks.", jp: "いいえ、けっこうです。" },
+          { en: "Maybe.", jp: "たぶんね。" },
+          { en: "I like it.", jp: "これ好き。" },
+          { en: "I don't know.", jp: "わからないな。" }
+        ]
+      },
+      {
+        id: "1-7", title: "家での動作",
+        items: [
+          { en: "Good night.", jp: "おやすみ。" },
+          { en: "Let's eat.", jp: "ご飯にしよう。" },
+          { en: "It's good!", jp: "美味しい！" },
+          { en: "I'm leaving.", jp: "行ってきます。" },
+          { en: "Welcome back.", jp: "おかえり。" }
+        ]
+      },
+      {
+        id: "1-8", title: "確認・質問",
+        items: [
+          { en: "Really?", jp: "本当？" },
+          { en: "Why?", jp: "なんで？" },
+          { en: "Where?", jp: "どこ？" },
+          { en: "What's this?", jp: "これなに？" },
+          { en: "Are you ready?", jp: "準備はいい？" }
+        ]
+      },
+      {
+        id: "1-9", title: "あいづち",
+        items: [
+          { en: "I see.", jp: "なるほどね。" },
+          { en: "Me too.", jp: "私も。" },
+          { en: "Exactly!", jp: "その通り！" },
+          { en: "Nice!", jp: "いいね！" },
+          { en: "Oh no!", jp: "あーあ！・大変！" }
+        ]
+      },
+      {
+        id: "1-10", title: "とっさの一言",
+        items: [
+          { en: "Watch out!", jp: "気をつけて！" },
+          { en: "Wait!", jp: "ちょっと待って！" },
+          { en: "Look!", jp: "みて！" },
+          { en: "Come here.", jp: "ここに来て。" },
+          { en: "Don't worry.", jp: "心配しないで。" }
+        ]
+      }
+    ]
+  },
+  2: {
+    // ...既存のレベル2データ
+  },
+  3: {
+    // ...既存のレベル3データ
+  }
+};
+    name: "レベル2",
+    subStages: [
+      {
+        id: "2-1", title: "よく使う日常表現",
+        items: [
+          { en: "I'm on my way.", jp: "今向かってるよ。" },
+          { en: "Sounds good.", jp: "いいね！" },
+          { en: "Take care.", jp: "気をつけてね。" }
+        ]
+      }
+    ]
+  },
+  3: {
+    name: "レベル3",
+    subStages: [
+      {
+        id: "3-1", title: "洋画頻出フレーズ",
+        items: [
+          { en: "What are you talking about?", jp: "何言ってるの？" },
+          { en: "Give me a break.", jp: "勘弁してよ。" },
+          { en: "I'll be right back.", jp: "すぐ戻るよ。" }
+        ]
+      }
+    ]
+  }
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadData();
+  checkStreak();
+  setSpeedUI(currentSpeed);
+  initEventListeners();
+  showHome();
+});
+
+function showArea(areaId) {
+  document.getElementById("homeArea").style.display = "none";
+  document.getElementById("todayArea").style.display = "none";
+  document.getElementById("nameArea").style.display = "none";
+  document.getElementById("lessonArea").style.display = "none";
+
+  const target = document.getElementById(areaId);
+  if (target) target.style.display = "block";
 }
 
-function goToSetupScreen() {
-  document.getElementById("screen-today").style.display = "none";
-  document.getElementById("screen-setup").style.display = "block";
+function showHome() {
+  showArea("homeArea");
 }
 
-function selectLevel(lvl) {
-  currentCourse = lvl;
-  const opt1 = document.getElementById("opt-lvl1");
-  const opt2 = document.getElementById("opt-lvl2");
+function initEventListeners() {
+  const btnGoToToday = document.getElementById("btnGoToToday");
+  if (btnGoToToday) {
+    btnGoToToday.addEventListener('click', () => {
+      showArea("todayArea");
+    });
+  }
 
-  opt1.classList.remove("selected");
-  opt2.classList.remove("selected");
+  const btnTodayToHome = document.getElementById("btnTodayToHome");
+  if (btnTodayToHome) {
+    btnTodayToHome.addEventListener('click', showHome);
+  }
 
-  if (lvl === 'lvl1') {
-    opt1.classList.add("selected");
-    currentStages = STAGES_LEVEL1;
-  } else {
-    opt2.classList.add("selected");
-    currentStages = STAGES_LEVEL2;
+  [1, 2, 3].forEach(lvl => {
+    const el = document.getElementById(`initLevel_${lvl}`);
+    if (el) el.addEventListener('click', () => chooseInitLevel(lvl));
+  });
+
+  const btnStart = document.getElementById("btnStart");
+  if (btnStart) btnStart.addEventListener('click', saveNameAndGoLesson);
+
+  const btnStart15Min = document.getElementById("btnStart15Min");
+  if (btnStart15Min) {
+    btnStart15Min.addEventListener('click', () => {
+      if (!userName) {
+        showArea("nameArea");
+      } else {
+        markAttendance();
+        showArea("lessonArea");
+        updateCard();
+      }
+    });
+  }
+
+  const btnBackHome = document.getElementById("btnBackHome");
+  if (btnBackHome) btnBackHome.addEventListener('click', showHome);
+
+  const btnListen = document.getElementById("btnListen");
+  if (btnListen) btnListen.addEventListener('click', speakCurrent);
+
+  const btnSpeak = document.getElementById("btnSpeak");
+  if (btnSpeak) btnSpeak.addEventListener('click', startListen);
+
+  const btnNext = document.getElementById("btnNext");
+  if (btnNext) btnNext.addEventListener('click', nextLesson);
+
+  const btnOpenModal = document.getElementById("btnOpenModal");
+  if (btnOpenModal) btnOpenModal.addEventListener('click', openRecordModal);
+
+  const btnTodayToModal = document.getElementById("btnTodayToModal");
+  if (btnTodayToModal) btnTodayToModal.addEventListener('click', openRecordModal);
+
+  const btnCloseModal = document.getElementById("btnCloseModal");
+  if (btnCloseModal) btnCloseModal.addEventListener('click', closeRecordModal);
+
+  [1, 2, 3].forEach(lvl => {
+    const el = document.getElementById(`mLevel_${lvl}`);
+    if (el) el.addEventListener('click', () => selectModalLevel(lvl));
+  });
+
+  const speedBtns = document.querySelectorAll('.speed-btn');
+  speedBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const spd = parseFloat(e.target.getAttribute('data-speed'));
+      setSpeed(spd);
+    });
+  });
+}
+
+function loadData() {
+  try {
+    userName = localStorage.getItem("eb_userName") || "";
+    currentLevel = parseInt(localStorage.getItem("eb_level") || "1", 10);
+    currentSubIndex = parseInt(localStorage.getItem("eb_subIndex") || "0", 10);
+    currentIndex = parseInt(localStorage.getItem("eb_currentIndex") || "0", 10);
+    streak = parseInt(localStorage.getItem("eb_streak") || "0", 10);
+    total = parseInt(localStorage.getItem("eb_total") || "0", 10);
+    lastDate = localStorage.getItem("eb_lastDate") || "";
+    currentSpeed = parseFloat(localStorage.getItem("eb_speed") || "0.5");
+  } catch(e) {
+    console.log("Storage load error:", e);
   }
 }
 
-function startApp() {
-  const inputName = document.getElementById("user-name-input").value.trim();
-  if (inputName !== "") {
-    userName = inputName;
+function saveData() {
+  try {
+    localStorage.setItem("eb_userName", userName);
+    localStorage.setItem("eb_level", currentLevel.toString());
+    localStorage.setItem("eb_subIndex", currentSubIndex.toString());
+    localStorage.setItem("eb_currentIndex", currentIndex.toString());
+    localStorage.setItem("eb_streak", streak.toString());
+    localStorage.setItem("eb_total", total.toString());
+    localStorage.setItem("eb_lastDate", lastDate);
+    localStorage.setItem("eb_speed", currentSpeed.toString());
+  } catch(e) {
+    console.log("Storage save error:", e);
   }
-
-  document.getElementById("screen-setup").style.display = "none";
-  document.getElementById("screen-main").style.display = "block";
-
-  currentStageIndex = 0;
-  loadStage();
 }
 
-/* ==========================================================================
-   4. ステージ読み込み & UI表示更新
-   ========================================================================== */
-
-function loadStage() {
-  stopEverything();
-
-  const data = currentStages[currentStageIndex];
-
-  document.getElementById("stage-indicator").innerText = `Stage ${currentStageIndex + 1}/${currentStages.length}`;
-  document.getElementById("char-icon").innerText = data.char;
-  document.getElementById("char-msg").innerText = `${userName}さん、${data.msg}`;
-  document.getElementById("target-en").innerText = data.en;
-  document.getElementById("target-jp").innerText = data.jp;
-
-  document.getElementById("spoken-text").innerText = "ここにあなたの声が表示されます";
-  document.getElementById("result-msg").innerText = "";
-  document.getElementById("result-msg").className = "result";
-  document.getElementById("next-btn").style.display = "none";
-
-  setButtonsState(false, false);
+function checkStreak() {
+  const today = new Date().toISOString().split('T')[0];
+  if (lastDate) {
+    const last = new Date(lastDate);
+    const current = new Date(today);
+    const diffDays = Math.floor((current - last) / (1000 * 60 * 60 * 24));
+    if (diffDays > 1) { streak = 0; }
+  }
 }
 
-/* ==========================================================================
-   5. 音声合成（お手本再生）制御部
-   ========================================================================== */
+function markAttendance() {
+  const today = new Date().toISOString().split('T')[0];
+  if (lastDate !== today) {
+    const last = lastDate ? new Date(lastDate) : null;
+    const current = new Date(today);
+    const diffDays = last ? Math.floor((current - last) / (1000 * 60 * 60 * 24)) : 0;
+    if (diffDays === 1 || !last) { streak += 1; } else { streak = 1; }
+    total += 1;
+    lastDate = today;
+    saveData();
+  }
+}
 
-function playAudio() {
+function chooseInitLevel(lvl) {
+  currentLevel = lvl;
+  [1, 2, 3].forEach(l => {
+    const el = document.getElementById(`initLevel_${l}`);
+    if (el) el.classList.remove("selected");
+  });
+  const selectedEl = document.getElementById(`initLevel_${lvl}`);
+  if (selectedEl) selectedEl.classList.add("selected");
+}
+
+function saveNameAndGoLesson() {
+  const input = document.getElementById("nameInput").value.trim();
+  if (!input) {
+    alert("お名前を入力してください！");
+    return;
+  }
+  userName = input;
+  currentSubIndex = 0;
+  currentIndex = 0;
+  saveData();
+  markAttendance();
+  showArea("lessonArea");
+  updateCard();
+}
+
+function getCurrentSubStage() {
+  const levelObj = curriculumData[currentLevel] || curriculumData[1];
+  const subStages = levelObj.subStages;
+  if (currentSubIndex < 0 || currentSubIndex >= subStages.length) {
+    currentSubIndex = 0;
+  }
+  return subStages[currentSubIndex];
+}
+
+function updateCard() {
+  const subStage = getCurrentSubStage();
+  if (currentIndex < 0 || currentIndex >= subStage.items.length) {
+    currentIndex = 0;
+  }
+  const currentItem = subStage.items[currentIndex];
+
+  isPassed = false;
+  const btnNext = document.getElementById("btnNext");
+  if (btnNext) btnNext.disabled = true;
+
+  document.getElementById("stepProgress").innerText = `Lv.${currentLevel} (${subStage.id}) ${currentIndex + 1}/${subStage.items.length}`;
+  document.getElementById("enText").innerText = currentItem.en;
+  document.getElementById("jpText").innerText = currentItem.jp;
+  document.getElementById("spokenBox").innerText = "👂 声を聞かせてね";
+  document.getElementById("resultMsg").innerText = "";
+  document.getElementById("resultMsg").style.color = "";
+  document.getElementById("charIcon").innerText = "🐶";
+  document.getElementById("charMsg").innerText = "ぽてワン「音の響きをよく聴いてね！」";
+}
+
+function speakCurrent() {
   if (!('speechSynthesis' in window)) {
-    alert("お使いのブラウザは音声読み上げ機能に対応していません。別のブラウザでお試しください。");
+    alert("お使いのブラウザは音声読み上げに対応していません。");
     return;
   }
 
-  stopEverything();
+  if (recognitionInstance) {
+    try { 
+      recognitionInstance.onstart = null;
+      recognitionInstance.onresult = null;
+      recognitionInstance.onerror = null;
+      recognitionInstance.onend = null;
+      recognitionInstance.abort(); 
+    } catch(e){}
+    recognitionInstance = null;
+  }
+  resetMicUI();
 
-  const data = currentStages[currentStageIndex];
-  const uttr = new SpeechSynthesisUtterance(data.en);
-  uttr.lang = 'en-US';
-  uttr.rate = playbackSpeed;
+  const subStage = getCurrentSubStage();
+  const currentItem = subStage.items[currentIndex];
 
-  uttr.onstart = function() {
-    isSpeaking = true;
-    setButtonsState(true, true);
-    document.getElementById("result-msg").innerText = "🔊 再生中...";
-    document.getElementById("result-msg").style.color = "#2B6CB0";
+  document.getElementById("charIcon").innerText = "🐶🎶";
+  document.getElementById("charMsg").innerText = "ぽてワン「音のつながりをよく聴いてね！」";
+
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(currentItem.en);
+  utterance.lang = "en-US";
+  utterance.rate = currentSpeed;
+  utterance.onend = function() {
+    document.getElementById("charIcon").innerText = "🐶";
   };
-
-  uttr.onend = function() {
-    isSpeaking = false;
-    setButtonsState(false, false);
-    document.getElementById("result-msg").innerText = "";
+  utterance.onerror = function() {
+    document.getElementById("charIcon").innerText = "🐶💦";
   };
-
-  uttr.onerror = function(e) {
-    console.error("音声再生エラー:", e);
-    isSpeaking = false;
-    setButtonsState(false, false);
-    document.getElementById("result-msg").innerText = "音声再生に失敗しました。";
-    document.getElementById("result-msg").style.color = "#E53E3E";
-  };
-
-  window.speechSynthesis.speak(uttr);
+  window.speechSynthesis.speak(utterance);
 }
 
-/* ==========================================================================
-   6. 音声認識（マイク発音チェック）制御部
-   ========================================================================== */
+function resetMicUI() {
+  isListening = false;
+  if (listenTimeoutTimer) {
+    clearTimeout(listenTimeoutTimer);
+    listenTimeoutTimer = null;
+  }
+  const btnSpeak = document.getElementById("btnSpeak");
+  if (btnSpeak) {
+    btnSpeak.disabled = false;
+    btnSpeak.innerText = "🎤 マネして言う";
+  }
+}
 
-function startSpeechRecognition() {
+function startListen() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
   if (!SpeechRecognition) {
-    alert("お使いのブラウザは音声認識機能に対応していません。Google Chrome や Safari をご利用ください。");
+    document.getElementById("spokenBox").innerText = "❌ お使いのブラウザは音声認識に対応していません。ChromeまたはSafariでお試しください。";
     return;
   }
 
-  stopEverything();
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+  }
 
-  recognition = new SpeechRecognition();
-  recognition.lang = 'en-US';
+  if (recognitionInstance) {
+    try { 
+      recognitionInstance.onstart = null;
+      recognitionInstance.onresult = null;
+      recognitionInstance.onerror = null;
+      recognitionInstance.onend = null;
+      recognitionInstance.abort(); 
+    } catch(e){}
+    recognitionInstance = null;
+  }
+
+  resetMicUI();
+  isListening = true;
+
+  const btnSpeak = document.getElementById("btnSpeak");
+  if (btnSpeak) {
+    btnSpeak.disabled = true;
+    btnSpeak.innerText = "🎙️ 聞き取り中...";
+  }
+
+  document.getElementById("spokenBox").innerText = "🎙️ マイクを準備中...";
+  document.getElementById("resultMsg").innerText = "";
+
+  const recognition = new SpeechRecognition();
+  recognitionInstance = recognition;
+  
+  recognition.lang = "en-US";
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
+  recognition.continuous = false;
 
   recognition.onstart = function() {
-    isListening = true;
-    setButtonsState(true, true);
-    document.getElementById("spoken-text").innerText = "🎤 聞き取り中... 発音してください";
-    document.getElementById("result-msg").innerText = "";
-
-    speechTimeoutTimer = setTimeout(function() {
-      if (isListening) {
-        try {
-          recognition.stop();
-        } catch(e) {
-          console.log("stop error:", e);
-        }
-        document.getElementById("spoken-text").innerText = "タイムアウト：声が検出されませんでした";
-        document.getElementById("result-msg").innerText = "もう一度ボタンを押してお試しください";
-        document.getElementById("result-msg").style.color = "#ED8936";
-        resetRecognitionState();
-      }
-    }, 10000);
+    document.getElementById("spokenBox").innerText = "🎙️ 声を聞いています... 喋ってください！";
   };
 
-  recognition.onresult = function(event) {
-    clearTimeout(speechTimeoutTimer);
-    const spoken = event.results[0][0].transcript;
-    document.getElementById("spoken-text").innerText = `「 ${spoken} 」`;
+  listenTimeoutTimer = setTimeout(() => {
+    if (isListening) {
+      try { recognition.stop(); } catch(e){}
+      document.getElementById("spokenBox").innerText = "⏱️ タイムアウト：もう一度ボタンを押して喋ってください。";
+      resetMicUI();
+    }
+  }, 10000);
 
-    checkAnswer(spoken);
+  recognition.onresult = function(event) {
+    resetMicUI();
+    if (event.results && event.results[0] && event.results[0][0]) {
+      const userText = event.results[0][0].transcript;
+      document.getElementById("spokenBox").innerText = "🗣️ あなた: " + userText;
+      checkAnswer(userText);
+    } else {
+      document.getElementById("spokenBox").innerText = "❓ 音声がうまく聞き取れませんでした。";
+    }
   };
 
   recognition.onerror = function(event) {
-    clearTimeout(speechTimeoutTimer);
-    resetRecognitionState();
-
-    console.warn("音声認識エラー:", event.error);
-
-    if (event.error === 'no-speech') {
-      document.getElementById("spoken-text").innerText = "声が聞こえませんでした";
-      document.getElementById("result-msg").innerText = "もう一度マイクに向かってハッキリ発音してみましょう！";
-      document.getElementById("result-msg").style.color = "#ED8936";
-    } else if (event.error === 'not-allowed') {
-      document.getElementById("spoken-text").innerText = "マイクの使用が許可されていません";
-      document.getElementById("result-msg").innerText = "ブラウザ設定でマイクを許可してください";
-      document.getElementById("result-msg").style.color = "#E53E3E";
-    } else {
-      document.getElementById("spoken-text").innerText = "認識エラーが発生しました";
-      document.getElementById("result-msg").innerText = "少し時間をおいて再度お試しください";
-      document.getElementById("result-msg").style.color = "#E53E3E";
+    resetMicUI();
+    console.error("SpeechRecognition Error:", event.error);
+    
+    switch (event.error) {
+      case 'not-allowed':
+      case 'service-not-allowed':
+        document.getElementById("spokenBox").innerText = "🚫 マイクの使用が許可されていません。ブラウザ設定でマイクを許可してください。";
+        break;
+      case 'no-speech':
+        document.getElementById("spokenBox").innerText = "🔇 声が検出されませんでした。もう少しマイクに近づけて喋ってみてください。";
+        break;
+      case 'network':
+        document.getElementById("spokenBox").innerText = "🌐 ネットワークエラー：音声認識にはインターネット接続が必要です。";
+        break;
+      case 'aborted':
+        break;
+      default:
+        document.getElementById("spokenBox").innerText = "❌ エラーが発生しました (" + event.error + ")。もう一度お試しください。";
+        break;
     }
   };
 
   recognition.onend = function() {
-    clearTimeout(speechTimeoutTimer);
-    resetRecognitionState();
+    resetMicUI();
   };
 
   try {
     recognition.start();
-  } catch(err) {
-    console.error("recognition start error:", err);
-    resetRecognitionState();
+  } catch (e) {
+    console.error("Start Exception:", e);
+    resetMicUI();
+    document.getElementById("spokenBox").innerText = "❌ マイク起動エラー。ページを更新してお試しください。";
   }
 }
 
-function resetRecognitionState() {
-  isListening = false;
-  setButtonsState(false, false);
+function cleanText(text) {
+  return text.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim();
 }
 
-function stopEverything() {
-  if (window.speechSynthesis && window.speechSynthesis.speaking) {
+function checkAnswer(userText) {
+  const subStage = getCurrentSubStage();
+  const currentItem = subStage.items[currentIndex];
+
+  const target = cleanText(currentItem.en);
+  const spoken = cleanText(userText);
+  const resultEl = document.getElementById("resultMsg");
+
+  if (spoken === target || spoken.includes(target) || target.includes(spoken)) {
+    isPassed = true;
+    const btnNext = document.getElementById("btnNext");
+    if (btnNext) btnNext.disabled = false;
+
+    resultEl.innerText = "🎉 すごい！大正解！";
+    resultEl.style.color = "#2E7D32";
+    document.getElementById("charIcon").innerText = "🐶✨";
+    document.getElementById("charMsg").innerText = "ぽてワン「完璧！素晴らしい発音だよ！」";
+
+    resultEl.classList.remove("pop-animation");
+    void resultEl.offsetWidth;
+    resultEl.classList.add("pop-animation");
+
+    if (typeof confetti === "function") {
+      confetti({ particleCount: 70, spread: 60, origin: { y: 0.7 } });
+    }
+  } else {
+    isPassed = false;
+    const btnNext = document.getElementById("btnNext");
+    if (btnNext) btnNext.disabled = true;
+
+    resultEl.innerText = "👍 惜しい！もう一回やってみよう";
+    resultEl.style.color = "#DD6B20";
+    document.getElementById("charIcon").innerText = "🐶💪";
+    document.getElementById("charMsg").innerText = "ぽてワン「惜しい！音を真似してみてね」";
+  }
+}
+
+function nextLesson() {
+  if (!isPassed) return;
+
+  if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
   }
-  isSpeaking = false;
+  if (recognitionInstance) {
+    try { 
+      recognitionInstance.onstart = null;
+      recognitionInstance.onresult = null;
+      recognitionInstance.onerror = null;
+      recognitionInstance.onend = null;
+      recognitionInstance.abort(); 
+    } catch(e){}
+    recognitionInstance = null;
+  }
+  resetMicUI();
 
-  if (recognition && isListening) {
-    try {
-      recognition.abort();
-    } catch(e) {
-      console.log("abort error:", e);
+  const subStage = getCurrentSubStage();
+  currentIndex++;
+
+  if (currentIndex >= subStage.items.length) {
+    currentIndex = 0;
+    currentSubIndex++;
+    const levelObj = curriculumData[currentLevel] || curriculumData[1];
+    if (currentSubIndex >= levelObj.subStages.length) {
+      currentSubIndex = 0;
+      alert(`🎉 おめでとうございます！ Level ${currentLevel} をすべてクリアしました！`);
+      showHome();
+      return;
     }
   }
-  isListening = false;
 
-  if (speechTimeoutTimer) {
-    clearTimeout(speechTimeoutTimer);
-    speechTimeoutTimer = null;
-  }
-
-  setButtonsState(false, false);
+  saveData();
+  updateCard();
 }
 
-function setButtonsState(listenDisabled, speakDisabled) {
-  const listenBtn = document.getElementById("listen-btn");
-  const speakBtn = document.getElementById("speak-btn");
+function openRecordModal() {
+  document.getElementById("modalStreak").innerText = streak;
+  document.getElementById("modalTotal").innerText = total;
 
-  if (listenBtn) listenBtn.disabled = listenDisabled;
-  if (speakBtn) speakBtn.disabled = speakDisabled;
-}
-
-/* ==========================================================================
-   7. 判定・判定後の進行処理
-   ========================================================================== */
-
-function checkAnswer(spokenText) {
-  const targetText = currentStages[currentStageIndex].en;
-
-  const cleanSpoken = spokenText.toLowerCase().replace(/[^a-z0-9]/g, "");
-  const cleanTarget = targetText.toLowerCase().replace(/[^a-z0-9]/g, "");
-
-  const resultEl = document.getElementById("result-msg");
-
-  if (cleanSpoken === cleanTarget || cleanSpoken.includes(cleanTarget) || cleanTarget.includes(cleanSpoken)) {
-    resultEl.innerText = "🎉 GREAT!! すばらしい発音です！";
-    resultEl.className = "result pop-animation";
-    resultEl.style.color = "#48BB78";
-
-    if (typeof confetti === 'function') {
-      confetti({
-        particleCount: 60,
-        spread: 70,
-        origin: { y: 0.7 }
-      });
+  [1, 2, 3].forEach(l => {
+    const el = document.getElementById(`mLevel_${l}`);
+    if (el) {
+      if (l === currentLevel) {
+        el.classList.add("selected");
+      } else {
+        el.classList.remove("selected");
+      }
     }
+  });
 
-    document.getElementById("next-btn").style.display = "block";
-
-    const currentItem = currentStages[currentStageIndex];
-    if (!reviewList.some(item => item.en === currentItem.en)) {
-      reviewList.push(currentItem);
-    }
-  } else {
-    resultEl.innerText = "👍 惜しい！もう一度やってみよう！";
-    resultEl.className = "result";
-    resultEl.style.color = "#ED8936";
-  }
+  setSpeedUI(currentSpeed);
+  document.getElementById("recordModal").style.display = "flex";
 }
 
-function nextStage() {
-  currentStageIndex++;
-
-  if (currentStageIndex < currentStages.length) {
-    loadStage();
-  } else {
-    stopEverything();
-
-    document.getElementById("target-en").innerText = "🏆 CLEAR!!";
-    document.getElementById("target-jp").innerText = "全ステージをクリアしました！";
-    document.getElementById("char-icon").innerText = "👑";
-    document.getElementById("char-msg").innerText = `${userName}さん、素晴らしい集中力です！`;
-
-    document.getElementById("listen-btn").style.display = "none";
-    document.getElementById("speak-btn").style.display = "none";
-    document.getElementById("spoken-text").style.display = "none";
-    document.getElementById("result-msg").innerText = "耳と口がしっかり英語に慣れてきましたね！";
-    document.getElementById("result-msg").style.color = "#2B6CB0";
-    document.getElementById("next-btn").style.display = "none";
-
-    if (typeof confetti === 'function') {
-      confetti({
-        particleCount: 180,
-        spread: 100,
-        origin: { y: 0.5 }
-      });
-    }
+function closeRecordModal() {
+  saveData();
+  if (document.getElementById("lessonArea").style.display === "block") {
+    updateCard();
   }
+  document.getElementById("recordModal").style.display = "none";
 }
 
-/* ==========================================================================
-   8. モーダル・設定・復習機能の制御
-   ========================================================================== */
+function selectModalLevel(lvl) {
+  currentLevel = lvl;
+  currentSubIndex = 0;
+  currentIndex = 0;
+
+  [1, 2, 3].forEach(l => {
+    const el = document.getElementById(`mLevel_${l}`);
+    if (el) {
+      if (l === lvl) {
+        el.classList.add("selected");
+      } else {
+        el.classList.remove("selected");
+      }
+    }
+  });
+}
 
 function setSpeed(speed) {
-  playbackSpeed = speed;
-  document.querySelectorAll(".speed-btn").forEach(function(btn) {
-    btn.classList.remove("active");
-  });
-  
-  const targetBtn = document.getElementById(`speed-${speed}`);
-  if (targetBtn) {
-    targetBtn.classList.add("active");
-  }
+  currentSpeed = speed;
+  setSpeedUI(speed);
+  saveData();
 }
 
-function openSettingsModal() {
-  document.getElementById("settings-modal").style.display = "flex";
-}
+function setSpeedUI(speed) {
+  const btnSlow = document.getElementById("speedSlow");
+  const btnNormal = document.getElementById("speedNormal");
+  const btnFast = document.getElementById("speedFast");
 
-function closeSettingsModal() {
-  document.getElementById("settings-modal").style.display = "none";
-}
+  if (!btnSlow || !btnNormal || !btnFast) return;
 
-function openReviewModal() {
-  const listEl = document.getElementById("review-list");
+  btnSlow.classList.remove("active");
+  btnNormal.classList.remove("active");
+  btnFast.classList.remove("active");
 
-  if (reviewList.length === 0) {
-    listEl.innerHTML = "<p style='color:#A0AEC0; text-align:center; padding: 20px 0;'>まだクリアしたフレーズはありません。<br>レッスンを進めるとここに記録されます。</p>";
+  if (speed <= 0.5) {
+    btnSlow.classList.add("active");
+  } else if (speed <= 0.8) {
+    btnNormal.classList.add("active");
   } else {
-    let htmlContent = "";
-    reviewList.forEach(function(item) {
-      htmlContent += `
-        <div style="padding: 10px 0; border-bottom: 1px solid #EDF2F7; display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <strong style="color:#2D3748; font-size: 15px;">${item.en}</strong>
-            <span style="color:#718096; font-size: 13px; margin-left: 8px;">${item.jp}</span>
-          </div>
-          <span style="font-size: 18px;">${item.char}</span>
-        </div>
-      `;
-    });
-    listEl.innerHTML = htmlContent;
+    btnFast.classList.add("active");
   }
-
-  document.getElementById("review-modal").style.display = "flex";
-}
-
-function closeReviewModal() {
-  document.getElementById("review-modal").style.display = "none";
 }
 </script>
+
 </body>
 </html>
