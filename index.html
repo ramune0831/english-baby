@@ -583,3 +583,618 @@ function closeReviewModal() {
 </script>
 </body>
 </html>
+<body>
+
+<div class="card">
+  <!-- =================================================================== -->
+  <!-- Screen 1: コンセプト解説画面                                         -->
+  <!-- =================================================================== -->
+  <div id="screen-concept">
+    <div style="font-size: 36px; margin-top: 8px;">👶🍿</div>
+    <h1>英会話は赤ちゃん以下</h1>
+    <div class="subtitle">〜洋画リスニングへの道〜</div>
+
+    <div class="concept-box">
+      <p><b>【このアプリの目的】</b><br>映画やドラマの英語が聞き取れない最大の理由は、単語力不足ではありません。「英語特有の音のつながり（ネイティブの音）」に耳が慣れていないからです。</p>
+      <p>まずは文法や理屈を一度忘れて<b>赤ちゃんの耳</b>になり、日常で使われる「超・短い音」からリラックスして耳と口を鳴らしていきましょう！</p>
+    </div>
+
+    <button class="btn btn-start" onclick="nextConceptScreen()">次へ進む</button>
+  </div>
+
+  <!-- =================================================================== -->
+  <!-- Screen 2: 本日の学習ステップ画面                                   -->
+  <!-- =================================================================== -->
+  <div id="screen-today" style="display: none;">
+    <div style="font-size: 36px; margin-top: 8px;">🎯</div>
+    <h1>本日の学習メニュー</h1>
+    <div class="subtitle">1日3ステップで確実にステップアップ</div>
+
+    <div class="today-box">
+      <div class="today-title">今日のルーティン</div>
+      <div class="today-sub">毎日少しずつ音を身体に染み込ませていきましょう</div>
+
+      <div class="step-list">
+        <div class="step-item step-1">
+          <span>STEP 1: 聴く（耳を慣らす）</span>
+          <span class="step-time">1分</span>
+        </div>
+        <div class="step-item step-2">
+          <span>STEP 2: 発音（口を慣らす）</span>
+          <span class="step-time">2分</span>
+        </div>
+        <div class="step-item step-3">
+          <span>STEP 3: 定着（セルフチェック）</span>
+          <span class="step-time">1分</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-start" onclick="goToSetupScreen()">学習を開始する</button>
+  </div>
+
+  <!-- =================================================================== -->
+  <!-- Screen 3: プロフィール＆コース設定画面                             -->
+  <!-- =================================================================== -->
+  <div id="screen-setup" style="display: none;">
+    <div style="font-size: 36px; margin-top: 8px;">🐣</div>
+    <h1>プロフィール設定</h1>
+    <div class="subtitle">あなたに最適なコースをセットアップします</div>
+    
+    <div style="text-align: left; font-size: 12px; font-weight: bold; color: #718096; margin-bottom: 4px;">お名前（ニックネーム）</div>
+    <input type="text" id="user-name-input" class="name-input" placeholder="例: たろう" value="たろう">
+
+    <div style="text-align: left; font-size: 12px; font-weight: bold; color: #718096; margin-bottom: 6px;">学習コース選択</div>
+    
+    <div class="level-option selected" id="opt-lvl1" onclick="selectLevel('lvl1')">
+      <div class="level-title">
+        レベル1: 超基本のあいさつ・感情 
+        <span class="recommended-badge">推奨</span>
+      </div>
+      <div class="level-desc">Hi / Thanks / Bye などの超基本音（全10ステージ構成）</div>
+    </div>
+    
+    <div class="level-option" id="opt-lvl2" onclick="selectLevel('lvl2')">
+      <div class="level-title">レベル2: 短いフレーズ</div>
+      <div class="level-desc">Let's go / I see などの日常2語フレーズ</div>
+    </div>
+
+    <button class="btn btn-start" onclick="startApp()" style="margin-top: 16px;">スタート！</button>
+  </div>
+
+  <!-- =================================================================== -->
+  <!-- Screen 4: メイン学習画面                                            -->
+  <!-- =================================================================== -->
+  <div id="screen-main" style="display: none;">
+    <div class="header-bar">
+      <div class="stage-badge" id="stage-indicator">Stage 1/10</div>
+      <div class="header-controls">
+        <button class="btn-icon" onclick="openReviewModal()">📚 復習帳</button>
+        <button class="btn-icon" onclick="openSettingsModal()">⚙️</button>
+      </div>
+    </div>
+
+    <div class="char-area">
+      <div class="char-icon" id="char-icon">👶</div>
+      <div class="char-msg" id="char-msg">一緒にがんばろう！</div>
+    </div>
+
+    <div id="learning-content">
+      <div class="en-text" id="target-en">---</div>
+      <div class="jp-text" id="target-jp">---</div>
+
+      <button class="btn btn-listen" id="listen-btn" onclick="playAudio()">🔊 お手本を聴く</button>
+      <button class="btn btn-speak" id="speak-btn" onclick="startSpeechRecognition()">🎤 まねして発音する</button>
+
+      <div class="spoken-box" id="spoken-text">ここにあなたの声が表示されます</div>
+      <div class="result" id="result-msg"></div>
+
+      <button class="btn btn-next" id="next-btn" onclick="nextStage()" style="display: none;">つぎへ進む ➔</button>
+    </div>
+  </div>
+
+  <!-- =================================================================== -->
+  <!-- Modal 1: 復習帳モーダル                                            -->
+  <!-- =================================================================== -->
+  <div class="modal" id="review-modal">
+    <div class="modal-content">
+      <h3 style="font-size: 16px; color: #2D3748; margin-bottom: 12px;">📚 クリアしたフレーズ一覧</h3>
+      <div id="review-list" style="text-align: left; font-size: 13px; margin: 16px 0; max-height: 220px; overflow-y: auto;">
+        <!-- JavaScriptで動的追加 -->
+      </div>
+      <button class="btn btn-start" onclick="closeReviewModal()">閉じる</button>
+    </div>
+  </div>
+
+  <!-- =================================================================== -->
+  <!-- Modal 2: 設定モーダル                                              -->
+  <!-- =================================================================== -->
+  <div class="modal" id="settings-modal">
+    <div class="modal-content">
+      <h3 style="font-size: 16px; color: #2D3748; margin-bottom: 12px;">⚙️ 各種設定</h3>
+      
+      <div class="setting-group">
+        <label class="setting-label">音声の再生速度</label>
+        <div class="speed-selector">
+          <button class="speed-btn" id="speed-0.8" onclick="setSpeed(0.8)">ゆっくり (0.8x)</button>
+          <button class="speed-btn active" id="speed-1.0" onclick="setSpeed(1.0)">ふつう (1.0x)</button>
+          <button class="speed-btn" id="speed-1.2" onclick="setSpeed(1.2)">はやめ (1.2x)</button>
+        </div>
+      </div>
+
+      <button class="btn btn-start" onclick="closeSettingsModal()" style="margin-top: 12px;">保存して閉じる</button>
+    </div>
+  </div>
+</div>
+<script>
+/* ==========================================================================
+   1. データ構造の定義（レベル1：全10ステージ / レベル2構成）
+   ========================================================================== */
+
+// レベル1: 超基本のあいさつ・感情（全10ステージ拡大版）
+const STAGES_LEVEL1 = [
+  { en: "Hi!", jp: "やあ！", char: "👶", msg: "まずは基本のあいさつから！" },
+  { en: "Hello!", jp: "こんにちは！", char: "🐣", msg: "元気にあいさつしてみよう！" },
+  { en: "Bye!", jp: "バイバイ！", char: "🐥", msg: "手を振りながら言ってみよう！" },
+  { en: "Thanks!", jp: "ありがとう！", char: "🐶", msg: "感謝の気持ちを込めて！" },
+  { en: "Sorry!", jp: "ごめんね！", char: "🐱", msg: "素直に言えると素敵だね！" },
+  { en: "Yes!", jp: "うん！/ はい！", char: "🐰", msg: "元気に返事をしてみよう！" },
+  { en: "No!", jp: "ううん！/ いいえ！", char: "🐻", msg: "はっきり言ってみよう！" },
+  { en: "Okay!", jp: "分かった！/ いいよ！", char: "🐼", msg: "かるくうなずきながら！" },
+  { en: "Help!", jp: "たすけて！", char: "🦁", msg: "大きめの声で言ってみよう！" },
+  { en: "Wow!", jp: "すごい！/ わあ！", char: "👑", msg: "感情を込めて驚いてみよう！" }
+];
+
+// レベル2: 短いフレーズ
+const STAGES_LEVEL2 = [
+  { en: "Let's go!", jp: "行こう！", char: "🚀", msg: "2語のフレーズに挑戦！" },
+  { en: "I see.", jp: "なるほど。", char: "💡", msg: "相づちの基本だよ！" },
+  { en: "Good job!", jp: "よくできたね！", char: "👏", msg: "ほめるときに使ってみよう！" },
+  { en: "See you!", jp: "またね！", char: "👋", msg: "かるいお別れのあいさつ！" },
+  { en: "Thank you!", jp: "ありがとうございます！", char: "🎁", msg: "ていねいなお礼だよ！" }
+];
+
+/* ==========================================================================
+   2. グローバル状態管理変数
+   ========================================================================== */
+let currentCourse = "lvl1";            // 選択中のコース ('lvl1' | 'lvl2')
+let currentStages = STAGES_LEVEL1;     // 現在のステージ配列
+let currentStageIndex = 0;             // 現在のインデックス
+let playbackSpeed = 1.0;               // 音声再生速度
+let userName = "たろう";               // ユーザー名
+let reviewList = [];                   // 復習リスト（クリア済みフレーズ）
+
+// 音声認識および音声合成（発音再生）の内部管理オブジェクト
+let recognition = null;
+let isListening = false;
+let isSpeaking = false;
+let speechTimeoutTimer = null;
+
+/* ==========================================================================
+   3. 画面遷移ロジック（UI制御）
+   ========================================================================== */
+
+/**
+ * コンセプト画面から本日のメニュー画面へ遷移
+ */
+function nextConceptScreen() {
+  document.getElementById("screen-concept").style.display = "none";
+  document.getElementById("screen-today").style.display = "block";
+}
+
+/**
+ * 本日のメニュー画面から初期設定画面へ遷移
+ */
+function goToSetupScreen() {
+  document.getElementById("screen-today").style.display = "none";
+  document.getElementById("screen-setup").style.display = "block";
+}
+
+/**
+ * コース選択処理
+ * @param {string} lvl - 'lvl1' または 'lvl2'
+ */
+function selectLevel(lvl) {
+  currentCourse = lvl;
+  const opt1 = document.getElementById("opt-lvl1");
+  const opt2 = document.getElementById("opt-lvl2");
+
+  opt1.classList.remove("selected");
+  opt2.classList.remove("selected");
+
+  if (lvl === 'lvl1') {
+    opt1.classList.add("selected");
+    currentStages = STAGES_LEVEL1;
+  } else {
+    opt2.classList.add("selected");
+    currentStages = STAGES_LEVEL2;
+  }
+}
+
+/**
+ * アプリのメイン学習画面を起動
+ */
+function startApp() {
+  const inputName = document.getElementById("user-name-input").value.trim();
+  if (inputName !== "") {
+    userName = inputName;
+  }
+
+  document.getElementById("screen-setup").style.display = "none";
+  document.getElementById("screen-main").style.display = "block";
+
+  currentStageIndex = 0;
+  loadStage();
+}
+
+/* ==========================================================================
+   4. ステージ読み込み & UI表示更新
+   ========================================================================== */
+
+/**
+ * 現在のインデックスに応じたステージデータを画面にロードする
+ */
+function loadStage() {
+  // 読み込み時にマイクや音声を完全停止して初期状態に戻す
+  stopEverything();
+
+  const data = currentStages[currentStageIndex];
+
+  // 各テキスト表示の更新
+  document.getElementById("stage-indicator").innerText = `Stage ${currentStageIndex + 1}/${currentStages.length}`;
+  document.getElementById("char-icon").innerText = data.char;
+  document.getElementById("char-msg").innerText = `${userName}さん、${data.msg}`;
+  document.getElementById("target-en").innerText = data.en;
+  document.getElementById("target-jp").innerText = data.jp;
+
+  // フィードバック領域のリセット
+  document.getElementById("spoken-text").innerText = "ここにあなたの声が表示されます";
+  document.getElementById("result-msg").innerText = "";
+  document.getElementById("result-msg").className = "result";
+  document.getElementById("next-btn").style.display = "none";
+
+  // ボタンの活性化状態をリセット
+  setButtonsState(false, false);
+}
+
+/* ==========================================================================
+   5. 音声合成（お手本再生）制御部
+   ========================================================================== */
+
+/**
+ * お手本英語音声の再生
+ */
+function playAudio() {
+  if (!('speechSynthesis' in window)) {
+    alert("お使いのブラウザは音声読み上げ機能に対応していません。別のブラウザでお試しください。");
+    return;
+  }
+
+  // 実行中の処理があればすべて停止
+  stopEverything();
+
+  const data = currentStages[currentStageIndex];
+  const uttr = new SpeechSynthesisUtterance(data.en);
+  uttr.lang = 'en-US';
+  uttr.rate = playbackSpeed;
+
+  // イベントハンドラ設定
+  uttr.onstart = function() {
+    isSpeaking = true;
+    setButtonsState(true, true);
+    document.getElementById("result-msg").innerText = "🔊 再生中...";
+    document.getElementById("result-msg").style.color = "#2B6CB0";
+  };
+
+  uttr.onend = function() {
+    isSpeaking = false;
+    setButtonsState(false, false);
+    document.getElementById("result-msg").innerText = "";
+  };
+
+  uttr.onerror = function(e) {
+    console.error("音声再生エラー:", e);
+    isSpeaking = false;
+    setButtonsState(false, false);
+    document.getElementById("result-msg").innerText = "音声再生に失敗しました。";
+    document.getElementById("result-msg").style.color = "#E53E3E";
+  };
+
+  // 発音再生の実行
+  window.speechSynthesis.speak(uttr);
+}
+
+/* ==========================================================================
+   6. 音声認識（マイク発音チェック）制御部
+   ========================================================================== */
+
+/**
+ * マイクを起動して音声認識を開始
+ */
+function startSpeechRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert("お使いのブラウザは音声認識機能に対応していません。Google Chrome や Safari をご利用ください。");
+    return;
+  }
+
+  // 実行中の音声合成・過去の認識処理を即時クリア
+  stopEverything();
+
+  recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  // 音声認識開始時のイベント
+  recognition.onstart = function() {
+    isListening = true;
+    setButtonsState(true, true);
+    document.getElementById("spoken-text").innerText = "🎤 聞き取り中... 発音してください";
+    document.getElementById("result-msg").innerText = "";
+
+    // 10秒間音声が入らない場合のセーフティタイムアウト設定
+    speechTimeoutTimer = setTimeout(function() {
+      if (isListening) {
+        try {
+          recognition.stop();
+        } catch(e) {
+          console.log("stop error:", e);
+        }
+        document.getElementById("spoken-text").innerText = "タイムアウト：声が検出されませんでした";
+        document.getElementById("result-msg").innerText = "もう一度ボタンを押してお試しください";
+        document.getElementById("result-msg").style.color = "#ED8936";
+        resetRecognitionState();
+      }
+    }, 10000);
+  };
+
+  // 音声認識成功（結果取得）時のイベント
+  recognition.onresult = function(event) {
+    clearTimeout(speechTimeoutTimer);
+    const spoken = event.results[0][0].transcript;
+    document.getElementById("spoken-text").innerText = `「 ${spoken} 」`;
+
+    // 発音の判定 logic 呼び出し
+    checkAnswer(spoken);
+  };
+
+  // エラーハンドリング
+  recognition.onerror = function(event) {
+    clearTimeout(speechTimeoutTimer);
+    resetRecognitionState();
+
+    console.warn("音声認識エラー:", event.error);
+
+    if (event.error === 'no-speech') {
+      document.getElementById("spoken-text").innerText = "声が聞こえませんでした";
+      document.getElementById("result-msg").innerText = "もう一度マイクに向かってハッキリ発音してみましょう！";
+      document.getElementById("result-msg").style.color = "#ED8936";
+    } else if (event.error === 'not-allowed') {
+      document.getElementById("spoken-text").innerText = "マイクの使用が許可されていません";
+      document.getElementById("result-msg").innerText = "ブラウザ設定でマイクを許可してください";
+      document.getElementById("result-msg").style.color = "#E53E3E";
+    } else {
+      document.getElementById("spoken-text").innerText = "認識エラーが発生しました";
+      document.getElementById("result-msg").innerText = "少し時間をおいて再度お試しください";
+      document.getElementById("result-msg").style.color = "#E53E3E";
+    }
+  };
+
+  // 音声認識終了時のイベント
+  recognition.onend = function() {
+    clearTimeout(speechTimeoutTimer);
+    resetRecognitionState();
+  };
+
+  // 音声認識の起動
+  try {
+    recognition.start();
+  } catch(err) {
+    console.error("recognition start error:", err);
+    resetRecognitionState();
+  }
+}
+
+/**
+ * 音声認識状態の安全なリセット
+ */
+function resetRecognitionState() {
+  isListening = false;
+  setButtonsState(false, false);
+}
+
+/**
+ * 音声再生・音声認識・タイマーの完全排他制御および停止処理
+ */
+function stopEverything() {
+  // 音声合成（読み上げ）の強制キャンセル
+  if (window.speechSynthesis && window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+  }
+  isSpeaking = false;
+
+  // 音声認識の強制終了
+  if (recognition && isListening) {
+    try {
+      recognition.abort();
+    } catch(e) {
+      console.log("abort error:", e);
+    }
+  }
+  isListening = false;
+
+  // タイムアウトタイマーの解除
+  if (speechTimeoutTimer) {
+    clearTimeout(speechTimeoutTimer);
+    speechTimeoutTimer = null;
+  }
+
+  // ボタン状態を元に戻す
+  setButtonsState(false, false);
+}
+
+/**
+ * ボタンの有効・無効（disabled）の切り替え制御
+ */
+function setButtonsState(listenDisabled, speakDisabled) {
+  const listenBtn = document.getElementById("listen-btn");
+  const speakBtn = document.getElementById("speak-btn");
+
+  if (listenBtn) listenBtn.disabled = listenDisabled;
+  if (speakBtn) speakBtn.disabled = speakDisabled;
+}
+
+/* ==========================================================================
+   7. 判定・判定後の進行処理
+   ========================================================================== */
+
+/**
+ * 発音の正誤判定処理
+ * @param {string} spokenText - 認識した英文テキスト
+ */
+function checkAnswer(spokenText) {
+  const targetText = currentStages[currentStageIndex].en;
+
+  // 記号除去および小文字化処理（表記揺れの吸収）
+  const cleanSpoken = spokenText.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const cleanTarget = targetText.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+  const resultEl = document.getElementById("result-msg");
+
+  // 一致判定（完全一致または包含判定）
+  if (cleanSpoken === cleanTarget || cleanSpoken.includes(cleanTarget) || cleanTarget.includes(cleanSpoken)) {
+    resultEl.innerText = "🎉 GREAT!! すばらしい発音です！";
+    resultEl.className = "result pop-animation";
+    resultEl.style.color = "#48BB78";
+
+    // コンフェティ（紙吹雪）アニメーションの実行
+    if (typeof confetti === 'function') {
+      confetti({
+        particleCount: 60,
+        spread: 70,
+        origin: { y: 0.7 }
+      });
+    }
+
+    // 次へ進むボタンを表示
+    document.getElementById("next-btn").style.display = "block";
+
+    // クリアしたフレーズを復習リストへ保存（重複チェック付き）
+    const currentItem = currentStages[currentStageIndex];
+    if (!reviewList.some(item => item.en === currentItem.en)) {
+      reviewList.push(currentItem);
+    }
+  } else {
+    resultEl.innerText = "👍 惜しい！もう一度やってみよう！";
+    resultEl.className = "result";
+    resultEl.style.color = "#ED8936";
+  }
+}
+
+/**
+ * 次のステージに進む、またはクリア画面を表示する処理
+ */
+function nextStage() {
+  currentStageIndex++;
+
+  if (currentStageIndex < currentStages.length) {
+    loadStage();
+  } else {
+    // 全ステージクリア時の演出とUI変更
+    stopEverything();
+
+    document.getElementById("target-en").innerText = "🏆 CLEAR!!";
+    document.getElementById("target-jp").innerText = "全ステージをクリアしました！";
+    document.getElementById("char-icon").innerText = "👑";
+    document.getElementById("char-msg").innerText = `${userName}さん、素晴らしい集中力です！`;
+
+    document.getElementById("listen-btn").style.display = "none";
+    document.getElementById("speak-btn").style.display = "none";
+    document.getElementById("spoken-text").style.display = "none";
+    document.getElementById("result-msg").innerText = "耳と口がしっかり英語に慣れてきましたね！";
+    document.getElementById("result-msg").style.color = "#2B6CB0";
+    document.getElementById("next-btn").style.display = "none";
+
+    // 盛大な紙吹雪演出
+    if (typeof confetti === 'function') {
+      confetti({
+        particleCount: 180,
+        spread: 100,
+        origin: { y: 0.5 }
+      });
+    }
+  }
+}
+
+/* ==========================================================================
+   8. モーダル・設定・復習機能の制御
+   ========================================================================== */
+
+/**
+ * 再生速度の選択とスタイルの変更
+ * @param {number} speed - 0.8 | 1.0 | 1.2
+ */
+function setSpeed(speed) {
+  playbackSpeed = speed;
+  document.querySelectorAll(".speed-btn").forEach(function(btn) {
+    btn.classList.remove("active");
+  });
+  
+  const targetBtn = document.getElementById(`speed-${speed}`);
+  if (targetBtn) {
+    targetBtn.classList.add("active");
+  }
+}
+
+/**
+ * 設定モーダルの表示
+ */
+function openSettingsModal() {
+  document.getElementById("settings-modal").style.display = "flex";
+}
+
+/**
+ * 設定モーダルの非表示
+ */
+function closeSettingsModal() {
+  document.getElementById("settings-modal").style.display = "none";
+}
+
+/**
+ * 復習帳モーダルの表示と動的要素構築
+ */
+function openReviewModal() {
+  const listEl = document.getElementById("review-list");
+
+  if (reviewList.length === 0) {
+    listEl.innerHTML = "<p style='color:#A0AEC0; text-align:center; padding: 20px 0;'>まだクリアしたフレーズはありません。<br>レッスンを進めるとここに記録されます。</p>";
+  } else {
+    let htmlContent = "";
+    reviewList.forEach(function(item) {
+      htmlContent += `
+        <div style="padding: 10px 0; border-bottom: 1px solid #EDF2F7; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <strong style="color:#2D3748; font-size: 15px;">${item.en}</strong>
+            <span style="color:#718096; font-size: 13px; margin-left: 8px;">${item.jp}</span>
+          </div>
+          <span style="font-size: 18px;">${item.char}</span>
+        </div>
+      `;
+    });
+    listEl.innerHTML = htmlContent;
+  }
+
+  document.getElementById("review-modal").style.display = "flex";
+}
+
+/**
+ * 復習帳モーダルの非表示
+ */
+function closeReviewModal() {
+  document.getElementById("review-modal").style.display = "none";
+}
+</script>
+</body>
+</html>
