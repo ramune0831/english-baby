@@ -1,458 +1,676 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>英会話は赤ちゃん以下 - 年齢別ステップ</title>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<style>
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #FFF9F2; margin: 0; padding: 16px; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; }
-.card { background: white; border-radius: 24px; padding: 24px 20px; width: 100%; max-width: 360px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); text-align: center; position: relative; box-sizing: border-box; } 
-h1 { font-size: 22px; color: #5A4A42; margin: 8px 0 4px; } 
-.subtitle { color: #8C7A6B; font-size: 13px; margin-bottom: 16px; } 
-.concept-box { background: #FFF0E5; border-radius: 16px; padding: 16px; margin: 16px 0; text-align: left; font-size: 13px; color: #5A4A42; line-height: 1.6; }
-.concept-box p { margin: 8px 0; }
-.btn { width: 100%; padding: 14px; margin: 6px 0; border: none; border-radius: 30px; font-size: 15px; font-weight: bold; cursor: pointer; box-sizing: border-box; } 
-.btn:disabled { opacity: 0.4; cursor: not-allowed; filter: grayscale(50%); } 
-.btn-listen { background: #EBF7FF; color: #2B6CB0; } 
-.btn-speak { background: #FFF0E5; color: #C05621; } 
-.btn-next { background: #FF6B6B; color: white; margin-top: 10px; } 
-.btn-start { background: #FF6B6B; color: white; } 
-.age-card { background: #F7FAFC; border: 2px solid #E2E8F0; border-radius: 16px; padding: 14px; margin: 8px 0; text-align: left; cursor: pointer; }
-.age-card:hover { border-color: #FF6B6B; background: #FFF5F5; }
-.age-title { font-size: 15px; font-weight: bold; color: #2D3748; }
-.age-desc { font-size: 11px; color: #718096; margin-top: 2px; }
-.header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; } 
-.btn-icon { background: #F0F4F8; border: none; border-radius: 20px; padding: 6px 12px; font-size: 12px; font-weight: bold; color: #4A5568; cursor: pointer; } 
-.char-area { background: #EBF7FF; border-radius: 16px; padding: 12px; margin: 12px 0; display: flex; align-items: center; gap: 12px; } 
-.char-icon { font-size: 32px; min-width: 45px; } 
-.char-msg { font-size: 13px; font-weight: bold; color: #2B6CB0; text-align: left; } 
-.visual-emoji { font-size: 54px; margin: 6px 0 0; }
-.en-text { font-size: 24px; font-weight: bold; color: #2D3748; margin: 6px 0 4px; word-break: break-word; } 
-.jp-text { font-size: 15px; color: #718096; margin-bottom: 16px; font-weight: bold; } 
-.spoken-box { font-size: 13px; color: #4A5568; background: #EDF2F7; border-radius: 12px; padding: 10px; margin-top: 8px; min-height: 20px; word-break: break-word; } 
-.result { margin-top: 6px; font-weight: bold; font-size: 14px; min-height: 22px; } 
-.modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); border-radius: 24px; justify-content: center; align-items: center; z-index: 10; } 
-.modal-content { background: white; padding: 20px; border-radius: 20px; width: 85%; max-height: 90%; overflow-y: auto; text-align: center; box-sizing: border-box; } 
-.status-box { background: #FFF0E5; padding: 10px; border-radius: 16px; margin: 10px 0; font-weight: bold; color: #5A4A42; font-size: 13px; }
-.setting-group { margin: 14px 0; text-align: left; }
-.setting-label { font-size: 12px; font-weight: bold; color: #718096; margin-bottom: 6px; display: block; }
-.speed-selector { display: flex; justify-content: space-between; gap: 6px; background: #F7FAFC; padding: 4px; border-radius: 16px; }
-.speed-btn { flex: 1; border: none; background: transparent; padding: 8px 0; border-radius: 12px; font-size: 11px; font-weight: bold; color: #718096; cursor: pointer; }
-.speed-btn.active { background: #FF9F43; color: white; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>英会話は赤ちゃん以下 - 赤ちゃんから大人まで</title>
+  <style>
+    :root {
+      --primary-color: #4A90E2;
+      --secondary-color: #50E3C2;
+      --accent-color: #FF6B6B;
+      --bg-color: #F8F9FA;
+      --card-bg: #FFFFFF;
+      --text-main: #2C3E50;
+      --text-sub: #7F8C8D;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    body { background: var(--bg-color); color: var(--text-main); display: flex; justify-content: center; min-height: 100vh; padding: 12px; }
+    .app-container { width: 100%; max-width: 480px; background: var(--card-bg); border-radius: var(--radius); box-shadow: 0 8px 24px rgba(0,0,0,0.08); display: flex; flex-direction: column; overflow: hidden; position: relative; }
+
+    /* Header */
+    header { background: #fff; padding: 12px 16px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+    .header-user { font-size: 0.95rem; font-weight: bold; color: var(--primary-color); }
+    .header-stats { display: flex; gap: 12px; font-size: 0.85rem; font-weight: 600; color: #555; }
+    .header-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 4px; }
+
+    /* Screen Management */
+    .screen { display: none; padding: 20px; flex-direction: column; flex: 1; overflow-y: auto; }
+    .screen.active { display: flex; }
+
+    /* Typography & UI */
+    h1 { font-size: 1.4rem; text-align: center; margin-bottom: 8px; color: var(--text-main); }
+    h2 { font-size: 1.2rem; margin-bottom: 12px; color: var(--text-main); text-align: center; }
+    p.subtitle { text-align: center; color: var(--text-sub); font-size: 0.85rem; margin-bottom: 20px; }
+    
+    .btn { background: var(--primary-color); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 1rem; font-weight: bold; cursor: pointer; text-align: center; width: 100%; transition: transform 0.1s, background 0.2s; margin-top: 8px; }
+    .btn:active { transform: scale(0.98); }
+    .btn-secondary { background: #E0E6ED; color: var(--text-main); }
+    .btn-outline { background: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); }
+
+    /* Input Fields */
+    input[type="text"] { width: 100%; padding: 14px; border: 2px solid #E0E6ED; border-radius: 12px; font-size: 1rem; margin-bottom: 16px; outline: none; transition: border-color 0.2s; }
+    input[type="text"]:focus { border-color: var(--primary-color); }
+
+    /* Card List & Selectors */
+    .grid-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .select-card { background: #F0F4F8; border: 2px solid transparent; padding: 16px 12px; border-radius: 14px; text-align: center; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .select-card.active { border-color: var(--primary-color); background: #EBF3FA; }
+    .select-card .icon { font-size: 2rem; }
+    .select-card .title { font-weight: bold; font-size: 0.95rem; }
+    .select-card .desc { font-size: 0.75rem; color: var(--text-sub); }
+
+    /* Timer / 15-min Banner */
+    .timer-banner { background: #FFF9E6; border: 1px solid #FFE5A3; border-radius: 10px; padding: 10px 14px; font-size: 0.85rem; color: #8A6D3B; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+
+    /* Main Flashcard */
+    .flashcard { background: #fff; border: 2px solid #EBF0F5; border-radius: 20px; padding: 24px 16px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 16px; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+    .card-emoji { font-size: 4.5rem; margin-bottom: 8px; line-height: 1; }
+    .card-jp { font-size: 1.2rem; font-weight: bold; color: var(--text-main); margin-bottom: 6px; }
+    .card-en { font-size: 1.5rem; font-weight: 800; color: var(--primary-color); margin-bottom: 12px; word-break: break-word; }
+    .card-hint { font-size: 0.8rem; color: #888; background: #F5F5F5; padding: 4px 10px; border-radius: 20px; display: inline-block; }
+
+    /* Mic & Voice Controls */
+    .mic-area { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: auto; }
+    .mic-btn { width: 72px; height: 72px; border-radius: 50%; background: var(--accent-color); color: white; border: none; font-size: 1.8rem; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 6px 16px rgba(255,107,107,0.4); transition: all 0.2s; }
+    .mic-btn.listening { animation: pulse 1.2s infinite; background: #E03131; }
+    @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(224,49,49,0.7); } 70% { transform: scale(1.08); box-shadow: 0 0 0 14px rgba(224,49,49,0); } 100% { transform: scale(1); } }
+    .speech-feedback { min-height: 24px; font-size: 0.9rem; color: var(--text-sub); text-align: center; font-weight: 600; }
+
+    /* Badge & Profile Item */
+    .badge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+    .badge-item { background: #F5F5F5; border-radius: 12px; padding: 10px 6px; text-align: center; opacity: 0.4; filter: grayscale(1); }
+    .badge-item.unlocked { opacity: 1; filter: none; background: #E6F7FF; border: 1px solid #91CAFF; }
+    .badge-item .b-icon { font-size: 1.6rem; }
+    .badge-item .b-name { font-size: 0.75rem; font-weight: bold; margin-top: 2px; }
+
+    /* Modal / Alert Overlay */
+    .modal-overlay { position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 100; padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    .modal-content { background: white; border-radius: 20px; padding: 24px; text-align: center; width: 100%; max-width: 360px; }
+  </style>
 </head>
 <body>
-<div class="card" id="app">
-  <div id="homeArea">
-    <div style="font-size:44px; margin-bottom:4px;">🎬👶🐶</div>
-    <h1>英会話は赤ちゃん以下</h1>
-    <div class="subtitle">あなたに合わせた年齢・レベルからスタート</div>
-    <div class="concept-box">
-      <p>🍼 <strong>ようちえん：</strong>絵と音で楽しく遊ぼう！</p>
-      <p>🎒 <strong>しょうがくせい：</strong>単語と短いくみあわせ！</p>
-      <p>📚 <strong>おとな初心者：</strong>耳から慣れる日常会話！</p>
-    </div>
-    <button class="btn btn-start" onclick="showArea('ageSelectArea')">コースを選ぶ ▶</button>
-  </div>
 
-  <div id="ageSelectArea" style="display:none;">
-    <h2 style="font-size:18px; color:#5A4A42; margin-bottom:12px;">あなたはどのくらい？</h2>
-    <div class="age-card" onclick="selectAgeGroup('kids_young')">
-      <div class="age-title">🍼 2〜3さい（ようちえん）</div>
-      <div class="age-desc">え・ひらがな中心／身近なことば</div>
+<div class="app-container">
+  <!-- Header -->
+  <header>
+    <div class="header-user" id="headerUser">ゲスト</div>
+    <div class="header-stats">
+      <span id="headerCoins">🪙 0</span>
+      <span id="headerStreak">🔥 0日</span>
     </div>
-    <div class="age-card" onclick="selectAgeGroup('kids_mid')">
-      <div class="age-title">🧒 4〜5さい（ようちえん）</div>
-      <div class="age-desc">え・ひらがな＋英語／単語のおけいこ</div>
-    </div>
-    <div class="age-card" onclick="selectAgeGroup('elem')">
-      <div class="age-title">🎒 しょうがくせい</div>
-      <div class="age-desc">簡単な日本語＋英語フレーズ</div>
-    </div>
-    <div class="age-card" onclick="selectAgeGroup('adult_1')">
-      <div class="age-title">📚 おとな① 超初心者</div>
-      <div class="age-desc">あいさつ・気持ち・基本の動作</div>
-    </div>
-    <div class="age-card" onclick="selectAgeGroup('adult_2')">
-      <div class="age-title">🐣 おとな② 初級・日常会話</div>
-      <div class="age-desc">日常表現・質問・お願いなど</div>
-    </div>
-    <div class="age-card" onclick="selectAgeGroup('adult_3')">
-      <div class="age-title">🎬 おとな③ 洋画チャレンジ</div>
-      <div class="age-desc">洋画頻出フレーズ・感情表現</div>
-    </div>
-    <button class="btn-icon" onclick="showHome()" style="margin-top:10px;">🏠 もどる</button>
-  </div>
+    <button class="header-btn" onclick="showScreen('screen-settings')">⚙️</button>
+  </header>
 
-  <div id="lessonArea" style="display:none;">
-    <div class="header-bar">
-      <button class="btn-icon" onclick="showArea('ageSelectArea')">コース選択</button>
-      <span style="color:#A0AEC0; font-size:11px; font-weight:bold;" id="stepProgress">1/5</span>
-      <button class="btn-icon" onclick="openRecordModal()">⚙️</button>
+  <!-- 1. お名前登録画面 -->
+  <section class="screen active" id="screen-welcome">
+    <h1>英会話は赤ちゃん以下 👶</h1>
+    <p class="subtitle">あなたに合わせたレベルからスタートしよう！</p>
+    <div style="margin: 20px 0;">
+      <label style="font-size: 0.9rem; font-weight: bold; display: block; margin-bottom: 8px;">あなたのお名前（またはニックネーム）</label>
+      <input type="text" id="userNameInput" placeholder="例: たろう / Taro" maxlength="15">
     </div>
-    <div class="char-area">
-      <div class="char-icon" id="charIcon">🐶</div>
-      <div class="char-msg" id="charMsg">ぽてワン「音をきいてマネしてみよう！」</div>
-    </div>
-    <div class="visual-emoji" id="visualEmoji">🍎</div>
-    <div class="jp-text" id="jpText">りんご</div>
-    <div class="en-text" id="enText">Apple</div>
-    <button class="btn btn-listen" onclick="speakCurrent()">🔊 きく</button>
-    <button class="btn btn-speak" id="btnSpeak" onclick="startListen()">🎤 マネして言う</button>
-    <div class="spoken-box" id="spokenBox">👂 こえをきかせてね</div>
-    <div class="result" id="resultMsg"></div>
-    <button class="btn btn-next" id="btnNext" onclick="nextLesson()" disabled>つぎへ ✨</button>
-  </div>
+    <button class="btn" onclick="saveNameAndNext()">はじめる！</button>
+  </section>
 
-  <div class="modal" id="recordModal">
-    <div class="modal-content">
-      <h3 style="color:#5A4A42; margin:4px 0;">⚙️ 設定・記録</h3>
-      <div class="status-box" id="modalStatusContainer"></div>
-      <div class="setting-group">
-        <span class="setting-label">🔊 音声スピード</span>
-        <div class="speed-selector">
-          <button class="speed-btn" id="speedSlow" onclick="setSpeed(0.5)">🐢 ゆっくり</button>
-          <button class="speed-btn" id="speedNormal" onclick="setSpeed(0.8)">🙂 ふつう</button>
-          <button class="speed-btn" id="speedFast" onclick="setSpeed(1.0)">🐇 はやい</button>
-        </div>
+  <!-- 2. 年齢・レベル選択画面 -->
+  <section class="screen" id="screen-age-select">
+    <h2>コースを選んでね</h2>
+    <p class="subtitle">学習するレベルをいつでも変更できます</p>
+    
+    <div class="grid-selector">
+      <div class="select-card" onclick="selectAge('toddler23', this)">
+        <span class="icon">🍼</span>
+        <span class="title">2〜3さい</span>
+        <span class="desc">ひらがな＋えもじ</span>
       </div>
-      <button class="btn btn-next" onclick="closeRecordModal()">保存してとじる</button>
+      <div class="select-card" onclick="selectAge('toddler45', this)">
+        <span class="icon">🧒</span>
+        <span class="title">4〜5さい</span>
+        <span class="desc">えいご＋えもじ</span>
+      </div>
+      <div class="select-card" onclick="selectAge('kids', this)">
+        <span class="icon">🎒</span>
+        <span class="title">しょうがくせい</span>
+        <span class="desc">かんたんな えいご</span>
+      </div>
+      <div class="select-card active" onclick="selectAge('adult1', this)">
+        <span class="icon">📚</span>
+        <span class="title">おとな①</span>
+        <span class="desc">超初心者・基礎単語</span>
+      </div>
+      <div class="select-card" onclick="selectAge('adult2', this)">
+        <span class="icon">💬</span>
+        <span class="title">おとな②</span>
+        <span class="desc">日常会話フレーズ</span>
+      </div>
+      <div class="select-card" onclick="selectAge('adult3', this)">
+        <span class="icon">🎬</span>
+        <span class="title">おとな③</span>
+        <span class="desc">実践的レッスン</span>
+      </div>
+    </div>
+
+    <button class="btn" onclick="startLearning()">このコースで学習する</button>
+  </section>
+
+  <!-- 3. メイン学習画面 -->
+  <section class="screen" id="screen-learn">
+    <div class="timer-banner">
+      <span>⏱ 15分集中モード</span>
+      <span id="sessionTimer">15:00</span>
+    </div>
+
+    <div class="flashcard">
+      <div class="card-emoji" id="cardEmoji">🍎</div>
+      <div class="card-jp" id="cardJp">りんご</div>
+      <div class="card-en" id="cardEn">Apple</div>
+      <div class="card-hint" id="cardHint">🔊 ボタンを押して聞いてみよう！</div>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+      <button class="btn btn-secondary" onclick="speakCurrentText()">🔊 聞く</button>
+      <button class="btn btn-outline" onclick="nextCard()">⏭ つぎへ</button>
+    </div>
+
+    <div class="mic-area">
+      <button class="mic-btn" id="micBtn" onclick="toggleSpeechRecognition()">🎤</button>
+      <div class="speech-feedback" id="speechFeedback">ボタンを押して発音してね</div>
+    </div>
+  </section>
+
+  <!-- 4. マイページ・設定画面 -->
+  <section class="screen" id="screen-settings">
+    <h2>マイページ & 設定</h2>
+    <div style="background: #F0F4F8; padding: 16px; border-radius: 12px; margin-bottom: 16px;">
+      <p style="font-size: 0.9rem; margin-bottom: 6px;">登録名: <strong id="settingNameDisplay">ゲスト</strong></p>
+      <p style="font-size: 0.9rem;">現在のコース: <strong id="settingCourseDisplay">おとな①</strong></p>
+    </div>
+
+    <button class="btn btn-outline" style="margin-bottom: 12px;" onclick="showScreen('screen-age-select')">🔄 コースを変更する</button>
+
+    <h3 style="font-size: 1rem; margin-top: 16px; margin-bottom: 8px;">獲得バッジ</h3>
+    <div class="badge-grid" id="badgeGrid"></div>
+
+    <button class="btn btn-secondary" style="margin-top: 24px;" onclick="showScreen('screen-learn')">学習に戻る</button>
+  </section>
+
+  <!-- 正解 / 完了モーダル -->
+  <div class="modal-overlay" id="resultModal">
+    <div class="modal-content">
+      <h2 style="font-size: 2rem; margin-bottom: 4px;">🎉 Perfect!</h2>
+      <p style="color: var(--text-sub); margin-bottom: 16px;" id="modalFeedbackText">すばらしい発音です！</p>
+      <button class="btn" onclick="closeModalAndNext()">つぎの問題へ ➡️</button>
     </div>
   </div>
 </div>
-
 <script>
-let currentAgeGroup = "kids_young", currentIndex = 0;
-let streak = 0, total = 0, lastDate = "", currentSpeed = 0.8, isListening = false;
-let recognitionInstance = null, listenTimeoutTimer = null, isPassed = false, coins = 0, badges = [];
+// 全コース別・フレーズ＆単語データベース（150以上完全収録）
+const CURRICULUM_DATA = {
+  // 🍼 2〜3さい（ひらがな ＋ えもじ）
+  toddler23: [
+    { emoji: "🍎", jp: "りんご", en: "Apple" },
+    { emoji: "🐶", jp: "いぬ", en: "Dog" },
+    { emoji: "🚗", jp: "くるま", en: "Car" },
+    { emoji: "🐱", jp: "ねこ", en: "Cat" },
+    { emoji: "🍌", jp: "バナナ", en: "Banana" },
+    { emoji: "🐟", jp: "さかな", en: "Fish" },
+    { emoji: "🥛", jp: "ぎゅうにゅう", en: "Milk" },
+    { emoji: "💧", jp: "みず", en: "Water" },
+    { emoji: "☀️", jp: "たいよう", en: "Sun" },
+    { emoji: "🌙", jp: "つき", en: "Moon" },
+    { emoji: "🌸", jp: "はな", en: "Flower" },
+    { emoji: "🐤", jp: "ひよこ", en: "Bird" },
+    { emoji: "👟", jp: "くつ", en: "Shoes" },
+    { emoji: "帽子", jp: "ぼうし", en: "Hat" },
+    { emoji: "🍞", jp: "パン", en: "Bread" },
+    { emoji: "🍚", jp: "ごはん", en: "Rice" }
+  ],
 
-const ALL_BADGES = [
-  { id: "streak_3", name: "🔥 3日連続", desc: "3日連続で学習した", check: () => streak >= 3 },
-  { id: "streak_7", name: "🌟 1週間達成", desc: "7日連続で学習した", check: () => streak >= 7 },
-  { id: "coin_100", name: "🪙 ブロンズ", desc: "100コイン獲得", check: () => coins >= 100 }
-];
-  <script>
-const ageGroupData = {
-  kids_young: { name: "🍼 2〜3さい", items: [
-    { emoji: "🍎", jp: "りんご", en: "Apple" }, { emoji: "🐶", jp: "いぬ", en: "Dog" },
-    { emoji: "🚗", jp: "くるま", en: "Car" }, { emoji: "🐱", jp: "ねこ", en: "Cat" },
-    { emoji: "🍌", jp: "バナナ", en: "Banana" }, { emoji: "🐟", jp: "さかな", en: "Fish" },
-    { emoji: "💧", jp: "おみず", en: "Water" }, { emoji: "🥛", jp: "ぎゅうにゅう", en: "Milk" }
-  ]},
-  kids_mid: { name: "🧒 4〜5さい", items: [
-    { emoji: "🍎", jp: "あかい りんご", en: "Red apple" }, { emoji: "☀️", jp: "おはよう", en: "Good morning" },
-    { emoji: "🙏", jp: "ありがとう", en: "Thank you" }, { emoji: "👋", jp: "またね", en: "See you" },
-    { emoji: "🍔", jp: "おなかすいた", en: "I'm hungry" }, { emoji: "🐶", jp: "おおきい いぬ", en: "Big dog" }
-  ]},
-  elem: { name: "🎒 しょうがくせい", items: [
+  // 🧒 4〜5さい（えいご ＋ えもじ）
+  toddler45: [
+    { emoji: "🍎", jp: "あかい りんご", en: "Red apple" },
+    { emoji: "🐶", jp: "おおきい いぬ", en: "Big dog" },
+    { emoji: "🐱", jp: "ちいさい ねこ", en: "Small cat" },
+    { emoji: "☀️", jp: "おはよう", en: "Good morning" },
+    { emoji: "🙏", jp: "ありがとう", en: "Thank you" },
+    { emoji: "👋", jp: "またね", en: "See you" },
+    { emoji: "🍔", jp: "おなかすいた", en: "I'm hungry" },
+    { emoji: "💧", jp: "のどかわいた", en: "I'm thirsty" },
+    { emoji: "😴", jp: "ねむいよ", en: "I'm sleepy" },
+    { emoji: "😊", jp: "うれしい", en: "I'm happy" },
+    { emoji: "🚗", jp: "あおい くるま", en: "Blue car" },
+    { emoji: "🎈", jp: "ふうせん", en: "Balloon" },
+    { emoji: "⭐", jp: "きらきら ほし", en: "Star" },
+    { emoji: "🍦", jp: "あいす", en: "Ice cream" }
+  ],
+
+  // 🎒 しょうがくせい（かんたんな えいご）
+  kids: [
     { emoji: "🍎", jp: "これは りんごです", en: "This is an apple." },
     { emoji: "🐶", jp: "わたしは いぬが すきです", en: "I like dogs." },
     { emoji: "🏫", jp: "がっこうへ いきます", en: "I go to school." },
-    { emoji: "☀️", jp: "よい いちにちを", en: "Have a nice day." }
-  ]},
-  adult_1: { name: "📚 おとな① 超初心者", items: [
-    { emoji: "🙏", en: "Thank you.", jp: "ありがとう。" }, { emoji: "☀️", en: "Good morning.", jp: "おはよう。" },
-    { emoji: "👋", en: "See you.", jp: "またね。" }, { emoji: "👏", en: "Good job!", jp: "よくできたね！" },
-    { emoji: "😃", en: "Hello.", jp: "こんにちは。" }, { emoji: "😫", en: "I'm tired.", jp: "疲れたよ。" },
-    { emoji: "🍔", en: "I'm hungry.", jp: "お腹が空いた。" }, { emoji: "😊", en: "I'm happy.", jp: "うれしいな。" },
-    { emoji: "👍", en: "I'm ready.", jp: "準備できたよ。" }, { emoji: "🏠", en: "I'm home.", jp: "ただいま。" },
-    { emoji: "🤝", en: "You're welcome.", jp: "どういたしまして。" }, { emoji: "👌", en: "No problem.", jp: "気にしないで。" },
-    { emoji: "🙆‍♂️", en: "All right.", jp: "了解。" }, { emoji: "✨", en: "Sure!", jp: "もちろん！" },
-    { emoji: "🆗", en: "Okay.", jp: "オッケー。" }, { emoji: "😢", en: "I'm sad.", jp: "悲しいな。" },
-    { emoji: "🤩", en: "I'm excited!", jp: "ワクワクする！" }, { emoji: "🙂", en: "I'm fine.", jp: "元気だよ。" },
-    { emoji: "😨", en: "I'm scared.", jp: "怖いよ。" }, { emoji: "😴", en: "I'm sleepy.", jp: "ねむいな。" },
-    { emoji: "☕", en: "Please.", jp: "おねがい。" }, { emoji: "🆘", en: "Help me.", jp: "助けて。" },
-    { emoji: "❓", en: "Can I?", jp: "いいかな？" }, { emoji: "👉", en: "Give me this.", jp: "これちょうだい。" },
-    { emoji: "🏃", en: "Let's go!", jp: "行こう！" }, { emoji: "⭕", en: "Yes, please.", jp: "はい、お願いします。" },
-    { emoji: "❌", en: "No, thanks.", jp: "いいえ、けっこうです。" }, { emoji: "🤔", en: "Maybe.", jp: "たぶんね。" },
-    { emoji: "❤️", en: "I like it.", jp: "これ好き。" }, { emoji: "🤷‍♂️", en: "I don't know.", jp: "わからないな。" },
-    { emoji: "🌙", en: "Good night.", jp: "おやすみ。" }, { emoji: "🍽️", en: "Let's eat.", jp: "ご飯にしよう。" },
-    { emoji: "😋", en: "It's good!", jp: "美味しい！" }, { emoji: "🚪", en: "I'm leaving.", jp: "行ってきます。" },
-    { emoji: "🏠", en: "Welcome back.", jp: "おかえり。" }, { emoji: "💡", en: "Really?", jp: "本当？" },
-    { emoji: "❓", en: "Why?", jp: "なんで？" }, { emoji: "📍", en: "Where?", jp: "どこ？" },
-    { emoji: "🔍", en: "What's this?", jp: "これなに？" }, { emoji: "⏰", en: "Are you ready?", jp: "準備はいい？" },
-    { emoji: "💡", en: "I see.", jp: "なるほどね。" }, { emoji: "🙋‍♂️", en: "Me too.", jp: "私も。" },
-    { emoji: "🎯", en: "Exactly!", jp: "その通り！" }, { emoji: "✨", en: "Nice!", jp: "いいね！" },
-    { emoji: "😱", en: "Oh no!", jp: "大変！" }, { emoji: "⚠️", en: "Watch out!", jp: "気をつけて！" },
-    { emoji: "✋", en: "Wait!", jp: "ちょっと待って！" }, { emoji: "👀", en: "Look!", jp: "みて！" },
-    { emoji: "👉", en: "Come here.", jp: "ここに来て。" }, { emoji: "😌", en: "Don't worry.", jp: "心配しないで。" }
-  ]},
-  adult_2: { name: "🐣 おとな② 初級・日常会話", items: [
-    { emoji: "❓", en: "How are you?", jp: "調子はどう？" }, { emoji: "💬", en: "How's it going?", jp: "調子はどうだい？" },
-    { emoji: "🙋‍♂️", en: "Long time no see.", jp: "お久しぶり！" }, { emoji: "😃", en: "What's up?", jp: "どうしたの？" },
-    { emoji: "🤝", en: "Nice to meet you.", jp: "はじめまして。" }, { emoji: "🚗", en: "I'm on my way.", jp: "今向かってるよ。" },
-    { emoji: "📞", en: "Call me later.", jp: "後で電話してね。" }, { emoji: "🏃", en: "I'm almost there.", jp: "もうすぐ着くよ。" },
-    { emoji: "📱", en: "Text me.", jp: "メッセージ送ってね。" }, { emoji: "📍", en: "See you there.", jp: "現地で会おう。" },
-    { emoji: "👍", en: "Sounds good.", jp: "いいね！" }, { emoji: "🙆‍♂️", en: "I agree.", jp: "同意するよ。" },
-    { emoji: "🎯", en: "That's true.", jp: "確かにそうだね。" }, { emoji: "🎉", en: "That sounds fun!", jp: "楽しそうだね！" },
-    { emoji: "💡", en: "I see what you mean.", jp: "言いたいことはわかるよ。" }, { emoji: "🙏", en: "Thanks anyway.", jp: "とにかくありがとう。" },
-    { emoji: "👋", en: "Take care.", jp: "体に気をつけてね。" }, { emoji: "✨", en: "Have a good one.", jp: "良い一日を！" },
-    { emoji: "💖", en: "I appreciate it.", jp: "感謝するよ。" }, { emoji: "🌟", en: "You made my day.", jp: "最高の日になったよ。" },
-    { emoji: "🤔", en: "What do you think?", jp: "どう思う？" }, { emoji: "🧐", en: "Are you sure?", jp: "確実なの？" },
-    { emoji: "❓", en: "Is everything OK?", jp: "全部大丈夫？" }, { emoji: "😲", en: "What happened?", jp: "何があったの？" },
-    { emoji: "💡", en: "Is that so?", jp: "そうなの？" }, { emoji: "🤝", en: "Could you help me?", jp: "手伝ってもらえる？" },
-    { emoji: "👀", en: "Let me see.", jp: "ええっと・見せて。" }, { emoji: "⏳", en: "Just a minute.", jp: "ちょっと待ってね。" },
-    { emoji: "✋", en: "Hold on.", jp: "ちょっと待って。" }, { emoji: "☕", en: "Take your time.", jp: "ごゆっくりね。" },
-    { emoji: "⭕", en: "Why not?", jp: "もちろん・いいよ！" }, { emoji: "👉", en: "How about you?", jp: "あなたはどう？" },
-    { emoji: "🚶‍♂️", en: "Shall we go?", jp: "行こうか？" }, { emoji: "🔍", en: "Let's check it out.", jp: "見に行ってみよう。" },
-    { emoji: "🔥", en: "Why don't we try?", jp: "試してみない？" }, { emoji: "❓", en: "Pardon?", jp: "なんて言ったの？" },
-    { emoji: "💡", en: "I got it.", jp: "分かった・了解。" }, { emoji: "🎯", en: "Makes sense.", jp: "なるほどね。" },
-    { emoji: "🔄", en: "Say that again?", jp: "もう一回言って？" }, { en: "What do you mean?", jp: "どういう意味？" },
-    { emoji: "💦", en: "I'm busy.", jp: "忙しいんだ。" }, { emoji: "⏰", en: "Are you free?", jp: "時間ある？" },
-    { emoji: "📅", en: "Sounds like a plan.", jp: "それで決まりだね。" }, { emoji: "🏃", en: "I have no time.", jp: "時間がないんだ。" },
-    { emoji: "📍", en: "I'll be there.", jp: "そこに行くよ。" }, { emoji: "🤩", en: "I can't wait!", jp: "待ちきれない！" },
-    { emoji: "😱", en: "No way!", jp: "ありえない！" }, { emoji: "😌", en: "I'm relieved.", jp: "安心したよ。" },
-    { emoji: "😬", en: "I'm nervous.", jp: "緊張するな。" }, { emoji: "😲", en: "I'm amazed!", jp: "驚いた！" }
-  ]},
-  adult_3: { name: "🎬 おとな③ 洋画チャレンジ", items: [
-    { emoji: "😤", en: "Give me a break.", jp: "勘弁してくれよ。" }, { emoji: "😱", en: "Get out of here!", jp: "嘘だろ！" },
-    { emoji: "👁️", en: "Watch your back.", jp: "背後に気をつけろ。" }, { emoji: "🏃", en: "I'll be right back.", jp: "すぐ戻る。" },
-    { emoji: "✊", en: "Hold on tight.", jp: "しっかりつかまってろ。" }, { emoji: "❓", en: "What are you talking about?", jp: "何言ってるんだ？" },
-    { emoji: "😠", en: "What's wrong with you?", jp: "どうかしちゃったのか？" }, { emoji: "💥", en: "I can't take it anymore.", jp: "もう我慢できない。" },
-    { emoji: "🤪", en: "Are you out of your mind?", jp: "正気かよ？" }, { emoji: "🚫", en: "Mind your own business.", jp: "余計なお世話だ。" },
-    { emoji: "🤝", en: "I've got your back.", jp: "俺がついている。" }, { emoji: "🙋‍♂️", en: "Count me in.", jp: "仲間に入れてくれ。" },
-    { emoji: "🔒", en: "Trust me.", jp: "俺を信じろ。" }, { emoji: "👍", en: "You can count on me.", jp: "任せておけ。" },
-    { emoji: "🔥", en: "We're in this together.", jp: "俺たちは一蓮托生だ。" }, { emoji: "💬", en: "To be honest.", jp: "正直に言うとな。" },
-    { emoji: "🤫", en: "Keep it to yourself.", jp: "他言無用だぞ。" }, { emoji: "❌", en: "Out of the question.", jp: "あり得ない。" },
-    { emoji: "👂", en: "Between you and me.", jp: "ここだけの話だが。" }, { emoji: "🤐", en: "Don't tell anyone.", jp: "誰にも言うなよ。" },
-    { emoji: "⚠️", en: "I have no choice.", jp: "選択の余地はない。" }, { emoji: "🚶‍♂️", en: "No turning back.", jp: "後戻りはできない。" },
-    { emoji: "⚡", en: "It's now or never.", jp: "今やるしかない。" }, { emoji: "🔥", en: "Whatever it takes.", jp: "どんな手を使っても。" },
-    { emoji: "✊", en: "I'm ready for this.", jp: "覚悟はできている。" }, { emoji: "💦", en: "It's not what it looks like.", jp: "誤解だ。" },
-    { emoji: "🙇‍♂️", en: "I didn't mean to.", jp: "そんなつもりじゃなかった。" }, { emoji: "🍃", en: "Forget about it.", jp: "今の話は忘れて。" },
-    { emoji: "🤦‍♂️", en: "It was a mistake.", jp: "間違いだった。" }, { emoji: "🤷‍♂️", en: "I had no idea.", jp: "知らなかったんだ。" },
-    { emoji: "😏", en: "You must be kidding.", jp: "冗談だろう？" }, { emoji: "✋", en: "Don't get me wrong.", jp: "誤解しないでくれ。" },
-    { emoji: "🤞", en: "Wish me luck.", jp: "幸運を祈ってくれ。" }, { emoji: "⚔️", en: "Is that the best you got?", jp: "せいぜいその程度か？" },
-    { emoji: "😏", en: "You asked for it.", jp: "自業自得だな。" }, { emoji: "🚨", en: "We have a problem.", jp: "問題発生だ。" },
-    { emoji: "❓", en: "What's going on?", jp: "何が起きている？" }, { emoji: "🕵️‍♂️", en: "Something's wrong.", jp: "何かがおかしい。" },
-    { emoji: "🛑", en: "Stay where you are.", jp: "そこから動くな。" }, { emoji: "⏳", en: "Time is running out.", jp: "時間がないぞ。" },
-    { emoji: "🏁", en: "Let's get this over with.", jp: "さっさと終わらせよう。" }, { emoji: "☕", en: "Take it easy.", jp: "気楽にいこうぜ。" },
-    { emoji: "👍", en: "Leave it to me.", jp: "俺に任せろ。" }, { emoji: "🏠", en: "Make yourself at home.", jp: "くつろいでね。" },
-    { emoji: "✋", en: "Don't push your luck.", jp: "調子に乗るなよ。" }, { emoji: "✨", en: "It was a pleasure.", jp: "光栄だったよ。" },
-    { emoji: "👋", en: "Until next time.", jp: "また会う日まで。" }, { emoji: "🚀", en: "Here we go.", jp: "さあ行くぞ。" },
-    { emoji: "⏰", en: "It's time to go.", jp: "行く時間だ。" }, { emoji: "🌅", en: "See you on the other side.", jp: "無事に向こうで会おう。" }
-  ]}
+    { emoji: "☀️", jp: "よい いちにちを", en: "Have a nice day." },
+    { emoji: "❓", jp: "あなたのお名前は？", en: "What's your name?" },
+    { emoji: "🙋‍♂️", jp: "わたしは ◯◯です", en: "I am happy." },
+    { emoji: "⚽", jp: "サッカーを しよう", en: "Let's play soccer." },
+    { emoji: "📖", jp: "ほんを よみます", en: "I read a book." },
+    { emoji: "✍️", jp: "えんぴつ", en: "Pencil" },
+    { emoji: "🎒", jp: "ランドセル / かばん", en: "Bag" },
+    { emoji: "🎵", jp: "おんがくが すき", en: "I like music." },
+    { emoji: "☔", jp: "あめが ふっている", en: "It is raining." }
+  ],
+
+  // 📚 おとな①（超初心者・基礎単語・名前を使った実践表現）
+  adult1: [
+    { emoji: "🙋‍♂️", jp: "私は◯◯です（名前の自己紹介）", en: "I'm {NAME}." },
+    { emoji: "🙏", jp: "ありがとうございます", en: "Thank you." },
+    { emoji: "☀️", jp: "おはようございます", en: "Good morning." },
+    { emoji: "👋", jp: "また会いましょう", en: "See you." },
+    { emoji: "👏", jp: "よくできました！", en: "Good job!" },
+    { emoji: "😃", jp: "こんにちは", en: "Hello." },
+    { emoji: "😫", jp: "疲れました", en: "I'm tired." },
+    { emoji: "🍔", jp: "お腹が空きました", en: "I'm hungry." },
+    { emoji: "😊", jp: "うれしいです", en: "I'm happy." },
+    { emoji: "👍", jp: "準備できました", en: "I'm ready." },
+    { emoji: "🏠", jp: "ただいま戻りました", en: "I'm home." },
+    { emoji: "🤝", jp: "どういたしまして", en: "You're welcome." },
+    { emoji: "👌", jp: "問題ありません", en: "No problem." },
+    { emoji: "🙆‍♂️", jp: "分かりました / 了解です", en: "All right." },
+    { emoji: "✨", jp: "もちろんです", en: "Sure!" },
+    { emoji: "🆗", jp: "わかりました", en: "Okay." },
+    { emoji: "😢", jp: "悲しいです", en: "I'm sad." },
+    { emoji: "🤩", jp: "ワクワクしています", en: "I'm excited!" },
+    { emoji: "🙂", jp: "元気ですよ", en: "I'm fine." },
+    { emoji: "😨", jp: "怖いです", en: "I'm scared." },
+    { emoji: "😴", jp: "眠いです", en: "I'm sleepy." },
+    { emoji: "☕", jp: "おねがいします", en: "Please." },
+    { emoji: "🆘", jp: "助けてください", en: "Help me." },
+    { emoji: "❓", jp: "いいですか？", en: "Can I?" },
+    { emoji: "👉", jp: "これをください", en: "Give me this." },
+    { emoji: "🏃", jp: "行きましょう！", en: "Let's go!" },
+    { emoji: "⭕", jp: "はい、お願いします", en: "Yes, please." },
+    { emoji: "❌", jp: "いいえ、結構です", en: "No, thanks." },
+    { emoji: "🤔", jp: "たぶんね", en: "Maybe." },
+    { emoji: "❤️", jp: "これが好きです", en: "I like it." },
+    { emoji: "🤷‍♂️", jp: "分かりません", en: "I don't know." },
+    { emoji: "🌙", jp: "おやすみなさい", en: "Good night." },
+    { emoji: "🍽️", jp: "食べましょう", en: "Let's eat." },
+    { emoji: "😋", jp: "おいしいです！", en: "It's good!" },
+    { emoji: "🚪", jp: "行ってきます", en: "I'm leaving." },
+    { emoji: "🏠", jp: "おかえりなさい", en: "Welcome back." },
+    { emoji: "💡", jp: "本当ですか？", en: "Really?" },
+    { emoji: "❓", jp: "なぜですか？", en: "Why?" },
+    { emoji: "📍", jp: "どこですか？", en: "Where?" },
+    { emoji: "🔍", jp: "これ何ですか？", en: "What's this?" },
+    { emoji: "⏰", jp: "準備はいいですか？", en: "Are you ready?" },
+    { emoji: "💡", jp: "なるほどね", en: "I see." },
+    { emoji: "🙋‍♂️", jp: "私もです", en: "Me too." },
+    { emoji: "🎯", jp: "その通り！", en: "Exactly!" },
+    { emoji: "✨", jp: "いいね！", en: "Nice!" },
+    { emoji: "😱", jp: "なんてことだ！", en: "Oh no!" },
+    { emoji: "⚠️", jp: "気をつけて！", en: "Watch out!" },
+    { emoji: "✋", jp: "待ってください", en: "Wait!" },
+    { emoji: "👀", jp: "見てください", en: "Look!" },
+    { emoji: "👉", jp: "ここに来てください", en: "Come here." },
+    { emoji: "😌", jp: "心配しないで", en: "Don't worry." }
+  ],
+
+  // 💬 おとな②（日常会話フレーズ）
+  adult2: [
+    { emoji: "❓", en: "How are you?", jp: "調子はどうですか？" },
+    { emoji: "💬", en: "How's it going?", jp: "調子はどうだい？" },
+    { emoji: "🙋‍♂️", en: "Long time no see.", jp: "お久しぶりです！" },
+    { emoji: "😃", en: "What's up?", jp: "どうしたの？" },
+    { emoji: "🤝", en: "Nice to meet you.", jp: "初めまして。" },
+    { emoji: "🚗", en: "I'm on my way.", jp: "今向かっています。" },
+    { emoji: "📞", en: "Call me later.", jp: "後で電話してね。" },
+    { emoji: "🏃", en: "I'm almost there.", jp: "もうすぐ着きます。" },
+    { emoji: "📱", en: "Text me.", jp: "メッセージを送ってください。" },
+    { emoji: "📍", en: "See you there.", jp: "現地で会いましょう。" },
+    { emoji: "👍", en: "Sounds good.", jp: "いいね！" },
+    { emoji: "🙆‍♂️", en: "I agree.", jp: "同意します。" },
+    { emoji: "🎯", en: "That's true.", jp: "確かにそうだね。" },
+    { emoji: "🎉", en: "That sounds fun!", jp: "楽しそうだね！" },
+    { emoji: "💡", en: "I see what you mean.", jp: "言いたいことは分かるよ。" },
+    { emoji: "🙏", en: "Thanks anyway.", jp: "とにかくありがとう。" },
+    { emoji: "👋", en: "Take care.", jp: "体に気をつけてね。" },
+    { emoji: "✨", en: "Have a good one.", jp: "良い一日を！" },
+    { emoji: "💖", en: "I appreciate it.", jp: "感謝します。" },
+    { emoji: "🌟", en: "You made my day.", jp: "最高の日になったよ。" },
+    { emoji: "🤔", en: "What do you think?", jp: "どう思う？" },
+    { emoji: "🧐", en: "Are you sure?", jp: "確実ですか？" },
+    { emoji: "❓", en: "Is everything OK?", jp: "全部大丈夫？" },
+    { emoji: "😲", en: "What happened?", jp: "何があったの？" },
+    { emoji: "💡", en: "Is that so?", jp: "そうなの？" },
+    { emoji: "🤝", en: "Could you help me?", jp: "手伝ってもらえる？" },
+    { emoji: "👀", en: "Let me see.", jp: "ええっと・見せて。" },
+    { emoji: "⏳", en: "Just a minute.", jp: "ちょっと待ってね。" },
+    { emoji: "✋", en: "Hold on.", jp: "ちょっと待って。" },
+    { emoji: "☕", en: "Take your time.", jp: "ごゆっくりね。" },
+    { emoji: "⭕", en: "Why not?", jp: "もちろん・いいよ！" },
+    { emoji: "👉", en: "How about you?", jp: "あなたはどう？" },
+    { emoji: "🚶‍♂️", en: "Shall we go?", jp: "行こうか？" },
+    { emoji: "🔍", en: "Let's check it out.", jp: "見に行ってみよう。" },
+    { emoji: "🔥", en: "Why don't we try?", jp: "試してみない？" },
+    { emoji: "❓", en: "Pardon?", jp: "なんて言ったの？" },
+    { emoji: "💡", en: "I got it.", jp: "分かった・了解。" },
+    { emoji: "🎯", en: "Makes sense.", jp: "なるほどね。" },
+    { emoji: "🔄", en: "Say that again?", jp: "もう一回言って？" },
+    { emoji: "❓", en: "What do you mean?", jp: "どういう意味？" },
+    { emoji: "💦", en: "I'm busy.", jp: "忙しいんだ。" },
+    { emoji: "⏰", en: "Are you free?", jp: "時間ある？" },
+    { emoji: "📅", en: "Sounds like a plan.", jp: "それで決まりだね。" },
+    { emoji: "🏃", en: "I have no time.", jp: "時間がないんだ。" },
+    { emoji: "📍", en: "I'll be there.", jp: "そこに行くよ。" },
+    { emoji: "🤩", en: "I can't wait!", jp: "待ちきれない！" },
+    { emoji: "😱", en: "No way!", jp: "ありえない！" },
+    { emoji: "😌", en: "I'm relieved.", jp: "安心したよ。" },
+    { emoji: "😬", en: "I'm nervous.", jp: "緊張するな。" },
+    { emoji: "😲", en: "I'm amazed!", jp: "驚いた！" }
+  ],
+
+  // 🎬 おとな③（実践的会話・表現）
+  adult3: [
+    { emoji: "😤", en: "Give me a break.", jp: "勘弁してくれよ。" },
+    { emoji: "😱", en: "Get out of here!", jp: "嘘だろ！" },
+    { emoji: "👁️", en: "Watch your back.", jp: "背後に気をつけろ。" },
+    { emoji: "🏃", en: "I'll be right back.", jp: "すぐ戻る。" },
+    { emoji: "✊", en: "Hold on tight.", jp: "しっかりつかまってろ。" },
+    { emoji: "❓", en: "What are you talking about?", jp: "何言ってるんだ？" },
+    { emoji: "😠", en: "What's wrong with you?", jp: "どうかしちゃったのか？" },
+    { emoji: "💥", en: "I can't take it anymore.", jp: "もう我慢できない。" },
+    { emoji: "🤪", en: "Are you out of your mind?", jp: "正気かよ？" },
+    { emoji: "🚫", en: "Mind your own business.", jp: "余計なお世話だ。" },
+    { emoji: "🤝", en: "I've got your back.", jp: "俺がついている。" },
+    { emoji: "🙋‍♂️", en: "Count me in.", jp: "仲間に入れてくれ。" },
+    { emoji: "🔒", en: "Trust me.", jp: "俺を信じろ。" },
+    { emoji: "👍", en: "You can count on me.", jp: "任せておけ。" },
+    { emoji: "🔥", en: "We're in this together.", jp: "俺たちは一蓮托生だ。" },
+    { emoji: "💬", en: "To be honest.", jp: "正直に言うとな。" },
+    { emoji: "🤫", en: "Keep it to yourself.", jp: "他言無用だぞ。" },
+    { emoji: "❌", en: "Out of the question.", jp: "あり得ない。" },
+    { emoji: "👂", en: "Between you and me.", jp: "ここだけの話だが。" },
+    { emoji: "🤐", en: "Don't tell anyone.", jp: "誰にも言うなよ。" },
+    { emoji: "⚠️", en: "I have no choice.", jp: "選択の余地はない。" },
+    { emoji: "🚶‍♂️", en: "No turning back.", jp: "後戻りはできない。" },
+    { emoji: "⚡", en: "It's now or never.", jp: "今やるしかない。" },
+    { emoji: "🔥", en: "Whatever it takes.", jp: "どんな手を使っても。" },
+    { emoji: "✊", en: "I'm ready for this.", jp: "覚悟はできている。" },
+    { emoji: "💦", en: "It's not what it looks like.", jp: "誤解だ。" },
+    { emoji: "🙇‍♂️", en: "I didn't mean to.", jp: "そんなつもりじゃなかった。" },
+    { emoji: "🍃", en: "Forget about it.", jp: "今の話は忘れて。" },
+    { emoji: "🤦‍♂️", en: "It was a mistake.", jp: "間違いだった。" },
+    { emoji: "🤷‍♂️", en: "I had no idea.", jp: "知らなかったんだ。" },
+    { emoji: "😏", en: "You must be kidding.", jp: "冗談だろう？" },
+    { emoji: "✋", en: "Don't get me wrong.", jp: "誤解しないでくれ。" },
+    { emoji: "🤞", en: "Wish me luck.", jp: "幸運を祈ってくれ。" },
+    { emoji: "⚔️", en: "Is that the best you got?", jp: "せいぜいその程度か？" },
+    { emoji: "😏", en: "You asked for it.", jp: "自業自得だな。" },
+    { emoji: "🚨", en: "We have a problem.", jp: "問題発生だ。" },
+    { emoji: "❓", en: "What's going on?", jp: "何が起きている？" },
+    { emoji: "🕵️‍♂️", en: "Something's wrong.", jp: "何かがおかしい。" },
+    { emoji: "🛑", en: "Stay where you are.", jp: "そこから動くな。" },
+    { emoji: "⏳", en: "Time is running out.", jp: "時間がないぞ。" },
+    { emoji: "🏁", en: "Let's get this over with.", jp: "さっさと終わらせよう。" },
+    { emoji: "☕", en: "Take it easy.", jp: "気楽にいこうぜ。" },
+    { emoji: "👍", en: "Leave it to me.", jp: "俺に任せろ。" },
+    { emoji: "🏠", en: "Make yourself at home.", jp: "くつろいでね。" },
+    { emoji: "✋", en: "Don't push your luck.", jp: "調子に乗るなよ。" },
+    { emoji: "✨", en: "It was a pleasure.", jp: "光栄だったよ。" },
+    { emoji: "👋", en: "Until next time.", jp: "また会う日まで。" },
+    { emoji: "🚀", en: "Here we go.", jp: "さあ行くぞ。" },
+    { emoji: "⏰", en: "It's time to go.", jp: "行く時間だ。" },
+    { emoji: "🌅", en: "See you on the other side.", jp: "無事に向こうで会おう。" }
+  ]
 };
-</script>
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-  loadData(); checkStreak(); showHome();
-});
+  // アプリの状態管理変数
+let currentUser = { name: "ゲスト", ageCategory: "adult1", coins: 0, streak: 0, lastDate: "" };
+let currentCardIndex = 0;
+let isListening = false;
+let recognition = null;
+let timerInterval = null;
+let timeLeft = 900; // 15分 (15 * 60)
 
-function showArea(id) {
-  ["homeArea", "ageSelectArea", "lessonArea"].forEach(a => {
-    const el = document.getElementById(a);
-    if (el) el.style.display = "none";
-  });
-  document.getElementById(id).style.display = "block";
+// 全バッジ定義
+const BADGES = [
+  { id: 'first_step', icon: '🐣', name: 'はじめの一歩' },
+  { id: 'streak_3', icon: '🔥', name: '3日連続' },
+  { id: 'coin_100', icon: '🪙', name: '100コイン' }
+];
+let unlockedBadges = [];
+
+// 初期化処理
+window.onload = function() {
+  loadUserData();
+  initSpeechRecognition();
+  updateHeaderUI();
+
+  if (currentUser.name && currentUser.name !== "ゲスト") {
+    showScreen('screen-age-select');
+  } else {
+    showScreen('screen-welcome');
+  }
+};
+
+// 画面切り替え
+function showScreen(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(screenId);
+  if (target) target.classList.add('active');
+
+  if (screenId === 'screen-settings') {
+    updateSettingsUI();
+  }
 }
 
-function showHome() { showArea("homeArea"); }
-
-function selectAgeGroup(groupKey) {
-  currentAgeGroup = groupKey;
-  currentIndex = 0;
-  saveData(); markAttendance();
-  showArea("lessonArea");
-  updateCard();
+// 名前保存＆次へ
+function saveNameAndNext() {
+  const input = document.getElementById('userNameInput').value.trim();
+  if (input) {
+    currentUser.name = input;
+  } else {
+    currentUser.name = "ゲスト";
+  }
+  saveUserData();
+  updateHeaderUI();
+  showScreen('screen-age-select');
 }
 
-function getCurrentItem() {
-  const group = ageGroupData[currentAgeGroup] || ageGroupData.kids_young;
-  if (currentIndex >= group.items.length) currentIndex = 0;
-  return group.items[currentIndex];
+// 年齢・コース選択
+function selectAge(ageKey, cardEl) {
+  document.querySelectorAll('.select-card').forEach(c => c.classList.remove('active'));
+  cardEl.classList.add('active');
+  currentUser.ageCategory = ageKey;
+  saveUserData();
 }
 
-function updateCard() {
-  const group = ageGroupData[currentAgeGroup] || ageGroupData.kids_young;
-  const item = getCurrentItem();
-  isPassed = false;
-  document.getElementById("btnNext").disabled = true;
+// 学習開始
+function startLearning() {
+  currentCardIndex = 0;
+  showScreen('screen-learn');
+  renderCurrentCard();
+  startTimer();
+}
+
+// 現在のカード描画（名前置換対応）
+function renderCurrentCard() {
+  const list = CURRICULUM_DATA[currentUser.ageCategory] || CURRICULUM_DATA.adult1;
+  if (currentCardIndex >= list.length) currentCardIndex = 0;
+
+  const item = list[currentCardIndex];
   
-  document.getElementById("stepProgress").innerText = `${group.name} (${currentIndex + 1}/${group.items.length})`;
-  document.getElementById("visualEmoji").innerText = item.emoji || "✨";
-  document.getElementById("jpText").innerText = item.jp;
-  document.getElementById("enText").innerText = item.en;
-  document.getElementById("spokenBox").innerText = "👂 こえをきかせてね";
-  document.getElementById("resultMsg").innerText = "";
-  document.getElementById("charIcon").innerText = "🐶";
-  document.getElementById("charMsg").innerText = "ぽてワン「音をきいてマネしてみよう！」";
+  // ユーザー名の置換 (例: I'm {NAME}. -> I'm Taro.)
+  let displayEn = item.en.replace('{NAME}', currentUser.name || "Guest");
+  let displayJp = item.jp.replace('{NAME}', currentUser.name || "ゲスト");
+
+  document.getElementById('cardEmoji').innerText = item.emoji || "✨";
+  document.getElementById('cardJp').innerText = displayJp;
+  document.getElementById('cardEn').innerText = displayEn;
+  document.getElementById('speechFeedback').innerText = "ボタンを押して発音してね";
+  document.getElementById('speechFeedback').style.color = "var(--text-sub)";
 }
 
-function speakCurrent() {
+// 次のカードへ
+function nextCard() {
+  const list = CURRICULUM_DATA[currentUser.ageCategory] || CURRICULUM_DATA.adult1;
+  currentCardIndex = (currentCardIndex + 1) % list.length;
+  renderCurrentCard();
+}
+
+// 音声読み上げ (Web Speech Synthesis)
+function speakCurrentText() {
   if (!('speechSynthesis' in window)) return;
-  resetMicUI();
-  document.getElementById("charIcon").innerText = "🐶🎶";
   window.speechSynthesis.cancel();
   
-  const item = getCurrentItem();
-  const u = new SpeechSynthesisUtterance(item.en);
-  u.lang = "en-US";
-  u.rate = (currentAgeGroup.startsWith("kids")) ? 0.6 : currentSpeed;
+  const text = document.getElementById('cardEn').innerText;
+  const uttr = new SpeechSynthesisUtterance(text);
+  uttr.lang = 'en-US';
   
-  u.onend = () => document.getElementById("charIcon").innerText = "🐶";
-  window.speechSynthesis.speak(u);
-}
-
-function resetMicUI() {
-  isListening = false;
-  if (listenTimeoutTimer) clearTimeout(listenTimeoutTimer);
-  const btn = document.getElementById("btnSpeak");
-  if (btn) { btn.disabled = false; btn.innerText = "🎤 マネして言う"; }
-}
-
-function startListen() {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    document.getElementById("spokenBox").innerText = "❌ 未対応のブラウザです。Chromeでお試しください。";
-    return;
+  // 年齢層に応じて再生速度を調整
+  if (currentUser.ageCategory.startsWith('toddler')) {
+    uttr.rate = 0.7;
+  } else {
+    uttr.rate = 0.9;
   }
-  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-  resetMicUI();
-  
-  isListening = true;
-  const btn = document.getElementById("btnSpeak");
-  btn.disabled = true; btn.innerText = "🎙️ きいています...";
-  document.getElementById("spokenBox").innerText = "🎙️ 声を聞いています...";
+  window.speechSynthesis.speak(uttr);
+}
 
-  const rec = new SpeechRecognition();
-  recognitionInstance = rec;
-  rec.lang = "en-US"; rec.interimResults = false; rec.maxAlternatives = 1;
+// 音声認識の初期化
+function initSpeechRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) return;
 
-  listenTimeoutTimer = setTimeout(() => {
-    if (isListening) {
-      try { rec.stop(); } catch(e){}
-      document.getElementById("spokenBox").innerText = "⏱️ もう一度ボタンを押してください。";
-      resetMicUI();
-    }
-  }, 9000);
+  recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
 
-  rec.onresult = (e) => {
-    resetMicUI();
-    if (e.results && e.results[0] && e.results[0][0]) {
-      const txt = e.results[0][0].transcript;
-      document.getElementById("spokenBox").innerText = "🗣️ あなた: " + txt;
-      checkAnswer(txt);
-    }
+  recognition.onresult = function(event) {
+    const transcript = event.results[0][0].transcript;
+    handleSpeechResult(transcript);
   };
 
-  rec.onerror = () => { resetMicUI(); document.getElementById("spokenBox").innerText = "❌ もう一度ためしてね"; };
-  rec.onend = () => resetMicUI();
-  try { rec.start(); } catch(e) { resetMicUI(); }
+  recognition.onerror = function() {
+    stopListeningUI();
+    document.getElementById('speechFeedback').innerText = "聞き取れませんでした。もう一度ためしてね";
+  };
+
+  recognition.onend = function() {
+    stopListeningUI();
+  };
 }
 
-function cleanText(t) { return t.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim(); }
-
-function checkAnswer(userText) {
-  const item = getCurrentItem();
-  const target = cleanText(item.en);
-  const spoken = cleanText(userText);
-  const res = document.getElementById("resultMsg");
-
-  if (spoken === target || spoken.includes(target) || target.includes(spoken)) {
-    if (!isPassed) { coins += 10; checkBadges(); saveData(); }
-    isPassed = true;
-    document.getElementById("btnNext").disabled = false;
-    res.innerText = "🎉 すごい！大正解！ (+10🪙)";
-    res.style.color = "#2E7D32";
-    document.getElementById("charIcon").innerText = "🐶✨";
-    if (typeof confetti === "function") confetti({ particleCount: 60, spread: 50, origin: { y: 0.7 } });
-  } else {
-    isPassed = false;
-    document.getElementById("btnNext").disabled = true;
-    res.innerText = "👍 惜しい！もう一回やってみよう";
-    res.style.color = "#DD6B20";
-  }
-}
-
-function nextLesson() {
-  if (!isPassed) return;
-  resetMicUI();
-  currentIndex++;
-  
-  const maxLen = ageGroupData[currentAgeGroup].items.length;
-  
-  if (currentIndex >= maxLen) {
-    currentIndex = 0;
-    alert("🎉 クリアおめでとうございます！");
-    showArea("ageSelectArea");
+// 音声認識ボタンのトグル
+function toggleSpeechRecognition() {
+  if (!recognition) {
+    alert("お使いのブラウザは音声認識機能に対応していません。Chromeをお使いください。");
     return;
   }
-  saveData(); updateCard();
-}
 
-function openRecordModal() {
-  const c = document.getElementById("modalStatusContainer");
-  if (c) {
-    c.innerHTML = `<p style="margin:4px 0;">🔥 連続: ${streak}日 | 🏆 累計: ${total}日 | 🪙 コイン: ${coins}枚</p>`;
-  }
-  setSpeedUI(currentSpeed);
-  document.getElementById("recordModal").style.display = "flex";
-}
-
-function closeRecordModal() {
-  saveData(); document.getElementById("recordModal").style.display = "none";
-}
-
-function setSpeed(s) { currentSpeed = s; setSpeedUI(s); saveData(); }
-function setSpeedUI(s) {
-  ["speedSlow","speedNormal","speedFast"].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.classList.remove("active");
-  });
-  if (s <= 0.5) document.getElementById("speedSlow")?.classList.add("active");
-  else if (s <= 0.8) document.getElementById("speedNormal")?.classList.add("active");
-  else document.getElementById("speedFast")?.classList.add("active");
-}
-
-function checkStreak() {
-  const today = new Date().toISOString().split('T')[0];
-  if (lastDate) {
-    const diff = Math.floor((new Date(today) - new Date(lastDate)) / 86400000);
-    if (diff > 1) streak = 0;
+  if (isListening) {
+    recognition.stop();
+    stopListeningUI();
+  } else {
+    try {
+      recognition.start();
+      isListening = true;
+      const btn = document.getElementById('micBtn');
+      btn.classList.add('listening');
+      document.getElementById('speechFeedback').innerText = "きいています...";
+    } catch(e) {
+      stopListeningUI();
+    }
   }
 }
 
-function markAttendance() {
-  const today = new Date().toISOString().split('T')[0];
-  if (lastDate !== today) {
-    const diff = lastDate ? Math.floor((new Date(today) - new Date(lastDate)) / 86400000) : 0;
-    streak = (diff === 1 || !lastDate) ? streak + 1 : 1;
-    total += 1;
-    lastDate = today;
-    saveData();
+function stopListeningUI() {
+  isListening = false;
+  const btn = document.getElementById('micBtn');
+  if (btn) btn.classList.remove('listening');
+}
+
+// 音声認識結果の判定
+function handleSpeechResult(spokenText) {
+  const targetText = document.getElementById('cardEn').innerText.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim();
+  const cleanedSpoken = spokenText.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim();
+
+  document.getElementById('speechFeedback').innerText = `あなた: "${spokenText}"`;
+
+  if (cleanedSpoken === targetText || cleanedSpoken.includes(targetText) || targetText.includes(cleanedSpoken)) {
+    // 正解処理
+    currentUser.coins += 10;
+    saveUserData();
+    updateHeaderUI();
+    
+    document.getElementById('modalFeedbackText').innerText = `発音: "${spokenText}" ✨ (+10🪙)`;
+    document.getElementById('resultModal').classList.add('active');
+  } else {
+    document.getElementById('speechFeedback').style.color = "var(--accent-color)";
+    document.getElementById('speechFeedback').innerText = `「${spokenText}」惜しい！もう一度やってみよう`;
   }
 }
 
-function checkBadges() {
-  ALL_BADGES.forEach(b => {
-    if (!badges.includes(b.id) && b.check()) { badges.push(b.id); }
-  });
+// モーダルを閉じて次の問題へ
+function closeModalAndNext() {
+  document.getElementById('resultModal').classList.remove('active');
+  nextCard();
 }
 
-function saveData() {
+// 15分タイマー制御
+function startTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      alert("⏱ 15分が経過しました！本日のレッスンおつかれさまでした！");
+    }
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('sessionTimer').innerText = `${m}:${s}`;
+  }, 1000);
+}
+
+// ヘッダーUI更新
+function updateHeaderUI() {
+  document.getElementById('headerUser').innerText = currentUser.name || "ゲスト";
+  document.getElementById('headerCoins').innerText = `🪙 ${currentUser.coins || 0}`;
+  document.getElementById('headerStreak').innerText = `🔥 ${currentUser.streak || 0}日`;
+}
+
+// マイページUI更新
+function updateSettingsUI() {
+  document.getElementById('settingNameDisplay').innerText = currentUser.name || "ゲスト";
+  
+  const courseNames = {
+    toddler23: "2〜3さい",
+    toddler45: "4〜5さい",
+    kids: "しょうがくせい",
+    adult1: "おとな① 超初心者",
+    adult2: "おとな② 日常会話",
+    adult3: "おとな③ 実践表現"
+  };
+  document.getElementById('settingCourseDisplay').innerText = courseNames[currentUser.ageCategory] || "おとな①";
+
+  // バッジ描画
+  const badgeGrid = document.getElementById('badgeGrid');
+  badgeGrid.innerHTML = BADGES.map(b => {
+    const isUnlocked = unlockedBadges.includes(b.id) || (b.id === 'first_step' && currentUser.coins > 0);
+    return `
+      <div class="badge-item ${isUnlocked ? 'unlocked' : ''}">
+        <div class="b-icon">${b.icon}</div>
+        <div class="b-name">${b.name}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ローカルストレージ保存・読み込み
+function saveUserData() {
   try {
-    localStorage.setItem("eb_ageGroup", currentAgeGroup);
-    localStorage.setItem("eb_currentIndex", currentIndex);
-    localStorage.setItem("eb_streak", streak);
-    localStorage.setItem("eb_total", total);
-    localStorage.setItem("eb_lastDate", lastDate);
-    localStorage.setItem("eb_speed", currentSpeed);
-    localStorage.setItem("eb_coins", coins);
-    localStorage.setItem("eb_badges", JSON.stringify(badges));
+    localStorage.setItem('babyEng_user', JSON.stringify(currentUser));
   } catch(e){}
 }
 
-function loadData() {
+function loadUserData() {
   try {
-    currentAgeGroup = localStorage.getItem("eb_ageGroup") || "kids_young";
-    currentIndex = parseInt(localStorage.getItem("eb_currentIndex") || "0", 10);
-    streak = parseInt(localStorage.getItem("eb_streak") || "0", 10);
-    total = parseInt(localStorage.getItem("eb_total") || "0", 10);
-    lastDate = localStorage.getItem("eb_lastDate") || "";
-    currentSpeed = parseFloat(localStorage.getItem("eb_speed") || "0.8");
-    coins = parseInt(localStorage.getItem("eb_coins") || "0", 10);
-    badges = JSON.parse(localStorage.getItem("eb_badges") || "[]");
+    const data = localStorage.getItem('babyEng_user');
+    if (data) {
+      currentUser = Object.assign(currentUser, JSON.parse(data));
+    }
   } catch(e){}
 }
 </script>
