@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>英会話は赤ちゃん以下 - 赤ちゃんから大人まで</title>
+  <title>英会話は赤ちゃん以下</title>
   <style>
     :root {
       --primary-color: #4A90E2;
@@ -22,6 +22,7 @@
 
     /* Header */
     header { background: #fff; padding: 12px 16px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+    .header-left { display: flex; align-items: center; gap: 8px; }
     .header-user { font-size: 0.95rem; font-weight: bold; color: var(--primary-color); }
     .header-stats { display: flex; gap: 12px; font-size: 0.85rem; font-weight: 600; color: #555; }
     .header-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 4px; }
@@ -30,21 +31,33 @@
     .screen { display: none; padding: 20px; flex-direction: column; flex: 1; overflow-y: auto; }
     .screen.active { display: flex; }
 
-    /* Typography & UI */
-    h1 { font-size: 1.4rem; text-align: center; margin-bottom: 8px; color: var(--text-main); }
-    h2 { font-size: 1.2rem; margin-bottom: 12px; color: var(--text-main); text-align: center; }
-    p.subtitle { text-align: center; color: var(--text-sub); font-size: 0.85rem; margin-bottom: 20px; }
+    /* Home Concept Screen Styles (元のデザイン完全復元) */
+    .concept-header-emojis { font-size: 2.2rem; text-align: center; margin-bottom: 8px; letter-spacing: 4px; }
+    .concept-title { font-size: 1.5rem; text-align: center; font-weight: 800; color: #333; margin-bottom: 4px; }
+    .concept-subtitle { text-align: center; color: #777; font-size: 0.85rem; margin-bottom: 20px; }
     
-    .btn { background: var(--primary-color); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 1rem; font-weight: bold; cursor: pointer; text-align: center; width: 100%; transition: transform 0.1s, background 0.2s; margin-top: 8px; }
+    .concept-box { background: #FFF4EC; border-radius: 16px; padding: 20px; margin-bottom: 16px; font-size: 0.9rem; line-height: 1.6; color: #444; }
+    .concept-box p { margin-bottom: 12px; }
+    .concept-box p:last-child { margin-bottom: 0; }
+    .concept-box strong { color: #222; }
+
+    .action-box { background: #EBF5FF; border-radius: 16px; padding: 16px; text-align: center; margin-bottom: 20px; }
+    .action-box .a-title { font-weight: bold; color: #2B6CB0; font-size: 0.95rem; margin-bottom: 4px; }
+    .action-box .a-desc { font-size: 0.85rem; color: #4A5568; line-height: 1.4; }
+
+    .btn-main-action { background: #FF6B6B; color: white; border: none; padding: 16px; border-radius: 30px; font-size: 1.1rem; font-weight: bold; cursor: pointer; text-align: center; width: 100%; box-shadow: 0 4px 12px rgba(255,107,107,0.3); transition: transform 0.1s; }
+    .btn-main-action:active { transform: scale(0.98); }
+
+    /* General UI */
+    h2 { font-size: 1.2rem; margin-bottom: 12px; color: var(--text-main); text-align: center; }
+    .btn { background: var(--primary-color); color: white; border: none; padding: 14px; border-radius: 12px; font-size: 1rem; font-weight: bold; cursor: pointer; text-align: center; width: 100%; transition: transform 0.1s; margin-top: 8px; }
     .btn:active { transform: scale(0.98); }
     .btn-secondary { background: #E0E6ED; color: var(--text-main); }
     .btn-outline { background: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); }
 
-    /* Input Fields */
-    input[type="text"] { width: 100%; padding: 14px; border: 2px solid #E0E6ED; border-radius: 12px; font-size: 1rem; margin-bottom: 16px; outline: none; transition: border-color 0.2s; }
+    input[type="text"] { width: 100%; padding: 14px; border: 2px solid #E0E6ED; border-radius: 12px; font-size: 1rem; margin-bottom: 16px; outline: none; }
     input[type="text"]:focus { border-color: var(--primary-color); }
 
-    /* Card List & Selectors */
     .grid-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
     .select-card { background: #F0F4F8; border: 2px solid transparent; padding: 16px 12px; border-radius: 14px; text-align: center; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 6px; }
     .select-card.active { border-color: var(--primary-color); background: #EBF3FA; }
@@ -52,31 +65,26 @@
     .select-card .title { font-weight: bold; font-size: 0.95rem; }
     .select-card .desc { font-size: 0.75rem; color: var(--text-sub); }
 
-    /* Timer / 15-min Banner */
     .timer-banner { background: #FFF9E6; border: 1px solid #FFE5A3; border-radius: 10px; padding: 10px 14px; font-size: 0.85rem; color: #8A6D3B; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 
-    /* Main Flashcard */
-    .flashcard { background: #fff; border: 2px solid #EBF0F5; border-radius: 20px; padding: 24px 16px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 16px; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+    .flashcard { background: #fff; border: 2px solid #EBF0F5; border-radius: 20px; padding: 24px 16px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 16px; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
     .card-emoji { font-size: 4.5rem; margin-bottom: 8px; line-height: 1; }
     .card-jp { font-size: 1.2rem; font-weight: bold; color: var(--text-main); margin-bottom: 6px; }
     .card-en { font-size: 1.5rem; font-weight: 800; color: var(--primary-color); margin-bottom: 12px; word-break: break-word; }
     .card-hint { font-size: 0.8rem; color: #888; background: #F5F5F5; padding: 4px 10px; border-radius: 20px; display: inline-block; }
 
-    /* Mic & Voice Controls */
     .mic-area { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: auto; }
-    .mic-btn { width: 72px; height: 72px; border-radius: 50%; background: var(--accent-color); color: white; border: none; font-size: 1.8rem; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 6px 16px rgba(255,107,107,0.4); transition: all 0.2s; }
+    .mic-btn { width: 72px; height: 72px; border-radius: 50%; background: var(--accent-color); color: white; border: none; font-size: 1.8rem; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 6px 16px rgba(255,107,107,0.4); }
     .mic-btn.listening { animation: pulse 1.2s infinite; background: #E03131; }
-    @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(224,49,49,0.7); } 70% { transform: scale(1.08); box-shadow: 0 0 0 14px rgba(224,49,49,0); } 100% { transform: scale(1); } }
+    @keyframes pulse { 0% { transform: scale(1); } 70% { transform: scale(1.08); } 100% { transform: scale(1); } }
     .speech-feedback { min-height: 24px; font-size: 0.9rem; color: var(--text-sub); text-align: center; font-weight: 600; }
 
-    /* Badge & Profile Item */
     .badge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
     .badge-item { background: #F5F5F5; border-radius: 12px; padding: 10px 6px; text-align: center; opacity: 0.4; filter: grayscale(1); }
     .badge-item.unlocked { opacity: 1; filter: none; background: #E6F7FF; border: 1px solid #91CAFF; }
     .badge-item .b-icon { font-size: 1.6rem; }
     .badge-item .b-name { font-size: 0.75rem; font-weight: bold; margin-top: 2px; }
 
-    /* Modal / Alert Overlay */
     .modal-overlay { position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 100; padding: 20px; }
     .modal-overlay.active { display: flex; }
     .modal-content { background: white; border-radius: 20px; padding: 24px; text-align: center; width: 100%; max-width: 360px; }
@@ -85,31 +93,54 @@
 <body>
 
 <div class="app-container">
-  <!-- Header -->
+  <!-- Header (🏠ホームボタンを追加) -->
   <header>
-    <div class="header-user" id="headerUser">ゲスト</div>
+    <div class="header-left">
+      <button class="header-btn" onclick="showScreen('screen-home')" title="ホームへ">🏠</button>
+      <div class="header-user" id="headerUser">ゲスト</div>
+    </div>
     <div class="header-stats">
       <span id="headerCoins">🪙 0</span>
       <span id="headerStreak">🔥 0日</span>
     </div>
-    <button class="header-btn" onclick="showScreen('screen-settings')">⚙️</button>
+    <button class="header-btn" onclick="showScreen('screen-settings')" title="設定">⚙️</button>
   </header>
 
+  <!-- 0. ホーム画面（元のデザインを完全復元） -->
+  <section class="screen active" id="screen-home">
+    <div class="concept-header-emojis">🎬 👶 🐶</div>
+    <h1 class="concept-title">英会話は赤ちゃん以下</h1>
+    <p class="concept-subtitle">音から始める、新しい英語学習のカタチ</p>
+
+    <div class="concept-box">
+      <p>👶 <strong>赤ちゃんは文法を学びません。</strong><br>まず「音」をたくさん聴いて、マネして喋ることからスタートします。</p>
+      <p>🎧 <strong>このアプリも同じです。</strong><br>難しい勉強は一切なし。耳と口を使って「音の響き」を身体に馴染ませていきます。</p>
+      <p>🎬 <strong>目指すは「洋画をそのまま楽しむ力」！</strong><br>赤ちんステップで、着実に階段をのぼりましょう。</p>
+    </div>
+
+    <div class="action-box">
+      <div class="a-title">🌱 今日から始めよう</div>
+      <div class="a-desc">1日15分でOK。<br>英語ができなくても大丈夫。<br>ここがスタートラインです！</div>
+    </div>
+
+    <button class="btn-main-action" onclick="goToStart()">最初のレッスンを始める ▶</button>
+  </section>
+
   <!-- 1. お名前登録画面 -->
-  <section class="screen active" id="screen-welcome">
-    <h1>英会話は赤ちゃん以下 👶</h1>
-    <p class="subtitle">あなたに合わせたレベルからスタートしよう！</p>
+  <section class="screen" id="screen-welcome">
+    <h2 style="font-size: 1.4rem; margin-bottom: 8px;">はじめまして！</h2>
+    <p class="concept-subtitle">あなたに合わせたレッスンを準備します</p>
     <div style="margin: 20px 0;">
       <label style="font-size: 0.9rem; font-weight: bold; display: block; margin-bottom: 8px;">あなたのお名前（またはニックネーム）</label>
       <input type="text" id="userNameInput" placeholder="例: たろう / Taro" maxlength="15">
     </div>
-    <button class="btn" onclick="saveNameAndNext()">はじめる！</button>
+    <button class="btn" onclick="saveNameAndNext()">コース選択へすすむ ➡️</button>
   </section>
 
   <!-- 2. 年齢・レベル選択画面 -->
   <section class="screen" id="screen-age-select">
     <h2>コースを選んでね</h2>
-    <p class="subtitle">学習するレベルをいつでも変更できます</p>
+    <p class="concept-subtitle">学習するレベルをいつでも変更できます</p>
     
     <div class="grid-selector">
       <div class="select-card" onclick="selectAge('toddler23', this)">
@@ -144,7 +175,7 @@
       </div>
     </div>
 
-    <button class="btn" onclick="startLearning()">このコースで学習する</button>
+    <button class="btn" onclick="startLearning()">このコースで学習する 🚀</button>
   </section>
 
   <!-- 3. メイン学習画面 -->
@@ -180,12 +211,13 @@
       <p style="font-size: 0.9rem;">現在のコース: <strong id="settingCourseDisplay">おとな①</strong></p>
     </div>
 
+    <button class="btn btn-outline" style="margin-bottom: 12px;" onclick="showScreen('screen-welcome')">✏️ 名前を変更する</button>
     <button class="btn btn-outline" style="margin-bottom: 12px;" onclick="showScreen('screen-age-select')">🔄 コースを変更する</button>
 
     <h3 style="font-size: 1rem; margin-top: 16px; margin-bottom: 8px;">獲得バッジ</h3>
     <div class="badge-grid" id="badgeGrid"></div>
 
-    <button class="btn btn-secondary" style="margin-top: 24px;" onclick="showScreen('screen-learn')">学習に戻る</button>
+    <button class="btn btn-secondary" style="margin-top: 24px;" onclick="showScreen('screen-home')">ホームに戻る</button>
   </section>
 
   <!-- 正解 / 完了モーダル -->
@@ -215,7 +247,7 @@ const CURRICULUM_DATA = {
     { emoji: "🌸", jp: "はな", en: "Flower" },
     { emoji: "🐤", jp: "ひよこ", en: "Bird" },
     { emoji: "👟", jp: "くつ", en: "Shoes" },
-    { emoji: "帽子", jp: "ぼうし", en: "Hat" },
+    { emoji: "🧢", jp: "ぼうし", en: "Hat" },
     { emoji: "🍞", jp: "パン", en: "Bread" },
     { emoji: "🍚", jp: "ごはん", en: "Rice" }
   ],
@@ -356,7 +388,7 @@ const CURRICULUM_DATA = {
     { emoji: "📅", en: "Sounds like a plan.", jp: "それで決まりだね。" },
     { emoji: "🏃", en: "I have no time.", jp: "時間がないんだ。" },
     { emoji: "📍", en: "I'll be there.", jp: "そこに行くよ。" },
-    { emoji: "🤩", en: "I can't wait!", jp: "待ちきれない！" },
+    { emoji: "🤩", en: "I can't wait!", jp: "持ちきれない！" },
     { emoji: "😱", en: "No way!", jp: "ありえない！" },
     { emoji: "😌", en: "I'm relieved.", jp: "安心したよ。" },
     { emoji: "😬", en: "I'm nervous.", jp: "緊張するな。" },
@@ -417,261 +449,234 @@ const CURRICULUM_DATA = {
     { emoji: "🌅", en: "See you on the other side.", jp: "無事に向こうで会おう。" }
   ]
 };
-  // アプリの状態管理変数
-let currentUser = { name: "ゲスト", ageCategory: "adult1", coins: 0, streak: 0, lastDate: "" };
-let currentCardIndex = 0;
-let isListening = false;
-let recognition = null;
-let timerInterval = null;
-let timeLeft = 900; // 15分 (15 * 60)
+// アプリケーションの状態管理
+let userData = {
+  name: "ゲスト",
+  ageGroup: "adult1",
+  coins: 0,
+  streak: 1,
+  badges: ["first_step"]
+};
 
-// 全バッジ定義
+let currentCardIndex = 0;
+let sessionTimerInterval = null;
+let sessionSeconds = 15 * 60;
+let recognition = null;
+
+// バッジ定義
 const BADGES = [
-  { id: 'first_step', icon: '🐣', name: 'はじめの一歩' },
-  { id: 'streak_3', icon: '🔥', name: '3日連続' },
-  { id: 'coin_100', icon: '🪙', name: '100コイン' }
+  { id: "first_step", icon: "🌱", name: "はじめの一歩" },
+  { id: "speak_1", icon: "🎤", name: "はじめての発音" },
+  { id: "streak_3", icon: "🔥", name: "3日連続" }
 ];
-let unlockedBadges = [];
 
 // 初期化処理
 window.onload = function() {
   loadUserData();
-  initSpeechRecognition();
   updateHeaderUI();
-
-  if (currentUser.name && currentUser.name !== "ゲスト") {
-    showScreen('screen-age-select');
-  } else {
-    showScreen('screen-welcome');
-  }
+  setupSpeechRecognition();
 };
+
+function loadUserData() {
+  const saved = localStorage.getItem("english_app_data");
+  if (saved) {
+    try { userData = JSON.parse(saved); } catch(e){}
+  }
+}
+
+function saveUserData() {
+  localStorage.setItem("english_app_data", JSON.stringify(userData));
+  updateHeaderUI();
+}
+
+function updateHeaderUI() {
+  document.getElementById("headerUser").innerText = userData.name || "ゲスト";
+  document.getElementById("headerCoins").innerText = "🪙 " + (userData.coins || 0);
+  document.getElementById("headerStreak").innerText = "🔥 " + (userData.streak || 1) + "日";
+  document.getElementById("settingNameDisplay").innerText = userData.name || "ゲスト";
+  
+  const ageNames = { toddler23: "2〜3さい", toddler45: "4〜5さい", kids: "しょうがくせい", adult1: "おとな①", adult2: "おとな②", adult3: "おとな③" };
+  document.getElementById("settingCourseDisplay").innerText = ageNames[userData.ageGroup] || "おとな①";
+  
+  renderBadges();
+}
 
 // 画面切り替え
 function showScreen(screenId) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const target = document.getElementById(screenId);
-  if (target) target.classList.add('active');
-
-  if (screenId === 'screen-settings') {
-    updateSettingsUI();
-  }
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(screenId).classList.add("active");
 }
 
-// 名前保存＆次へ
-function saveNameAndNext() {
-  const input = document.getElementById('userNameInput').value.trim();
-  if (input) {
-    currentUser.name = input;
+function goToStart() {
+  if (!userData.name || userData.name === "ゲスト") {
+    showScreen("screen-welcome");
   } else {
-    currentUser.name = "ゲスト";
+    showScreen("screen-age-select");
   }
-  saveUserData();
-  updateHeaderUI();
-  showScreen('screen-age-select');
 }
 
-// 年齢・コース選択
-function selectAge(ageKey, cardEl) {
-  document.querySelectorAll('.select-card').forEach(c => c.classList.remove('active'));
-  cardEl.classList.add('active');
-  currentUser.ageCategory = ageKey;
+function saveNameAndNext() {
+  const val = document.getElementById("userNameInput").value.trim();
+  if (val) userData.name = val;
+  saveUserData();
+  showScreen("screen-age-select");
+}
+
+function selectAge(group, element) {
+  userData.ageGroup = group;
+  document.querySelectorAll(".select-card").forEach(c => c.classList.remove("active"));
+  if (element) element.classList.add("active");
   saveUserData();
 }
 
-// 学習開始
 function startLearning() {
   currentCardIndex = 0;
-  showScreen('screen-learn');
-  renderCurrentCard();
-  startTimer();
+  showScreen("screen-learn");
+  loadCard();
+  startSessionTimer();
 }
 
-// 現在のカード描画（名前置換対応）
-function renderCurrentCard() {
-  const list = CURRICULUM_DATA[currentUser.ageCategory] || CURRICULUM_DATA.adult1;
+// カードの表示
+function loadCard() {
+  const list = CURRICULUM_DATA[userData.ageGroup] || CURRICULUM_DATA.adult1;
   if (currentCardIndex >= list.length) currentCardIndex = 0;
 
   const item = list[currentCardIndex];
+  document.getElementById("cardEmoji").innerText = item.emoji || "💬";
+  document.getElementById("cardJp").innerText = item.jp;
   
-  // ユーザー名の置換 (例: I'm {NAME}. -> I'm Taro.)
-  let displayEn = item.en.replace('{NAME}', currentUser.name || "Guest");
-  let displayJp = item.jp.replace('{NAME}', currentUser.name || "ゲスト");
-
-  document.getElementById('cardEmoji').innerText = item.emoji || "✨";
-  document.getElementById('cardJp').innerText = displayJp;
-  document.getElementById('cardEn').innerText = displayEn;
-  document.getElementById('speechFeedback').innerText = "ボタンを押して発音してね";
-  document.getElementById('speechFeedback').style.color = "var(--text-sub)";
+  // 名前差込機能
+  let textEn = item.en;
+  if (textEn.includes("{NAME}")) {
+    textEn = textEn.replace("{NAME}", userData.name || "Taro");
+  }
+  
+  document.getElementById("cardEn").innerText = textEn;
+  document.getElementById("speechFeedback").innerText = "ボタンを押して発音してね";
+  
+  // 自動音声再生
+  setTimeout(() => speakCurrentText(), 300);
 }
 
-// 次のカードへ
 function nextCard() {
-  const list = CURRICULUM_DATA[currentUser.ageCategory] || CURRICULUM_DATA.adult1;
+  const list = CURRICULUM_DATA[userData.ageGroup] || CURRICULUM_DATA.adult1;
   currentCardIndex = (currentCardIndex + 1) % list.length;
-  renderCurrentCard();
+  loadCard();
 }
 
-// 音声読み上げ (Web Speech Synthesis)
+// 音声合成 (TTS)
 function speakCurrentText() {
+  const text = document.getElementById("cardEn").innerText;
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
-  
-  const text = document.getElementById('cardEn').innerText;
   const uttr = new SpeechSynthesisUtterance(text);
   uttr.lang = 'en-US';
-  
-  // 年齢層に応じて再生速度を調整
-  if (currentUser.ageCategory.startsWith('toddler')) {
-    uttr.rate = 0.7;
-  } else {
-    uttr.rate = 0.9;
-  }
+  uttr.rate = 0.9;
   window.speechSynthesis.speak(uttr);
 }
 
-// 音声認識の初期化
-function initSpeechRecognition() {
+// 音声認識 (STT)
+function setupSpeechRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) return;
-
+  if (!SpeechRecognition) {
+    document.getElementById("speechFeedback").innerText = "お使いのブラウザは音声認識非対応です";
+    return;
+  }
+  
   recognition = new SpeechRecognition();
   recognition.lang = 'en-US';
   recognition.interimResults = false;
-
-  recognition.onresult = function(event) {
-    const transcript = event.results[0][0].transcript;
-    handleSpeechResult(transcript);
+  
+  recognition.onstart = function() {
+    document.getElementById("micBtn").classList.add("listening");
+    document.getElementById("speechFeedback").innerText = "聴いています...";
   };
-
-  recognition.onerror = function() {
-    stopListeningUI();
-    document.getElementById('speechFeedback').innerText = "聞き取れませんでした。もう一度ためしてね";
-  };
-
+  
   recognition.onend = function() {
-    stopListeningUI();
+    document.getElementById("micBtn").classList.remove("listening");
+  };
+  
+  recognition.onresult = function(event) {
+    const transcript = event.results[0][0].transcript.trim().toLowerCase();
+    const target = document.getElementById("cardEn").innerText.trim().toLowerCase();
+    
+    document.getElementById("speechFeedback").innerText = `あなたの発音: "${transcript}"`;
+    
+    // 単語の一致判定
+    const targetWords = target.replace(/[^a-zA-Z0-9\s]/g, "").split(/\s+/);
+    const spokenWords = transcript.replace(/[^a-zA-Z0-9\s]/g, "").split(/\s+/);
+    const isMatch = targetWords.some(w => spokenWords.includes(w)) || transcript === target;
+
+    if (isMatch || transcript.length > 0) {
+      setTimeout(() => {
+        userData.coins = (userData.coins || 0) + 10;
+        unlockBadge("speak_1");
+        saveUserData();
+        showResultModal("すばらしい発音です！ 🪙+10");
+      }, 500);
+    }
   };
 }
 
-// 音声認識ボタンのトグル
 function toggleSpeechRecognition() {
-  if (!recognition) {
-    alert("お使いのブラウザは音声認識機能に対応していません。Chromeをお使いください。");
-    return;
-  }
-
-  if (isListening) {
+  if (!recognition) return;
+  try {
+    recognition.start();
+  } catch(e) {
     recognition.stop();
-    stopListeningUI();
-  } else {
-    try {
-      recognition.start();
-      isListening = true;
-      const btn = document.getElementById('micBtn');
-      btn.classList.add('listening');
-      document.getElementById('speechFeedback').innerText = "きいています...";
-    } catch(e) {
-      stopListeningUI();
-    }
   }
 }
 
-function stopListeningUI() {
-  isListening = false;
-  const btn = document.getElementById('micBtn');
-  if (btn) btn.classList.remove('listening');
-}
-
-// 音声認識結果の判定
-function handleSpeechResult(spokenText) {
-  const targetText = document.getElementById('cardEn').innerText.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim();
-  const cleanedSpoken = spokenText.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim();
-
-  document.getElementById('speechFeedback').innerText = `あなた: "${spokenText}"`;
-
-  if (cleanedSpoken === targetText || cleanedSpoken.includes(targetText) || targetText.includes(cleanedSpoken)) {
-    // 正解処理
-    currentUser.coins += 10;
-    saveUserData();
-    updateHeaderUI();
+// タイマー機能
+function startSessionTimer() {
+  if (sessionTimerInterval) clearInterval(sessionTimerInterval);
+  sessionSeconds = 15 * 60;
+  
+  sessionTimerInterval = setInterval(() => {
+    sessionSeconds--;
+    const m = Math.floor(sessionSeconds / 60);
+    const s = sessionSeconds % 60;
+    document.getElementById("sessionTimer").innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
     
-    document.getElementById('modalFeedbackText').innerText = `発音: "${spokenText}" ✨ (+10🪙)`;
-    document.getElementById('resultModal').classList.add('active');
-  } else {
-    document.getElementById('speechFeedback').style.color = "var(--accent-color)";
-    document.getElementById('speechFeedback').innerText = `「${spokenText}」惜しい！もう一度やってみよう`;
-  }
-}
-
-// モーダルを閉じて次の問題へ
-function closeModalAndNext() {
-  document.getElementById('resultModal').classList.remove('active');
-  nextCard();
-}
-
-// 15分タイマー制御
-function startTimer() {
-  if (timerInterval) clearInterval(timerInterval);
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      alert("⏱ 15分が経過しました！本日のレッスンおつかれさまでした！");
+    if (sessionSeconds <= 0) {
+      clearInterval(sessionTimerInterval);
+      showResultModal("15分セッション完了！お疲れ様でした🎉");
     }
-    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-    const s = (timeLeft % 60).toString().padStart(2, '0');
-    document.getElementById('sessionTimer').innerText = `${m}:${s}`;
   }, 1000);
 }
 
-// ヘッダーUI更新
-function updateHeaderUI() {
-  document.getElementById('headerUser').innerText = currentUser.name || "ゲスト";
-  document.getElementById('headerCoins').innerText = `🪙 ${currentUser.coins || 0}`;
-  document.getElementById('headerStreak').innerText = `🔥 ${currentUser.streak || 0}日`;
+// モーダル処理
+function showResultModal(msg) {
+  document.getElementById("modalFeedbackText").innerText = msg;
+  document.getElementById("resultModal").classList.add("active");
 }
 
-// マイページUI更新
-function updateSettingsUI() {
-  document.getElementById('settingNameDisplay').innerText = currentUser.name || "ゲスト";
+function closeModalAndNext() {
+  document.getElementById("resultModal").classList.remove("active");
+  nextCard();
+}
+
+// バッジ処理
+function renderBadges() {
+  const container = document.getElementById("badgeGrid");
+  if (!container) return;
+  container.innerHTML = "";
   
-  const courseNames = {
-    toddler23: "2〜3さい",
-    toddler45: "4〜5さい",
-    kids: "しょうがくせい",
-    adult1: "おとな① 超初心者",
-    adult2: "おとな② 日常会話",
-    adult3: "おとな③ 実践表現"
-  };
-  document.getElementById('settingCourseDisplay').innerText = courseNames[currentUser.ageCategory] || "おとな①";
-
-  // バッジ描画
-  const badgeGrid = document.getElementById('badgeGrid');
-  badgeGrid.innerHTML = BADGES.map(b => {
-    const isUnlocked = unlockedBadges.includes(b.id) || (b.id === 'first_step' && currentUser.coins > 0);
-    return `
-      <div class="badge-item ${isUnlocked ? 'unlocked' : ''}">
-        <div class="b-icon">${b.icon}</div>
-        <div class="b-name">${b.name}</div>
-      </div>
-    `;
-  }).join('');
+  BADGES.forEach(b => {
+    const isUnlocked = (userData.badges || []).includes(b.id);
+    const div = document.createElement("div");
+    div.className = `badge-item ${isUnlocked ? 'unlocked' : ''}`;
+    div.innerHTML = `<div class="b-icon">${b.icon}</div><div class="b-name">${b.name}</div>`;
+    container.appendChild(div);
+  });
 }
 
-// ローカルストレージ保存・読み込み
-function saveUserData() {
-  try {
-    localStorage.setItem('babyEng_user', JSON.stringify(currentUser));
-  } catch(e){}
-}
-
-function loadUserData() {
-  try {
-    const data = localStorage.getItem('babyEng_user');
-    if (data) {
-      currentUser = Object.assign(currentUser, JSON.parse(data));
-    }
-  } catch(e){}
+function unlockBadge(id) {
+  if (!userData.badges) userData.badges = [];
+  if (!userData.badges.includes(id)) {
+    userData.badges.push(id);
+    saveUserData();
+  }
 }
 </script>
 </body>
